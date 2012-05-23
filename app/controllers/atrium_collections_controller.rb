@@ -71,6 +71,17 @@ class AtriumCollectionsController < AtriumController
       logger.debug("Collection Selected Highlight: #{selected_document_ids.inspect}")
       @response, @documents = get_solr_response_for_field_values("id",selected_document_ids || [])
     end
+    solr_desc_arr=[]
+    @atrium_showcase.descriptions.each do |desc|
+      solr_desc_arr<< desc.description_solr_id unless desc.description_solr_id.blank?
+    end
+    @description_hash={}
+    logger.debug("Solr Doc: #{solr_desc_arr.inspect}")
+    desc_response, desc_documents = get_solr_response_for_field_values("id",solr_desc_arr.uniq)
+    desc_documents.each do |doc|
+      @description_hash[doc["id"]]= doc["description_content_s"].blank? ? "" : doc["description_content_s"].first
+      @description_hash["title"]= doc["title_t"].blank? ? "" : doc["title_t"].first
+    end
     #puts "browse_level_navigation_data: #{@exhibit_navigation_data.first.browse_levels.first.values.inspect}"
   end
 
@@ -81,6 +92,9 @@ class AtriumCollectionsController < AtriumController
 
   def update
     @atrium_collection = Atrium::Collection.find(params[:id])
+    if (params[:atrium_collection])
+      params[:atrium_collection][:search_facet_names] ||= []
+    end
     respond_to do |format|
       if @atrium_collection.update_attributes(params[:atrium_collection])
         refresh_collection

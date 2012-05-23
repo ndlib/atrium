@@ -251,5 +251,24 @@
       return false;
     });
 
+    $(".add_description h3.index_title a").click( function(){
+      var href = $(this).attr('href');
+      alert(href)
+       $.ajax({
+         type: "GET",
+         url: url,
+         dataType: "html",
+         beforeSend: function() {
+   			$descNode.animate({'backgroundColor':'#fb6c6c'},300);
+         },
+         success: function() {
+           $descNode.slideUp(300,function() {
+             $descNode.remove();
+           });
+         }
+       });
+      return false;
+    });
+
   });
 })(jQuery);

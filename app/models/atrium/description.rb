@@ -11,10 +11,8 @@ class Atrium::Description < ActiveRecord::Base
   accepts_nested_attributes_for :essay,   :allow_destroy => true
   accepts_nested_attributes_for :summary, :allow_destroy => true
 
-  after_save    :update_solr unless ENV['DO_NOT_INDEX']
-  after_destroy :remove_from_solr
-
-
+  #after_save    :update_solr unless ENV['DO_NOT_INDEX']
+  #after_destroy :remove_from_solr
 
   def self.get_description_from_solr_id(solr_id)
     atrium_description=Atrium::Description.find(solr_id.split('_').last)
@@ -24,6 +22,14 @@ class Atrium::Description < ActiveRecord::Base
 
   def pretty_title
     title.blank? ? "Description #{id}" : title
+  end
+
+  def get_essay
+    essay.blank? ? "" : essay.content
+  end
+
+  def get_summary
+    essay.blank? ? "" : summary.content
   end
 
   def solr_id

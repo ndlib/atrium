@@ -34,7 +34,9 @@ module Atrium
           resources :atrium_collections, :atrium_exhibits do
             resource :atrium_showcases
           end
-          resources :atrium_descriptions
+          resources :atrium_descriptions do
+            resource :atrium_essays
+          end
           match 'atrium_collections/:id/exhibit_order',                              :to => 'atrium_collection_exhibit_order#index',      :as => 'atrium_collection_exhibit_order'
           match 'atrium_collections/:id/exhibit_order/update',                       :to => 'atrium_collection_exhibit_order#update',     :as => 'update_atrium_collection_exhibit_order', :via => :post
           match 'atrium_collections/:collection_id/catalog',                         :to => 'catalog#index',                              :as => 'atrium_collection_home', :via => :get
@@ -57,6 +59,8 @@ module Atrium
           match 'atrium_showcases/:showcase_id/descriptions/new',                    :to => 'atrium_descriptions#new',                    :as => 'new_atrium_description'
           match 'atrium/customization/start',                                        :to => 'atrium_customization#start',                 :as => 'start_atrium_customization'
           match 'atrium/customization/stop',                                         :to => 'atrium_customization#stop',                  :as => 'stop_atrium_customization'
+          match 'atrium_descriptions/add/:showcase_id',                              :to => 'atrium_descriptions#add_from_solr',          :as => 'atrium_descriptions_add'
+          match 'atrium_descriptions/link/:showcase_id',                             :to => 'atrium_descriptions#save_ids_to_descriptions',      :as => 'atrium_descriptions_link'
         end
       end
 

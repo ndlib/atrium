@@ -110,7 +110,7 @@ module Atrium::Catalog
         redirect_to new_atrium_exhibit_path
       end
     else
-      delete_or_assign_search_session_params
+      delete_or_assign_search_session_params if !params[:add_description]
 
       extra_head_content << view_context.auto_discovery_link_tag(:rss, url_for(params.merge(:format => 'rss')), :title => "RSS for results")
       extra_head_content << view_context.auto_discovery_link_tag(:atom, url_for(params.merge(:format => 'atom')), :title => "Atom for results")
@@ -140,6 +140,8 @@ module Atrium::Catalog
 
       if params[:CKEditor] || params[:edit_exhibit_filter] ||  params[:edit_collection_filter] || params[:edit_browse_level_filter] || params[:add_featured]
         render "list_item", :layout=> "item_listing"
+      elsif params[:add_description]
+        render "list_description", :layout=> "item_listing"
       end
 
       respond_to do |format|

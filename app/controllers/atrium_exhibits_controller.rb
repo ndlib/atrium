@@ -62,6 +62,18 @@ class AtriumExhibitsController < AtriumController
       logger.debug("Collection Selected Highlight: #{selected_document_ids.inspect}")
       @response, @documents = get_solr_response_for_field_values("id",selected_document_ids || [])
     end
+
+    solr_desc_arr=[]
+    @atrium_showcase.descriptions.each do |desc|
+      solr_desc_arr<< desc.description_solr_id unless desc.description_solr_id.blank?
+    end
+    @description_hash={}
+    logger.debug("Solr Doc: #{solr_desc_arr.inspect}")
+    desc_response, desc_documents = get_solr_response_for_field_values("id",solr_desc_arr.uniq)
+    desc_documents.each do |doc|
+      @description_hash[doc["id"]]= doc["description_content_s"].blank? ? "" : doc["description_content_s"].first
+      @description_hash["title"]= doc["title_t"].blank? ? "" : doc["title_t"].first
+    end
   end
 
   def set_exhibit_scope

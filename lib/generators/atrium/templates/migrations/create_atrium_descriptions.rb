@@ -4,6 +4,7 @@ class CreateAtriumDescriptions < ActiveRecord::Migration
       t.integer :atrium_showcase_id, :null=>false
       t.string :page_display
       t.string :title
+      t.string :description_solr_id
     end
     add_index :atrium_descriptions, :id
     add_index :atrium_descriptions, :atrium_showcase_id

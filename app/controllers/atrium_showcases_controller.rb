@@ -76,7 +76,9 @@ class AtriumShowcasesController < AtriumController
     @atrium_showcase.showcase_items[:type]="featured"
     @atrium_showcase.showcase_items[:solr_doc_ids]=selected_document_ids.join(',')
     @atrium_showcase.save
-    session[:folder_document_ids] = session[:copy_folder_document_ids]
+    logger.debug("Copy of session#{session[:copy_folder_document_ids].inspect}")
+    session_folder_ids=[] || session[:copy_folder_document_ids]
+    session[:folder_document_ids] = session_folder_ids
     session[:copy_folder_document_ids]=nil
     logger.debug("@atrium_showcase: #{@atrium_showcase.inspect},Selected Highlight: #{selected_document_ids.inspect}, folders_selected: #{session[:folder_document_ids].inspect}")
     @response, @documents = get_solr_response_for_field_values("id",@atrium_showcase.showcase_items[:solr_doc_ids].split(',') || [])
@@ -141,6 +143,11 @@ class AtriumShowcasesController < AtriumController
     unset_edit_showcase_in_session
     redirect_to path
   end
+
+  def blacklight_config
+    CatalogController.blacklight_config
+  end
+
 
   private
 

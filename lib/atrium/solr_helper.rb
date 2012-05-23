@@ -121,11 +121,16 @@ module Atrium::SolrHelper
       if params[:id]
         begin
           @description = Atrium::Description.find(params[:id])
-          @showcase= Atrium::Showcase.find(@description.atrium_showcase_id)
+          if @description
+            @showcase= Atrium::Showcase.find(@description.atrium_showcase_id)
+          end
         rescue
           #just do nothing here if
         end
+      elsif(params[:showcase_id])
+        @showcase= Atrium::Showcase.find(params[:showcase_id])
       end
+      logger.debug("Showcase: #{@showcase.inspect}")
       if @showcase && @showcase.parent
         if @showcase.parent.is_a?(Atrium::Collection)
           @atrium_collection = @showcase.parent
@@ -396,5 +401,13 @@ module Atrium::SolrHelper
 
   def facet_selected?(facet_name)
     params[:f].include?(facet_name) if params[:f]
+  end
+
+  def display_solr_essay(pid)
+    logger.debug("description: #{pid.inspect}")
+    response, document = get_solr_response_for_doc_id(pid)
+    content = render_document_show_field_value :document => document, :field => 'description_content_s'
+    logger.debug("Content:#{content}")
+    return content.html_safe
   end
 end
