@@ -45,14 +45,15 @@ class AtriumCollectionsController < AtriumController
 
   def show
     @exhibit_navigation_data = get_exhibit_navigation_data
+
     if(params[:collection_number])
       @collection = Atrium::Collection.find(params[:collection_number])
       @atrium_showcase= Atrium::Showcase.with_selected_facets(@collection.id,@collection.class.name, params[:f]).first
     elsif(params[:id])
       @atrium_collection= Atrium::Collection.find(params[:id])
       @atrium_showcase= Atrium::Showcase.with_selected_facets(@atrium_collection.id,@atrium_collection.class.name, params[:f]).first
-      #get_atrium_showcase(params[:collection_number], params[:f]).first
     end
+
     if @atrium_collection && @atrium_collection.filter_query_params && @atrium_collection.filter_query_params[:solr_doc_ids]
       logger.debug("Items in Collection: #{@atrium_collection.filter_query_params[:solr_doc_ids]}")
       items_document_ids = @atrium_collection.filter_query_params[:solr_doc_ids].split(',')
@@ -64,6 +65,7 @@ class AtriumCollectionsController < AtriumController
     if(params[:showcase_id] && @atrium_showcase.nil?)
       @atrium_showcase = Atrium::Showcase.find(params[:showcase_id])
     end
+
     logger.debug("Atrium Browse Page: #{@atrium_showcase.inspect}")
     if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
       logger.debug("#{@atrium_showcase.inspect}, #{@atrium_showcase.showcase_items[:solr_doc_ids]}")
@@ -71,10 +73,14 @@ class AtriumCollectionsController < AtriumController
       logger.debug("Collection Selected Highlight: #{selected_document_ids.inspect}")
       @response, @documents = get_solr_response_for_field_values("id",selected_document_ids || [])
     end
+
     solr_desc_arr=[]
-    @atrium_showcase.descriptions.each do |desc|
-      solr_desc_arr<< desc.description_solr_id unless desc.description_solr_id.blank?
+    if @atrium_showcase
+      @atrium_showcase.descriptions.each do |desc|
+        solr_desc_arr<< desc.description_solr_id unless desc.description_solr_id.blank?
+      end
     end
+
     @description_hash={}
     logger.debug("Solr Doc: #{solr_desc_arr.inspect}")
     desc_response, desc_documents = get_solr_response_for_field_values("id",solr_desc_arr.uniq)
@@ -82,7 +88,6 @@ class AtriumCollectionsController < AtriumController
       @description_hash[doc["id"]]= doc["description_content_s"].blank? ? "" : doc["description_content_s"].first
       @description_hash["title"]= doc["title_t"].blank? ? "" : doc["title_t"].first
     end
-    #puts "browse_level_navigation_data: #{@exhibit_navigation_data.first.browse_levels.first.values.inspect}"
   end
 
   def edit
