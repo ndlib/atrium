@@ -38,6 +38,13 @@ describe Atrium::Description do
     end
   end
 
+
+  describe "#descriptions from solr description" do
+    it "should be able to create new description with solr id" do
+      pending
+    end
+  end
+
   describe "#summary" do
     it "should be able to create summary" do
       pending

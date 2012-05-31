@@ -4,13 +4,14 @@
   <%= link_to "Back to Browse #{@atrium_collection.pretty_title}", @atrium_collection %>
 <% end %>
 
-<% if !@description_from_solr.empty? %>
-  <h3><%= @description_from_solr["title"]%></h3>
-  <%=@description_from_solr[@atrium_description.description_solr_id].html_safe%>
-<% elsif @atrium_description && @atrium_description.essay && @atrium_description.essay.content %>
-  <h3><%= @atrium_description.title%></h3>
-  <%= @atrium_description.get_essay %>
-<% end %>
+<div>
+  <h3><%= @atrium_description.pretty_title%></h3>
+  <% if !@atrium_description.description_solr_id.blank? %>
+    <%= get_essay_from_description(@description_hash,@atrium_description.description_solr_id).html_safe%>
+  <% elsif @atrium_description && @atrium_description.essay && @atrium_description.essay.content %>
+    <%= @atrium_description.get_essay %>
+  <% end %>
+</div>
 
 <% if params[:exhibit_id] %>
   <%= link_to "Back to Browse Exhibit",atrium_exhibit_path(:id=>params[:exhibit_id], :f=>params[:f]) %>

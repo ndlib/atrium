@@ -9,6 +9,7 @@ class AtriumController < ApplicationController
   include Atrium::SolrHelper
   include Atrium::LayoutHelper
   include Atrium::CollectionsHelper
+  include Atrium::DescriptionsHelper
 
   layout :current_layout
 

@@ -9,6 +9,17 @@ module Atrium::ApplicationHelper
   end
 
   def is_editing?
-    session[:edit_showcase] ? true : false
+    session[:edit_showcase].blank? ? false : true
   end
+
+  def get_essay_from_description(desc_hash, desc_id)
+    if !desc_hash.nil?
+      return desc_hash[desc_id]
+    else
+      logger.error("hash is blank for some reason. Please check")
+      return ""
+    end
+  end
+
+
 end

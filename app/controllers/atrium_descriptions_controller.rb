@@ -4,14 +4,7 @@ class AtriumDescriptionsController < AtriumController
 
   def index
     @atrium_showcase = Atrium::Showcase.find(params[:showcase_id])
-    solr_desc_arr=[]
-    @atrium_showcase.descriptions.each { |desc| solr_desc_arr<< desc.description_solr_id unless desc.description_solr_id.blank? }
-    @description_hash={}
-    desc_response, desc_documents = get_solr_response_for_field_values("id",solr_desc_arr)
-    desc_documents.each do |doc|
-      @description_hash[doc["id"]]= doc["description_content_s"].blank? ? "" : doc["description_content_s"].first
-      @description_hash["title"]= doc["title_t"].blank? ? "" : doc["title_t"].first
-    end
+    @description_hash=get_description_for_showcase(@atrium_showcase)
     render :layout => false
   end
 
@@ -68,18 +61,33 @@ class AtriumDescriptionsController < AtriumController
 
   def show
     @atrium_description = Atrium::Description.find(params[:id])
-    @description_from_solr={}
-    unless @atrium_description.description_solr_id.blank?
-      desc_response, desc_documents = get_solr_response_for_doc_id(@atrium_description.description_solr_id)
-      @description_from_solr[desc_documents["id"]]= desc_documents["description_content_s"].blank? ? "" : desc_documents["description_content_s"].first
-      @description_from_solr["title"]= desc_documents["title_t"].blank? ? "" : desc_documents["title_t"].first
+    @description_hash={}
+    unless @atrium_description.description_solr_id.nil?
+      p = params.dup
+      params.delete :f
+      params.delete :q
+      desc_response, desc_documents = get_solr_response_for_field_values("id",@atrium_description.description_solr_id)
+      desc_documents.each do |doc|
+        @description_hash[doc["id"]]= doc["description_content_s"].blank? ? "" : doc["description_content_s"].first
+      end
+      params.merge!(:f=>p[:f])
+      params.merge!(:q=>p[:q])
     end
   end
 
   def save_ids_to_descriptions
-    if session[:folder_document_ids]
+    unless session[:folder_document_ids].empty?
+      description_hash={}
+      desc_response, desc_documents = get_solr_response_for_field_values("id",session[:folder_document_ids])
+      desc_documents.each do |doc|
+        desc_hash={}
+        desc_hash["page_display"]= doc["page_display_s"].blank? ? "" : doc["page_display_s"].first
+        desc_hash["title"]= doc["title_s"].blank? ? "" : doc["title_s"].first
+        description_hash[doc["id"]]=desc_hash
+      end
       session[:folder_document_ids].each do |solr_id|
-        @atrium_description = Atrium::Description.new(:atrium_showcase_id=>params[:showcase_id], :description_solr_id=>solr_id, :page_display=>"newpage")
+        doc = description_hash[solr_id]
+        @atrium_description = Atrium::Description.new(:atrium_showcase_id=>params[:showcase_id], :description_solr_id=>solr_id, :page_display=>doc["page_display"], :title=>doc["title"])
         @atrium_description.save!
       end
       #logger.debug("Copy of session#{session[:copy_folder_document_ids].inspect}")
@@ -117,11 +125,16 @@ class AtriumDescriptionsController < AtriumController
     end
     solr_desc_arr=[]
     @atrium_showcase.descriptions.each do |desc|
-      solr_desc_arr<<desc.solr_doc_ids
+      solr_desc_arr<<desc.description_solr_id
     end
     session[:folder_document_ids] = solr_desc_arr.uniq
     #make sure to pass in a search_fields parameter so that it shows search results immediately
     redirect_to catalog_index_path(:add_description=>true,:collection_id=>collection_id,:exhibit_id=>exhibit_id,:search_field=>"all_fields",:f=>{"active_fedora_model_s"=>["Description"]})
   end
+
+  def blacklight_config
+    CatalogController.blacklight_config
+  end
+
 
 end

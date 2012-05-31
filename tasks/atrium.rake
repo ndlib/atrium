@@ -131,8 +131,8 @@ namespace :atrium do
     puts "Copying Gemfile from test_support/etc"
     FileUtils.cp('../../test_support/etc/Gemfile','./Gemfile')
 
-    puts "Creating local vendor/cache dir and copying gems from atrium gemset"
-    FileUtils.cp_r(File.join('..','..','vendor','cache'), './vendor')
+    #puts "Creating local vendor/cache dir and copying gems from atrium gemset"
+    #FileUtils.cp_r(File.join('..','..','vendor','cache'), './vendor')
 
     puts "Configure bundler to only look at the local vendor/cache"
     FileUtils.mkdir_p( File.expand_path('./.bundle') )
@@ -143,16 +143,9 @@ namespace :atrium do
     FileUtils.cp_r(File.join('..','..','test_support','fixtures'), File.join('.','test_support','fixtures'))
 
     puts "Executing bundle install"
-    %x[bundle install --local]
+    %x[bundle install]
     errors << 'Error running bundle install in test app' unless $?.success?
 
-    puts "Installing jQuery UJS in test app"
-    %x[bundle exec rails g jquery:install]
-    errors << 'Error installing jquery-rails in test app' unless $?.success?
-
-    puts "Installing cucumber in test app"
-    %x[bundle exec rails g cucumber:install]
-    errors << 'Error installing cucumber in test app' unless $?.success?
 
     puts "Generating default blacklight install"
     %x[bundle exec rails g blacklight --devise]
@@ -163,6 +156,14 @@ namespace :atrium do
     errors << 'Error generating default atrium install' unless $?.success?
 
     FileUtils.cp('../../lib/generators/atrium/templates/db/seeds.rb','db/seeds.rb')
+
+    puts "Installing jQuery UJS in test app"
+    %x[bundle exec rails g jquery:install]
+    errors << 'Error installing jquery-rails in test app' unless $?.success?
+
+    puts "Installing cucumber in test app"
+    %x[bundle exec rails g cucumber:install]
+    errors << 'Error installing cucumber in test app' unless $?.success?
 
     puts "Loading blacklight marc test data into Solr"
     %x[bundle exec rake solr:marc:index_test_data]

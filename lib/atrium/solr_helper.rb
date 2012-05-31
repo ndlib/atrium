@@ -277,6 +277,7 @@ module Atrium::SolrHelper
         if exhibit.respond_to?(:browse_levels) && !exhibit.browse_levels.nil?
           updated_browse_levels = get_browse_level_data(atrium_collection,exhibit,exhibit.browse_levels,browse_response,current_extra_controller_params,true)
           exhibit.browse_levels.each_index do |index|
+            logger.debug("#{exhibit.browse_levels.inspect}")
             exhibit.browse_levels.fetch(index).values = updated_browse_levels.fetch(index).values
             exhibit.browse_levels.fetch(index).label = updated_browse_levels.fetch(index).label
             exhibit.browse_levels.fetch(index).selected = updated_browse_levels.fetch(index).selected

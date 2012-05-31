@@ -71,12 +71,14 @@ class AtriumShowcasesController < AtriumController
 
   def show
     @atrium_showcase = Atrium::Showcase.find(params[:showcase_id])
-    @atrium_showcase.showcase_items ||= Hash.new
-    selected_document_ids = session[:folder_document_ids]
-    @atrium_showcase.showcase_items[:type]="featured"
-    @atrium_showcase.showcase_items[:solr_doc_ids]=selected_document_ids.join(',')
-    @atrium_showcase.save
-    logger.debug("Copy of session#{session[:copy_folder_document_ids].inspect}")
+    unless session[:folder_document_ids].blank?
+      @atrium_showcase.showcase_items ||= Hash.new
+      selected_document_ids = session[:folder_document_ids]
+      @atrium_showcase.showcase_items[:type]="featured"
+      @atrium_showcase.showcase_items[:solr_doc_ids]=selected_document_ids.join(',')
+      @atrium_showcase.save
+      logger.debug("Copy of session#{session[:copy_folder_document_ids].inspect}")
+    end
     session_folder_ids=[] || session[:copy_folder_document_ids]
     session[:folder_document_ids] = session_folder_ids
     session[:copy_folder_document_ids]=nil

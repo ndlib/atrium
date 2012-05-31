@@ -59,7 +59,8 @@ class AtriumCollectionsController < AtriumController
       logger.debug("Collection items: #{items_document_ids.inspect}")
       @collection_items_response, @collection_items_documents = get_solr_response_for_field_values("id",items_document_ids || [])
     end
-    logger.debug("Finding Atrium Browse Page: #{@atrium_showcase.inspect}")
+    logger.debug("Finding Atrium Showcase Page: #{@atrium_showcase.inspect}")
+    puts "Finding Atrium Showcase Page: #{@atrium_showcase.inspect}"
 
     if(params[:showcase_id] && @atrium_showcase.nil?)
       @atrium_showcase = Atrium::Showcase.find(params[:showcase_id])
@@ -71,18 +72,8 @@ class AtriumCollectionsController < AtriumController
       logger.debug("Collection Selected Highlight: #{selected_document_ids.inspect}")
       @response, @documents = get_solr_response_for_field_values("id",selected_document_ids || [])
     end
-    solr_desc_arr=[]
-    @atrium_showcase.descriptions.each do |desc|
-      solr_desc_arr<< desc.description_solr_id unless desc.description_solr_id.blank?
-    end
-    @description_hash={}
-    logger.debug("Solr Doc: #{solr_desc_arr.inspect}")
-    desc_response, desc_documents = get_solr_response_for_field_values("id",solr_desc_arr.uniq)
-    desc_documents.each do |doc|
-      @description_hash[doc["id"]]= doc["description_content_s"].blank? ? "" : doc["description_content_s"].first
-      @description_hash["title"]= doc["title_t"].blank? ? "" : doc["title_t"].first
-    end
-    #puts "browse_level_navigation_data: #{@exhibit_navigation_data.first.browse_levels.first.values.inspect}"
+    @description_hash=get_description_for_showcase(@atrium_showcase) unless @atrium_showcase.nil?
+    #logger.debug("Atrium Hash: #{@description_hash.inspect}")
   end
 
   def edit
@@ -130,7 +121,7 @@ class AtriumCollectionsController < AtriumController
 end
 
 def blacklight_config
-    CatalogController.blacklight_config
+  CatalogController.blacklight_config
 end
 
 private

@@ -1,6 +1,9 @@
 <%- if params[:add_featured] -%>
   <h1> You can use either use search form or facet to search for items to be added featured source. Please use selected checkbox to select item </h1>
+<%- elsif params[:add_description] -%>
+  <h1> You can use either use search form to search for description.Please use selected checkbox to add description </h1>
 <%- end -%>
+
 <div id="search" class="search">
   <%= form_tag catalog_index_path, :method => :get do %>
     <h2 class="search"><%= label_tag(:q, "Search ") %></h2>

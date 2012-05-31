@@ -118,6 +118,12 @@
       }
     });
 
+    function getParams() {
+        var $html = $(response);
+        $html.find('a.description_colorbox').colorbox({ width: '960px', height: '90%', iframe: true });
+        return $html;
+    }
+
     function loadMore(response) {
         var $html = $(response);
         $html.find('a.description_colorbox').colorbox({ width: '960px', height: '90%', iframe: true });
@@ -140,7 +146,7 @@
     });
 
     $("a.destroy_description", this).live("click", function(e) {
-       var $descNode = $(this).closest('li')
+       var $descNode = $(this).closest('dl')
        var url = $(this).attr('action');
        $.ajax({
          type: "DELETE",

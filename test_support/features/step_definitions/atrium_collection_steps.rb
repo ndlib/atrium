@@ -79,3 +79,21 @@ When /^I add record "([^"]*)" to featured to the "([^"]*)" with id "([^"]*)" and
   visit path
 end
 
+When /^I add description with id "([^"]*)" to (collection|exhibit) with id "([^"]*)" and facet "([^"]*)"$/  do |id, collection_or_exhibit, asset_id, facet|
+  click_button("folder_submit_#{id}")
+  asset= collection_or_exhibit.eql?("collection") ?  Atrium::Collection.find(asset_id) : Atrium::Exhibit.find(asset_id)
+  #puts asset.inspect
+  selected_facet= collection_or_exhibit.eql?("collection") ? nil : {"pub_date"=>["#{facet}"]}
+  showcase= Atrium::Showcase.with_selected_facets(asset.id, asset.class.name, selected_facet).first
+  showcase.should_not be nil
+  #puts showcase.inspect
+  path = atrium_descriptions_link_path(:showcase_id=>showcase.id)
+  visit path
+end
+
+Then /^I should see description with title "([^"]*)" in description list$/ do |title|
+  content="Essay: #{title}"
+  page.should have_selector("div#show_description h3", :content => content)
+end
+
+
