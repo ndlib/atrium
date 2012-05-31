@@ -11,8 +11,8 @@ class Atrium::Description < ActiveRecord::Base
   accepts_nested_attributes_for :essay,   :allow_destroy => true
   accepts_nested_attributes_for :summary, :allow_destroy => true
 
-  #after_save    :update_solr unless ENV['DO_NOT_INDEX']
-  #after_destroy :remove_from_solr
+  after_save  :update_solr unless ENV['DO_NOT_INDEX']
+  after_destroy :remove_from_solr
 
   def self.get_description_from_solr_id(solr_id)
     atrium_description=Atrium::Description.find(solr_id.split('_').last)
@@ -42,17 +42,19 @@ class Atrium::Description < ActiveRecord::Base
 
   def as_solr
     doc= {
-      :id                          => solr_id,
-      :format                      => "Description",
-      :title_t                     => pretty_title,
-      :title_facet                 => pretty_title,
-      :title_display               => pretty_title,
-      :summary_display             => summary_text,
-      :essay_display               => essay_text,
-      :summary_t                   => summary_text,
-      :essay_t                     => essay_text,
-      :atrium_showcase_id_t        => get_atrium_showcase_id,
-      :atrium_showcase_id_display  => get_atrium_showcase_id
+      :active_fedora_model_s          => "Description",
+      :page_display_s                 => (page_display unless page_display.blank?),
+      :id                             => solr_id,
+      :format                         => "Description",
+      :title_t                        => pretty_title,
+      :title_s                        => pretty_title,
+      :summary_t                      => (summary_text unless summary.blank?),
+      :summary_s                      => (summary_text unless summary.blank?),
+      :description_content_t          => (essay.content unless essay.blank?),
+      :description_content_s          => (essay.content unless essay.blank?),
+      :description_content_no_html_t  => (essay_text unless essay.blank?),
+      :atrium_showcase_id_t           => get_atrium_showcase_id,
+      :atrium_showcase_id_display     => get_atrium_showcase_id
     }.reject{|key, value| value.blank?}
     puts "Doc: #{doc.inspect}"
     return doc
@@ -72,8 +74,10 @@ class Atrium::Description < ActiveRecord::Base
   end
 
   def update_solr
-    to_solr
-    Blacklight.solr.commit
+    if(description_solr_id.blank?)
+      to_solr
+      Blacklight.solr.commit
+    end
   end
 
   def show_on_this_page?
@@ -89,8 +93,10 @@ class Atrium::Description < ActiveRecord::Base
   private
 
   def remove_from_solr
-    Blacklight.solr.delete_by_id solr_id
-    Blacklight.solr.commit
+    if(description_solr_id.blank?)
+      Blacklight.solr.delete_by_id solr_id
+      Blacklight.solr.commit
+    end
   end
 
 end
