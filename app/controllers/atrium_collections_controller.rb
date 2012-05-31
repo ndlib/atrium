@@ -45,14 +45,15 @@ class AtriumCollectionsController < AtriumController
 
   def show
     @exhibit_navigation_data = get_exhibit_navigation_data
+
     if(params[:collection_number])
       @collection = Atrium::Collection.find(params[:collection_number])
       @atrium_showcase= Atrium::Showcase.with_selected_facets(@collection.id,@collection.class.name, params[:f]).first
     elsif(params[:id])
       @atrium_collection= Atrium::Collection.find(params[:id])
       @atrium_showcase= Atrium::Showcase.with_selected_facets(@atrium_collection.id,@atrium_collection.class.name, params[:f]).first
-      #get_atrium_showcase(params[:collection_number], params[:f]).first
     end
+
     if @atrium_collection && @atrium_collection.filter_query_params && @atrium_collection.filter_query_params[:solr_doc_ids]
       logger.debug("Items in Collection: #{@atrium_collection.filter_query_params[:solr_doc_ids]}")
       items_document_ids = @atrium_collection.filter_query_params[:solr_doc_ids].split(',')
@@ -65,6 +66,7 @@ class AtriumCollectionsController < AtriumController
     if(params[:showcase_id] && @atrium_showcase.nil?)
       @atrium_showcase = Atrium::Showcase.find(params[:showcase_id])
     end
+
     logger.debug("Atrium Browse Page: #{@atrium_showcase.inspect}")
     if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
       logger.debug("#{@atrium_showcase.inspect}, #{@atrium_showcase.showcase_items[:solr_doc_ids]}")
