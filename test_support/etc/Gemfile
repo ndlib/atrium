@@ -4,13 +4,18 @@
 source 'http://rubygems.org'
 
 gem 'rails', '~> 3.1'
-gem 'blacklight', '~> 3.2.1'
+gem 'blacklight', '~> 3.3'
 gem 'atrium', :path => '../../'
 
 gem 'cancan'
 gem 'devise'
 gem 'jquery-rails'
-gem 'sass-rails', '~> 3.1.1'
+
+group :assets do
+  gem 'sass-rails'
+  gem 'compass-rails', '~> 1.0.0'
+  gem 'compass-susy-plugin', '~> 0.9.0'
+end
 
 # For testing
 group :development, :test do

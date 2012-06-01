@@ -1,5 +1,6 @@
+<%= debug @atrium_descriptions.inspect %>
 <span id="show_description">
-  <%- if @atrium_showcase && @atrium_showcase.descriptions-%>
-    <%= render :partial=>'shared/list_descriptions', :locals=>{:descriptions=>@atrium_showcase.descriptions} %>
+  <%- if @atrium_descriptions-%>
+    <%= render :partial=>'shared/list_descriptions', :locals=>{:descriptions=>@atrium_descriptions} %>
   <%- end -%>
 </span>

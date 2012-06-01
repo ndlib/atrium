@@ -3,9 +3,14 @@ class AtriumDescriptionsController < AtriumController
   before_filter :initialize_collection
 
   def index
-    @atrium_showcase = Atrium::Showcase.find(params[:showcase_id])
-    @description_hash=get_description_for_showcase(@atrium_showcase)
-    render :layout => false
+    atrium_showcase=Atrium::Showcase.find(params[:showcase_id])
+    @atrium_descriptions = atrium_showcase.descriptions
+    @description_hash=get_description_for_showcase(atrium_showcase)
+    respond_to do |want|
+      want.inline {
+        render :action =>'index.html', :layout=>false
+      }
+    end
   end
 
   def new

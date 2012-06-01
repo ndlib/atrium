@@ -172,6 +172,7 @@ module Atrium::SolrHelper
       @browse_response = @response
       @browse_document_list = @document_list
       logger.debug("Collection: #{@atrium_collection}, Exhibit: #{@atrium_collection.exhibits}")
+      @showcase = Atrium::Showcase.with_selected_facets(@atrium_collection.id,@atrium_collection.class.name, params[:f]).first
     rescue Exception=>e
       logger.error("Could not initialize collection information for id #{collection_id}. Reason - #{e.to_s}")
     end

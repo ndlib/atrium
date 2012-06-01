@@ -98,7 +98,6 @@
         $.ajax({
           type: 'GET',
           url: url,
-          dataType: 'html',
           cache: true,
           beforeSend: function() {
             $('#cboxLoadedContent').empty();

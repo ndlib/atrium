@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
 
   s.add_dependency 'rails', '~> 3.1'
-  s.add_dependency 'blacklight', '~> 3.2'  
+  s.add_dependency 'blacklight', '~> 3.3'
   s.add_dependency 'builder'
   s.add_dependency 'cancan'
   s.add_dependency 'ckeditor_rails'
