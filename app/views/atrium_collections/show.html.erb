@@ -1,4 +1,4 @@
-<%=render :partial=>'shared/collection_title_header'%>
+<%= render :partial=>'shared/collection_title_header'%>
 
 <div id="show_description">
   <%- if @atrium_showcase && @atrium_showcase.descriptions.any? -%>
@@ -6,15 +6,13 @@
   <%- end -%>
 </div>
 
-<span id="show_selected">
+<div id="show_selected">
   <%- if !@documents.blank? && @documents.any? -%>
     <%= render :partial=>'shared/featured_sources' %>
   <%- end -%>
-</span>
+</div>
 
-<hr />
-
-<h2>Complete Sources</h2>
+<h3 class="list-heading">Complete Sources</h3>
 <div id="complete_sources">
   <%- if !@collection_items_documents.blank? -%>
     <%= render :partial=>'collection_items_index' %>

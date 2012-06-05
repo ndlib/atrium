@@ -1,5 +1,3 @@
-<h2>
-  <div id="title_id" data-column-name="atrium_collection[title]" class="<%= session[:edit_showcase] && (can? :create, Atrium::Collection) ?  "edit-text": "no-edit"%>" data-update-uri=<%= atrium_collection_path(@atrium_collection) %>>
-    <%= @atrium_collection.title %>
-  </div>
-</h2>
+<div id="collection-title">
+  <%= @atrium_collection.title_markup %>
+</div>
