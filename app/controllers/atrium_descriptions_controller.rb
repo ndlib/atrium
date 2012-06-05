@@ -1,6 +1,6 @@
 class AtriumDescriptionsController < AtriumController
 
-  before_filter :initialize_collection
+  before_filter :initialize_collection, :get_exhibit_navigation_data
 
   def index
     atrium_showcase=Atrium::Showcase.find(params[:showcase_id])

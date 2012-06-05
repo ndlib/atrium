@@ -43,27 +43,30 @@
           </div>
         </div>
         <div id="sidebar">
-          <% if params[:controller] == "catalog" %>
+          <% if params[:controller].eql?( "catalog") %>
             <% if (params[:atrium_collection_browse].blank? && params[:atrium_exhibit_browse].blank?) || params[:class] == "edit_collection" %>
               <% if params[:collection_id] %>
                 <h3><%= link_to("Back to Browse Collection", atrium_collection_path(params[:collection_id])) %></h3>
               <% end %>
             <% else %>
-	      <%= render :partial => 'shared/collection_search_form' %>
-              <%= render :partial => 'atrium_collections/navigation' %>
+	            <%= render :partial => 'shared/collection_search_form' %>
+                <%= render :partial => 'atrium_collections/navigation' %>
             <% end %>
-          <% elsif params[:controller] == "atrium_collections" && !(params[:action] == "show")%>
+          <% elsif params[:controller].eql?("atrium_collections") && !(params[:action].eql?("show"))%>
             <%= render :partial => 'atrium_collections/edit_navigation' %>
-          <% elsif params[:controller] == "atrium_exhibits"&& !(params[:action] == "show")%>
+          <% elsif params[:controller].eql?("atrium_exhibits") && !(params[:action].eql?("show"))%>
             <%= render :partial => 'atrium_collections/edit_navigation' %>
-          <% elsif params[:controller] == "atrium_exhibits" && params[:action] == "show" && session[:edit_showcase]%>
-             <%= render :partial => 'atrium_showcases/showcase_navigation' %>
-          <% elsif params[:controller] == "atrium_collections" && params[:action] == "show" && session[:edit_showcase]%>
-             <%= render :partial => 'atrium_showcases/showcase_navigation' %>
-          <% elsif params[:controller] == "atrium_collections" && params[:action] == "show"%>
+          <% elsif params[:controller].eql?("atrium_exhibits") && params[:action].eql?("show") && session[:edit_showcase]%>
+              <%= render :partial => 'atrium_showcases/showcase_navigation' %>
+          <% elsif params[:controller].eql?("atrium_collections") && params[:action].eql?("show") && session[:edit_showcase]%>
+              <%= render :partial => 'atrium_showcases/showcase_navigation' %>
+          <% elsif params[:controller].eql?("atrium_collections") && params[:action].eql?("show")%>
             <%= render :partial => 'shared/collection_search_form' %>
             <%= render :partial => 'atrium_collections/navigation' %>
-          <% elsif params[:controller] == "atrium_descriptions"%>
+          <% elsif params[:controller].eql?("atrium_descriptions") && params[:action].eql?("index")%>
+              <%= render :partial => 'shared/collection_search_form' %>
+              <%= render :partial => 'atrium_collections/navigation' %>
+          <% elsif params[:controller].eql?("atrium_descriptions") && !(params[:action].eql?("index"))%>
           <% elsif params[:controller] != "user_sessions" && !(params[:controller] == "atrium_collections" && params[:action] == "index")%>
             <%= render :partial => 'shared/collection_search_form' %>
             <%= render :partial => 'atrium_collections/navigation' %>

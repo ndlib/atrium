@@ -3,7 +3,7 @@
   <%- @exhibit_navigation_data.each do |exhibit| -%>
     <%- if @exhibit && exhibit.set_number == @exhibit.set_number  %>
       <%- unless exhibit.browse_levels.nil? || exhibit.browse_levels.empty? -%>
-        <%= render :partial => 'atrium_showcases/navigation_browse_levels', :locals=>{:exhibit_number=>exhibit.set_number, :browse_levels=>exhibit.browse_levels, :browse_facets=>exhibit.browse_facet_names}%>
+        <%= render :partial => 'atrium_showcases/navigation_browse_levels', :locals=>{:exhibit_number=>exhibit.set_number, :browse_levels=>exhibit.browse_levels, :browse_facets=>exhibit.browse_facet_names, :exhibit_id=>exhibit.id}%>
       <%- end -%>
     <%- end -%>
   <%- end -%>

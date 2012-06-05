@@ -20,11 +20,9 @@ class AtriumExhibitsController < AtriumController
     #respond_to do |format|
     if @exhibit.save
       @exhibit.update_attributes(params[:atrium_exhibit])
-
       flash[:notice] = 'Exhibit was successfully created.'
-      format.html { redirect_to :action => "edit", :id=>@exhibit.id }
+      redirect_to :controller=>"atrium_collections", :action => "edit", :id=>@exhibit.atrium_collection_id
     end
-    format.html { render :action => "new" }
     #end
   end
 

@@ -6,7 +6,7 @@ module Atrium::CollectionsHelper
   # first arg item is a facet value item from rsolr-ext.
   # options consist of:
   # :suppress_link => true # do not make it a link, used for an already selected value for instance
-  def get_browse_facet_path(facet_solr_field, value, browse_facets, exhibit_number, opts={})
+  def get_browse_facet_path(facet_solr_field, value, browse_facets, exhibit_number, exhibit_id, opts={})
     logger.debug("Params: #{params.inspect}")
     p = HashWithIndifferentAccess.new
     p.merge!(:f=>params[:f].dup) if params[:f]
@@ -21,7 +21,7 @@ module Atrium::CollectionsHelper
     #if params[:edit_showcase]
     #  p.merge!(:edit_showcase=>true)
     #end
-    p.merge!(:id=>exhibit_number)
+    p.merge!(:id=>exhibit_id)
     p = remove_related_facet_params(facet_solr_field, p, browse_facets, exhibit_number)
     p = add_browse_facet_params(facet_solr_field,value,p)
     #it should only return a path for current facet selection plus parent selected values so if generating for multiple levels, than need to ignore some potentially
@@ -36,9 +36,13 @@ module Atrium::CollectionsHelper
     p
   end
 
+  def get_exhibit_set_number(exhibit_id)
+    Atrium::Exhibit.find(exhibit_id).set_number
+  end
+
   # Standard display of a SELECTED facet value, no link, special span
   # with class, and 'remove' button.
-  def get_selected_browse_facet_path(facet_solr_field, value, browse_facets, exhibit_number, opts={})
+  def get_selected_browse_facet_path(facet_solr_field, value, browse_facets, exhibit_number, exhibit_id, opts={})
     logger.debug("Options: #{opts.inspect}")
     value = [value] unless value.is_a? Array
     p = HashWithIndifferentAccess.new
@@ -55,7 +59,7 @@ module Atrium::CollectionsHelper
     #if params[:edit_showcase]
     #  p.merge!(:edit_showcase=>true)
     #end
-    p.merge!(:id=>exhibit_number)
+    p.merge!(:id=>exhibit_id)
    # params[:action] == "edit" ? edit_atrium_collection_path(p) : atrium_collection_path(p)
     atrium_exhibit_path(p)
   end

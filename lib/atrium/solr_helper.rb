@@ -172,7 +172,8 @@ module Atrium::SolrHelper
       @browse_response = @response
       @browse_document_list = @document_list
       logger.debug("Collection: #{@atrium_collection}, Exhibit: #{@atrium_collection.exhibits}")
-      @showcase = Atrium::Showcase.with_selected_facets(@atrium_collection.id,@atrium_collection.class.name, params[:f]).first
+      @collection_showcase = Atrium::Showcase.with_selected_facets(@atrium_collection.id,@atrium_collection.class.name, params[:f]).first
+      logger.debug("Collection level showcase: #{@collection_showcase.inspect}")
     rescue Exception=>e
       logger.error("Could not initialize collection information for id #{collection_id}. Reason - #{e.to_s}")
     end
@@ -271,12 +272,14 @@ module Atrium::SolrHelper
   #
   #   One should use the above methods to generate data for expand/collapse controls, breadcrumbs, etc.
   def get_exhibit_navigation_data
+    logger.debug("........... get_exhibit_navigation_data")
     initialize_collection if atrium_collection.nil?
     browse_data = []
     unless atrium_collection.nil? || atrium_collection.exhibits.nil?
       atrium_collection.exhibits.each do |exhibit|
         if exhibit.respond_to?(:browse_levels) && !exhibit.browse_levels.nil?
           updated_browse_levels = get_browse_level_data(atrium_collection,exhibit,exhibit.browse_levels,browse_response,current_extra_controller_params,true)
+          logger.debug("Updated Browse Levels: #{updated_browse_levels.inspect}")
           exhibit.browse_levels.each_index do |index|
             logger.debug("#{exhibit.browse_levels.inspect}")
             exhibit.browse_levels.fetch(index).values = updated_browse_levels.fetch(index).values
@@ -288,10 +291,24 @@ module Atrium::SolrHelper
         end
       end
     end
+    logger.debug("Before BrowseData: #{browse_data.inspect}")
+
+    browse_data=[] if check_for_scope(browse_data)
+    @exhibit_navigation_data=browse_data
+
+    logger.debug("After BrowseData: #{browse_data.inspect}")
     browse_data
   end
 
   private
+
+  def check_for_scope(exhibit_list)
+    scoped_to_items=false
+    if atrium_collection && atrium_collection.filter_query_params && atrium_collection.filter_query_params[:solr_doc_ids]
+      scoped_to_items=true
+    end
+    return scoped_to_items
+  end
 
   # This is a private method and should not be called directly.
   # get_exhibit_navigation_data calls this method to fill out the browse_level_navigation_data array

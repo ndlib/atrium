@@ -25,7 +25,7 @@
       <%- end %>
     </fieldset>
     <%- collection_id = @exhibit.atrium_collection_id if @exhibit.atrium_collection_id -%>
-    <%- query_params = {:collection_id=>collection_id,:edit_exhibit_filter=>@exhibit.id, :exhibit_id=>@exhibit.id} -%>
+    <%- query_params = {:collection_id=>collection_id,:edit_exhibit_filter=>true, :exhibit_id=>@exhibit.id} -%>
     <%- query_params.merge!(@exhibit.filter_query_params) if @exhibit.filter_query_params -%>
     <%- query_params.delete(:controller) %>
     <%- query_params.delete(:action) %>

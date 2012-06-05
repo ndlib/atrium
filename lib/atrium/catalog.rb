@@ -116,6 +116,11 @@ module Atrium::Catalog
       extra_head_content << view_context.auto_discovery_link_tag(:atom, url_for(params.merge(:format => 'atom')), :title => "Atom for results")
 
       @extra_controller_params = {}
+      if params[:exhibit_id]
+        @exhibit = Atrium::Exhibit.find(params[:exhibit_id])
+        @atrium_collection = @exhibit.collection if @exhibit
+      end
+
       if params[:browse_level_id]
         @browse_level = Atrium::BrowseLevel.find(params[:browse_level_id])
         @exhibit = @browse_level.exhibit if @browse_level

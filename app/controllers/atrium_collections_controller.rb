@@ -81,6 +81,7 @@ class AtriumCollectionsController < AtriumController
   def edit
     #@atrium_collection = Atrium::Collection.find(params[:id])
     @exhibit_navigation_data = get_exhibit_navigation_data
+    @atrium_exhibit= Atrium::Exhibit.new
   end
 
   def update

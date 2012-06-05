@@ -45,8 +45,13 @@ module AtriumHelper
   # used in the catalog/_facets partial
   def facet_field_names
     collection = Atrium::Collection.find(params[:collection_id]) if params[:collection_id] && !params[:edit_collection_filter]
-    if collection
-      params[:add_featured] && params[:exhibit_id] ? [] : collection.search_facets.collect {|f| f.name}
+    if params[:add_featured]
+      []
+    elsif params[:exhibit_id]
+      exhibit = Atrium::Exhibit.find(params[:exhibit_id])
+      exhibit.browse_facet_names
+    elsif collection && params[:edit_collection_filter]
+       collection.search_facets.collect {|f| f.name}
     else
       super
     end

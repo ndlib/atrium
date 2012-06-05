@@ -67,7 +67,7 @@ class Atrium::Showcase < ActiveRecord::Base
   scope :with_selected_facets, lambda {|*args|
     parent_id, parent_type, selected_facets = args.flatten(1)
     logger.debug("getting browse page for exhibit: #{parent_id.inspect}, type:#{parent_type} and facets: #{selected_facets.inspect}")
-
+    selected_facets=parent_type.eql?("Atrium::Collection") ? {} : selected_facets
     selected_facets ? facet_conditions = selected_facets.collect {|key,value| "(#{Atrium::Showcase::FacetSelection.quoted_table_name}.`solr_facet_name` = '#{key}' and #{Atrium::Showcase::FacetSelection.quoted_table_name}.`value` = '#{(value.is_a?(String) ? value : value.flatten)}')"} : facet_conditions = {}
     conditions = "#{quoted_table_name}.`showcases_id` = #{parent_id} AND #{quoted_table_name}.`showcases_type` = \"#{parent_type}\""
 

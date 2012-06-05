@@ -37,7 +37,7 @@
             childTag       = $target.children().first()[0].nodeName.toLowerCase(),
             primaryLabel   = $target.attr('data-primary-label'),
             secondaryLabel = $target.attr('data-secondary-label');
-
+        console.log($(e.target))
         $(childTag, e.target).each(function(index, element){
           var objectId = $(element).attr('data-id');
           orderedItems[objectId] = (index + 1);
