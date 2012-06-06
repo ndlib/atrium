@@ -8,6 +8,11 @@
 
 
 (function($){
+
+  $.fn.outerHTML = function() {
+    return $(this).clone().wrap('<p></p>').parent().html();
+  }
+
   $(document).ready(function(){
 
     CKEDITOR.config.toolbar_Basic = [[ 'Source', '-', 'Bold', 'Italic' ] ];
@@ -31,18 +36,16 @@
 
     $('.sortable').sortable({
       update: function(e, ui){
-        var $target        = $(e.target),
+        var $target        = $(e.target).closest('ol'),
             orderedItems   = {},
             resourceURL    = $target.attr('data-resource'),
             childTag       = $target.children().first()[0].nodeName.toLowerCase(),
             primaryLabel   = $target.attr('data-primary-label'),
             secondaryLabel = $target.attr('data-secondary-label');
-        console.log($(e.target))
-        $(childTag, e.target).each(function(index, element){
+        $(childTag, $(e.target).closest('ol')).each(function(index, element){
           var objectId = $(element).attr('data-id');
           orderedItems[objectId] = (index + 1);
         });
-
         $.ajax({
           type: 'POST',
           url: resourceURL,
@@ -53,7 +56,6 @@
             } else {
               $target.parents('fieldset').effect('highlight', {}, 1500);
             }
-
             if (primaryLabel !== undefined){
               $('td.label', $target).text(secondaryLabel);        // This could be implemented better
               $('td.label', $target).first().text(primaryLabel);  //

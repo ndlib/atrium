@@ -130,7 +130,7 @@ module Atrium::SolrHelper
       elsif(params[:showcase_id])
         @showcase= Atrium::Showcase.find(params[:showcase_id])
       end
-      logger.debug("Showcase: #{@showcase.inspect}")
+      #logger.debug("Showcase: #{@showcase.inspect}")
       if @showcase && @showcase.parent
         if @showcase.parent.is_a?(Atrium::Collection)
           @atrium_collection = @showcase.parent
@@ -162,7 +162,7 @@ module Atrium::SolrHelper
       elsif params[:exhibit_id]
         @exhibit = Atrium::Exhibit.find(params[:exhibit_id])
       end
-      logger.debug("Collection: #{@atrium_collection}")
+      #logger.debug("Collection: #{@atrium_collection}")
       @extra_controller_params ||= {}
       params[:browse_level_id] ? @browse_level = Atrium::BrowseLevel.find(params[:browse_level_id]): @browse_level = get_current_browse_level(@exhibit)
       @extra_controller_params = prepare_extra_controller_params_for_collection_query(@atrium_collection,@exhibit,@browse_level,params,@extra_controller_params)
@@ -171,9 +171,9 @@ module Atrium::SolrHelper
       @extra_controller_params = reset_extra_controller_params_after_collection_query(@atrium_collection,@exhibit,@browse_level,@extra_controller_params)
       @browse_response = @response
       @browse_document_list = @document_list
-      logger.debug("Collection: #{@atrium_collection}, Exhibit: #{@atrium_collection.exhibits}")
+      #logger.debug("Collection: #{@atrium_collection}, Exhibit: #{@atrium_collection.exhibits}")
       @collection_showcase = Atrium::Showcase.with_selected_facets(@atrium_collection.id,@atrium_collection.class.name, params[:f]).first
-      logger.debug("Collection level showcase: #{@collection_showcase.inspect}")
+      #logger.debug("Collection level showcase: #{@collection_showcase.inspect}")
     rescue Exception=>e
       logger.error("Could not initialize collection information for id #{collection_id}. Reason - #{e.to_s}")
     end
@@ -272,16 +272,16 @@ module Atrium::SolrHelper
   #
   #   One should use the above methods to generate data for expand/collapse controls, breadcrumbs, etc.
   def get_exhibit_navigation_data
-    logger.debug("........... get_exhibit_navigation_data")
+    #logger.debug("get_exhibit_navigation_data browse response: #{browse_response.inspect}")
     initialize_collection if atrium_collection.nil?
     browse_data = []
     unless atrium_collection.nil? || atrium_collection.exhibits.nil?
       atrium_collection.exhibits.each do |exhibit|
         if exhibit.respond_to?(:browse_levels) && !exhibit.browse_levels.nil?
           updated_browse_levels = get_browse_level_data(atrium_collection,exhibit,exhibit.browse_levels,browse_response,current_extra_controller_params,true)
-          logger.debug("Updated Browse Levels: #{updated_browse_levels.inspect}")
+          #logger.debug("Updated Browse Levels: #{updated_browse_levels.inspect}")
           exhibit.browse_levels.each_index do |index|
-            logger.debug("#{exhibit.browse_levels.inspect}")
+            #logger.debug("#{exhibit.browse_levels.inspect}")
             exhibit.browse_levels.fetch(index).values = updated_browse_levels.fetch(index).values
             exhibit.browse_levels.fetch(index).label = updated_browse_levels.fetch(index).label
             exhibit.browse_levels.fetch(index).selected = updated_browse_levels.fetch(index).selected
@@ -291,12 +291,12 @@ module Atrium::SolrHelper
         end
       end
     end
-    logger.debug("Before BrowseData: #{browse_data.inspect}")
+    #logger.debug("Before BrowseData: #{browse_data.inspect}")
 
     browse_data=[] if check_for_scope(browse_data)
     @exhibit_navigation_data=browse_data
 
-    logger.debug("After BrowseData: #{browse_data.inspect}")
+    #logger.debug("After BrowseData: #{browse_data.inspect}")
     browse_data
   end
 
@@ -339,28 +339,15 @@ module Atrium::SolrHelper
       browse_level.label = facet_field_labels[browse_facet_name] if (browse_level.label.nil? || browse_level.label.blank?)
       #always add whether there should be values set or not
       updated_browse_levels << browse_level
-      if params.has_key?(:exhibit_number) && params[:exhibit_number].to_i == exhibit_number.to_i
-        if params.has_key?(:f) && !params[:f].nil?
-          temp = params[:f].dup
-          unless top_level && !params[:f][browse_facet_name] && !params[:f][browse_facet_name.to_s]
-            browse_levels.each_with_index do |cur_browse_level,index|
-              params[:f].delete(cur_browse_level.solr_facet_name)
-            end
-          else
-            params[:f] = {}
-          end
-          extra_controller_params = prepare_extra_controller_params_for_collection_query(collection,exhibit,browse_level,params,extra_controller_params)
-          puts "extra controller params before: #{extra_controller_params.inspect}"
-          (response_without_f_param, @new_document_list) = get_search_results(params,extra_controller_params)
-          extra_controller_params = reset_extra_controller_params_after_collection_query(collection,exhibit,browse_level,extra_controller_params)
-          puts "extra controller params after: #{extra_controller_params.inspect}"
-          params[:f] = temp
-        else
-          response_without_f_param = response
-        end
-      elsif params.has_key?(:f) && !params[:f].nil?
+      if params.has_key?(:f) && !params[:f].nil?
         temp = params[:f].dup
-        params[:f] = {}
+        unless top_level && !params[:f][browse_facet_name] && !params[:f][browse_facet_name.to_s]
+          browse_levels.each_with_index do |cur_browse_level,index|
+            params[:f].delete(cur_browse_level.solr_facet_name)
+          end
+        else
+          params[:f] = {}
+        end
         extra_controller_params = prepare_extra_controller_params_for_collection_query(collection,exhibit,browse_level,params,extra_controller_params)
         (response_without_f_param, @new_document_list) = get_search_results(params,extra_controller_params)
         extra_controller_params = reset_extra_controller_params_after_collection_query(collection,exhibit,browse_level,extra_controller_params)
@@ -400,7 +387,6 @@ module Atrium::SolrHelper
 
   def get_atrium_showcase(exhibit_id, facet_hash={})
     atrium_showcase= Atrium::Showcase.with_selected_facets(exhibit_id,facet_hash)
-    logger.error("Get browse page: #{atrium_showcase.inspect}")
     return atrium_showcase
   end
 
@@ -423,10 +409,10 @@ module Atrium::SolrHelper
   end
 
   def display_solr_essay(pid)
-    logger.debug("description: #{pid.inspect}")
+    #logger.debug("description: #{pid.inspect}")
     response, document = get_solr_response_for_doc_id(pid)
     content = render_document_show_field_value :document => document, :field => 'description_content_s'
-    logger.debug("Content:#{content}")
+    #logger.debug("Content:#{content}")
     return content.html_safe
   end
 end
