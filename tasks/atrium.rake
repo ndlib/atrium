@@ -102,22 +102,25 @@ namespace :atrium do
   task :setup_test_app => [:set_test_host_path] do
     path = TEST_HOST_PATH
     errors = []
-
-    puts "Freezing gems to project vendor/cache"
-    %x[bundle package]
-    errors << 'Bundle package failed' unless $?.success?
-
-    puts "Cleaning out test app path"
-    %x[rm -fr #{path}]
+    puts "Cleaning out test app path #{path}"
+    puts %x[rm -fr #{path}]
     errors << 'Error removing test app' unless $?.success?
+
+    ###puts "Freezing gems to project vendor/cache"
+    ###puts %x[bundle package]
+    ###errors << 'Bundle package failed' unless $?.success?
 
     puts "Creating test app directory"
     FileUtils.mkdir_p(path)
 
-    puts "Copying over .rvmrc file"
-    FileUtils.cp("./test_support/etc/rvmrc",File.join(path,".rvmrc"))
+    puts "Installing rails, bundler and devise"
+    %x[gem install --no-rdoc --no-ri 'rails' -v "<4"]
+    %x[gem install --no-rdoc --no-ri 'bundler']
+
+    #puts "Copying over .rvmrc file"
+    #FileUtils.cp("./test_support/etc/rvmrc",File.join(path,".rvmrc"))
     FileUtils.cd("tmp")
-    system("source ./test_app/.rvmrc")
+    #system("source ./test_app/.rvmrc")
 
     puts "Generating new rails app"
     %x[bundle exec rails new test_app]
@@ -125,62 +128,64 @@ namespace :atrium do
     FileUtils.cd('test_app')
     FileUtils.rm('public/index.html')
 
-    after = 'TestApp::Application.configure do'
-    replace!( "#{path}/config/environments/test.rb",  /#{after}/, "#{after}\n    config.log_level = :warn\n")
-
     puts "Copying Gemfile from test_support/etc"
     FileUtils.cp('../../test_support/etc/Gemfile','./Gemfile')
 
     #puts "Creating local vendor/cache dir and copying gems from atrium gemset"
     #FileUtils.cp_r(File.join('..','..','vendor','cache'), './vendor')
 
-    puts "Configure bundler to only look at the local vendor/cache"
-    FileUtils.mkdir_p( File.expand_path('./.bundle') )
-    FileUtils.cp_r(File.expand_path('../../test_support/etc/bundle_config'), File.expand_path('./.bundle/config'))
+    #puts "Configure bundler to only look at the local vendor/cache"
+    #FileUtils.mkdir_p( File.expand_path('./.bundle') )
+    #FileUtils.cp_r(File.expand_path('../../test_support/etc/bundle_config'), File.expand_path('./.bundle/config'))
 
     puts "Copying fixtures into test app spec/fixtures directory"
     FileUtils.mkdir_p( File.join('.','test_support') )
     FileUtils.cp_r(File.join('..','..','test_support','fixtures'), File.join('.','test_support','fixtures'))
 
     puts "Executing bundle install"
-    %x[bundle install]
+    puts %x[bundle install]
     errors << 'Error running bundle install in test app' unless $?.success?
 
-
-    puts "Generating default blacklight install"
-    %x[bundle exec rails g blacklight --devise]
-    errors << 'Error generating default blacklight install' unless $?.success?
-
-    puts "Generating default atrium install"
-    %x[bundle exec rails g atrium -df] # using -f to force overwriting of solr.yml
-    errors << 'Error generating default atrium install' unless $?.success?
-
-    FileUtils.cp('../../lib/generators/atrium/templates/db/seeds.rb','db/seeds.rb')
-
     puts "Installing jQuery UJS in test app"
-    %x[bundle exec rails g jquery:install]
+    puts %x[bundle exec rails g jquery:install]
     errors << 'Error installing jquery-rails in test app' unless $?.success?
 
     puts "Installing cucumber in test app"
-    %x[bundle exec rails g cucumber:install]
+    puts %x[bundle exec rails g cucumber:install]
     errors << 'Error installing cucumber in test app' unless $?.success?
 
-    puts "Loading blacklight marc test data into Solr"
-    %x[bundle exec rake solr:marc:index_test_data]
+    puts "Generating default blacklight install"
+    puts %x[bundle exec rails g blacklight --devise]
+    errors << 'Error generating default blacklight install' unless $?.success?
+
+    puts "Generating default atrium install"
+    puts %x[bundle exec rails g atrium -df] # using -f to force overwriting of solr.yml
+    errors << 'Error generating default atrium install' unless $?.success?
+
+    after = 'TestApp::Application.configure do'
+    replace!( "#{path}/config/environments/test.rb",  /#{after}/, "#{after}\n    config.log_level = :warn\n")
+
+    puts FileUtils.cp('../../lib/generators/atrium/templates/db/seeds.rb','db/seeds.rb')
+
+    ###puts "Loading blacklight marc test data into Solr"
+    ###%x[bundle exec rake solr:marc:index_test_data]
 
     puts "Running rake db:migrate"
-    output = %x[bundle exec rake db:migrate]
-    puts output
+    puts %x[bundle exec rake db:migrate]    
     errors << 'Error running db:migrate in test app' unless $?.success?
 
-    %x[bundle exec rake db:migrate RAILS_ENV=test]
+    puts %x[bundle exec rake db:migrate RAILS_ENV=test]
     errors << 'Error running db:migrate RAILS_ENV=test in test app' unless $?.success?
 
+	  #raise "Errors: #{errors.join("; ")}" unless errors.empty?
+	
     FileUtils.cd('../../')
-  end
+  end 
+  
 
   task :set_test_host_path do
     TEST_HOST_PATH = File.join(File.expand_path(File.dirname(__FILE__)),'..','tmp','test_app')
+    #TEST_HOST_PATH = '/home/blakshmi/project/atrium/tmp/test_app'
     puts "Test app path:\n#{TEST_HOST_PATH}"
   end
 

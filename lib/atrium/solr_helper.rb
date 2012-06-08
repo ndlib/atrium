@@ -167,6 +167,7 @@ module Atrium::SolrHelper
       params[:browse_level_id] ? @browse_level = Atrium::BrowseLevel.find(params[:browse_level_id]): @browse_level = get_current_browse_level(@exhibit)
       @extra_controller_params = prepare_extra_controller_params_for_collection_query(@atrium_collection,@exhibit,@browse_level,params,@extra_controller_params)
       (@response, @document_list) = get_search_results(params, @extra_controller_params)
+      (@images, @members) = get_all_children(@document_list)
       #reset to just filters in collection filter
       @extra_controller_params = reset_extra_controller_params_after_collection_query(@atrium_collection,@exhibit,@browse_level,@extra_controller_params)
       @browse_response = @response
@@ -414,5 +415,58 @@ module Atrium::SolrHelper
     content = render_document_show_field_value :document => document, :field => 'description_content_s'
     #logger.debug("Content:#{content}")
     return content.html_safe
+  end
+
+  def get_all_children(doc_list)
+    parent_arr=[]
+    modified_arr=[]
+    doc_list.each_with_index do |doc, i|
+      parent_arr<< doc["id"] unless (doc["id"].blank?)
+    end
+    parent_arr.each do |id|
+      rel_id="info:fedora/#{id}"
+      modified_arr<< rel_id
+    end
+    logger.debug("Get children for list: #{parent_arr.inspect}, #{modified_arr.inspect}")
+    p = params.dup
+    params.delete(:f)
+    params.delete(:page)
+    params.delete(:q)
+    params.delete(:fq)
+    per_page=params[:per_page]
+    params[:per_page] = 1000
+    response, is_part_response_list = get_solr_response_for_field_values("is_part_of_s",modified_arr)   ##get child pages
+    response, is_member_response_list = get_solr_response_for_field_values("is_member_of_s",modified_arr)        ## get any child components
+    logger.debug("count: #{is_part_response_list.count}, #{is_member_response_list.count}")
+    params[:f] = p[:f]
+    params[:page] = p[:page]
+    params[:q] = p[:q]
+    params[:fq] = p[:fq]
+    params[:per_page] = p[:per_page]
+    @image_hash={}
+    @member_hash={}
+    parent_arr.each do |parent|
+      logger.debug("Processing id: #{parent.inspect}")
+      image_arr=[]
+      member_arr=[]
+      is_part_response_list.each do |doc|
+        parent_id = doc["is_part_of_s"].first.split("/").last
+        if parent_id.eql?(parent)
+          logger.debug("is_part_response_list parent #{doc["is_part_of_s"].inspect}, id: #{doc["id"].inspect} ")
+          image_arr<<doc
+        end
+      end
+      is_member_response_list.each do |doc|
+        parent_id = doc["is_member_of_s"].first.split("/").last
+        if parent_id.eql?(parent)
+          logger.debug("is_member_of_s_response_list parent #{doc["is_member_of_s"].inspect}, id: #{doc["id"].inspect} ")
+          member_arr<<doc
+        end
+      end
+      @image_hash[parent]=image_arr
+      @member_hash[parent]=member_arr
+    end
+    #logger.debug("image_hash parent #{@image_hash.inspect}, member_hash: #{@member_hash.inspect} ")
+    return [@image_hash, @member_hash ]
   end
 end

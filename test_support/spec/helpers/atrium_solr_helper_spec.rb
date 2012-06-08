@@ -90,6 +90,7 @@ describe Atrium::SolrHelper do
       collection = mock()
       collection.stubs(:exhibits).returns([])
       helper.stubs(:atrium_collection).returns(collection)
+      helper.stubs(:check_for_scope).returns(false)
       helper.get_exhibit_navigation_data.should == []
     end
 

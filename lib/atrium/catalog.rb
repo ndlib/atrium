@@ -28,7 +28,6 @@ module Atrium::Catalog
     super
     if params[:atrium_collection_browse] || params[:atrium_exhibit_browse]
       @exhibit_navigation_data = get_exhibit_navigation_data
-
       render "browse_show"
     end
   end
@@ -138,6 +137,7 @@ module Atrium::Catalog
       logger.debug("params before search are: #{params.inspect}")
       logger.debug("extra params before search are: #{@extra_controller_params.inspect}")
       (@response, @document_list) = get_search_results(params,@extra_controller_params)
+      (@images, @members) = get_all_children(@document_list)
       #reset to settings before was merged with user params
       @extra_controller_params = reset_extra_controller_params_after_collection_query(collection,exhibit,browse_level,@extra_controller_params) if collection || exhibit || browse_level
       @filters = params[:f] || []

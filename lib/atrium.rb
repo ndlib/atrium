@@ -1,3 +1,4 @@
+require "blacklight"
 module Atrium
   require 'engine' if defined?(Rails) && Rails::VERSION::MAJOR == 3
   require 'application_controller'
@@ -6,6 +7,7 @@ module Atrium
   require 'atrium/routes'
 
   require 'ckeditor-rails'
+  require 'devise'
   require 'loggable'
 
   include Loggable
