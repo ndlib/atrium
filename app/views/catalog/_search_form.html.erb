@@ -4,6 +4,10 @@
   <h1> You can use either use search form to search for description.Please use selected checkbox to add description </h1>
 <%- end -%>
 
+<%- if @atrium_collection -%>
+  <%= render :partial => "shared/collection_title_header" %>
+<%- end -%>
+
 <div id="search" class="search">
   <%= form_tag catalog_index_path, :method => :get do %>
     <h2 class="search"><%= label_tag(:q, "Search ") %></h2>
@@ -30,5 +34,4 @@
       </div>
     <%- end -%>
   <% end %>
-  <hr/>
 </div>

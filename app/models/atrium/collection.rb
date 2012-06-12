@@ -34,20 +34,16 @@ class Atrium::Collection < ActiveRecord::Base
     search_facets.map{|facet| facet.name }
   end
 
-  def custom_title
-    nil # TODO: return a user-provided chunck of HTML
-  end
-
-  def has_custom_title?
-    false # TODO: check to see if custom HTML is provided for the main colleciton title
-  end
-
   def pretty_title
     title.blank? ? 'Unnamed Collection' : title
   end
 
-  def title_markup
-    has_custom_title? ? custom_title : "<h2>#{title}</h2>".html_safe
+  def has_custom_title?
+    !title_markup.blank?
+  end
+
+  def display_title
+    has_custom_title? ? title_markup.html_safe : "<h2>#{title}</h2>".html_safe
   end
 
   def search_facet_names=(collection_of_facet_names)

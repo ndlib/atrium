@@ -11,7 +11,7 @@
     <%= raw(render_head_content) %>
   </head>
   <% if params[:q].to_s.empty? and params[:f].to_s.empty? and params[:id].nil? %>
-  <body onload="$('input#q').focus();" class="<%= render_body_class %>">
+  <body onload="$('input#q').focus();" class="<%= render_body_class.html_safe %>">
     <% else %>
   <body class="<%= render_body_class.html_safe %>">
   <% end %>
