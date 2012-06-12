@@ -1,5 +1,5 @@
 class Atrium::Exhibit < ActiveRecord::Base
-  set_table_name :atrium_exhibits
+  self.table_name = 'atrium_exhibits'
 
   has_many :browse_levels, :class_name => 'Atrium::BrowseLevel', :foreign_key => 'atrium_exhibit_id', :order => 'level_number ASC'
   has_many :showcases,     :class_name => 'Atrium::Showcase',  :as => :showcases

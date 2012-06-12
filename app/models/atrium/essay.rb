@@ -1,5 +1,5 @@
 class Atrium::Essay < ActiveRecord::Base
-  set_table_name :atrium_essays
+  self.table_name = 'atrium_essays'
 
   belongs_to :description, :class_name => 'Atrium::Description', :foreign_key => 'atrium_description_id'
 

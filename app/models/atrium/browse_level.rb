@@ -1,5 +1,5 @@
 class Atrium::BrowseLevel < ActiveRecord::Base
-  set_table_name :atrium_browse_levels
+  self.table_name = 'atrium_browse_levels'
 
   belongs_to :exhibit, :class_name => 'Atrium::Exhibit', :foreign_key => 'atrium_exhibit_id'
 

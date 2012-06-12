@@ -1,6 +1,6 @@
 require 'sanitize'
 class Atrium::Description < ActiveRecord::Base
-  set_table_name :atrium_descriptions
+  self.table_name = 'atrium_descriptions'
 
   belongs_to :showcase, :class_name => 'Atrium::Showcase', :foreign_key => 'atrium_showcase_id'
   has_one :summary, :class_name => 'Atrium::Essay',  :conditions => "\"atrium_essays\".content_type = \"summary\"", :foreign_key => 'atrium_description_id', :dependent => :destroy

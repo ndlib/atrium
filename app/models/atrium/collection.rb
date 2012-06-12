@@ -1,5 +1,5 @@
 class Atrium::Collection < ActiveRecord::Base
-  set_table_name :atrium_collections
+  self.table_name = 'atrium_collections'
 
   has_many :exhibits,      :class_name => 'Atrium::Exhibit',       :foreign_key => 'atrium_collection_id', :order => 'set_number ASC', :dependent => :destroy
   has_many :search_facets, :class_name => 'Atrium::Search::Facet', :foreign_key => 'atrium_collection_id', :dependent => :destroy

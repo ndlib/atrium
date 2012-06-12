@@ -1,5 +1,5 @@
 class Atrium::Showcase::FacetSelection < ActiveRecord::Base
-  set_table_name :atrium_showcase_facet_selections
+  self.table_name = 'atrium_showcase_facet_selections'
 
   belongs_to :showcase, :class_name => 'Atrium::Showcase', :foreign_key => 'atrium_showcase_id'
 

@@ -1,5 +1,5 @@
 class Atrium::Showcase < ActiveRecord::Base
-  set_table_name :atrium_showcases
+  self.table_name = 'atrium_showcases'
 
   has_many :descriptions,     :class_name => 'Atrium::Description',              :foreign_key => 'atrium_showcase_id', :dependent => :destroy
   has_many :facet_selections, :class_name => 'Atrium::Showcase::FacetSelection', :foreign_key => 'atrium_showcase_id'
