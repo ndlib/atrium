@@ -167,8 +167,8 @@ namespace :atrium do
 
     puts FileUtils.cp('../../lib/generators/atrium/templates/db/seeds.rb','db/seeds.rb')
 
-    ###puts "Loading blacklight marc test data into Solr"
-    ###%x[bundle exec rake solr:marc:index_test_data]
+    puts "Loading blacklight marc test data into Solr"
+    %x[bundle exec rake solr:marc:index_test_data]
 
     puts "Running rake db:migrate"
     puts %x[bundle exec rake db:migrate]    

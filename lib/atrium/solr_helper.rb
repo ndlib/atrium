@@ -420,6 +420,7 @@ module Atrium::SolrHelper
   def get_all_children(doc_list)
     parent_arr=[]
     modified_arr=[]
+    logger.debug("Get children for list: #{doc_list.count}")
     doc_list.each_with_index do |doc, i|
       parent_arr<< doc["id"] unless (doc["id"].blank?)
     end
