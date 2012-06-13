@@ -1,20 +1,18 @@
 <div class="facet-list">
-  <h2><%=@atrium_collection.title %></h2>
+  <h2 class="collection-title"><%= @atrium_collection.pretty_title %></h2>
   <ul class="collection-controls">
     <li><%= link_to 'View Collection', @atrium_collection %></li>
     <li><%= link_to 'Configure Collection', edit_atrium_collection_path(@atrium_collection.id) %></li>
     <li><%= link_to 'Customize Collection Home Page',  new_atrium_collection_atrium_showcases_path(@atrium_collection)%></li>
   </ul>
   <%- unless @exhibit_navigation_data.nil? || @exhibit_navigation_data.empty? -%>
-    <dl id="exhibits">
-      <%- @exhibit_navigation_data.each do |exhibit| -%>
-        <dt><%= exhibit.pretty_title%></dt>
-        <dd><%= link_to 'Configure Exhibit', edit_atrium_exhibit_path(exhibit) %></dd>
-        <dd>
-          <%= link_to 'Customize Exhibit Home Page',  new_atrium_exhibit_atrium_showcases_path(exhibit)%>
-        </dd>
-      <%- end -%>
-    </dl>
+    <%- @exhibit_navigation_data.each do |exhibit| -%>
+      <h3 class="exhibit-title"><%= exhibit.pretty_title%></h3>
+      <ul class="exhibit-controls">
+        <li><%= link_to 'Configure Exhibit', edit_atrium_exhibit_path(exhibit) %></li>
+        <li><%= link_to 'Customize Exhibit Home Page',  new_atrium_exhibit_atrium_showcases_path(exhibit)%></li>
+      </ul>
+    <%- end -%>
   <%- end -%>
 </div>
 

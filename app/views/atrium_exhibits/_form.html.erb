@@ -1,4 +1,4 @@
-<%- if @exhibit -%>
+<% if @exhibit %>
   <%= form_for(@exhibit, :html => {:class => 'atrium'}) do |f| %>
     <fieldset>
       <legend>General Configuration</legend>
@@ -12,41 +12,38 @@
 
     <h3>Exhibit Scope</h3>
     <p>
-      A exhibit is a subset of a collection or collection. The scope of the exhibit can be set to any possible query made in the search interface.
+      An exhibit is a subset of a collection. The scope of the exhibit can be
+      set to any query made in the search interface.
     </p>
     <fieldset>
       <legend>Current Scope</legend>
-      <%-if @exhibit.filter_query_params %>
+      <%if @exhibit.filter_query_params %>
         <ul>
-          <%- @exhibit.filter_query_params.each do |key,value| %>
+          <% @exhibit.filter_query_params.each do |key,value| %>
             <li><label><%= key %>: </label><%= value %></li>
-            <%- end %>
+          <% end %>
         </ul>
-      <%- end %>
+      <% end %>
     </fieldset>
-    <%- collection_id = @exhibit.atrium_collection_id if @exhibit.atrium_collection_id -%>
-    <%- query_params = {:collection_id=>collection_id,:edit_exhibit_filter=>true, :exhibit_id=>@exhibit.id} -%>
-    <%- query_params.merge!(@exhibit.filter_query_params) if @exhibit.filter_query_params -%>
-    <%- query_params.delete(:controller) %>
-    <%- query_params.delete(:action) %>
-    <%- query_params.delete(:solr_doc_ids) %>
-    <%# link_to("Set Exhibit Scope", catalog_index_path(query_params)).html_safe %>
-    <dl>
-      <dd>
-        <%= link_to("Set Exhibit Scope", atrium_set_exhibit_scope_path(query_params)).html_safe %>
-        <%= link_to("Remove Exhibit Scope", atrium_unset_exhibit_scope_path(@exhibit.id)).html_safe  %>
-      </dd>
-    </dl>
+    <% collection_id = @exhibit.atrium_collection_id if @exhibit.atrium_collection_id %>
+    <% query_params = {:collection_id=>collection_id,:edit_exhibit_filter=>true, :exhibit_id=>@exhibit.id} %>
+    <% query_params.merge!(@exhibit.filter_query_params) if @exhibit.filter_query_params %>
+    <% query_params.delete(:controller) %>
+    <% query_params.delete(:action) %>
+    <% query_params.delete(:solr_doc_ids) %>
+    <p class="exhibit-scope-controls">
+      <%= link_to("Set Exhibit Scope", atrium_set_exhibit_scope_path(query_params), :class => 'button').html_safe %>
+      <%= link_to("Remove Exhibit Scope", atrium_unset_exhibit_scope_path(@exhibit.id), :class => 'button').html_safe %>
+    </p>
 
     <h3>Group Exhibit Items by Facets</h3>
     <p>
       Items present in a exhibit can be further scoped by facet selections. These facets
       are arranged in a single-level tree with each facet nested beneath its parent.
     </p>
-
     <fieldset>
       <legend>Current Facets</legend>
-      <%- if @exhibit.browse_levels.any? -%>
+      <% if @exhibit.browse_levels.any? %>
         <table>
           <thead>
             <tr>
@@ -59,12 +56,12 @@
             </tr>
           </thead>
           <tbody data-resource="<%= update_atrium_exhibit_facet_order_path %>" data-primary-label="Group By:" data-secondary-label="Then By:" class="sortable">
-            <%- @exhibit.browse_levels.each_with_index do |level,index| -%>
+            <% @exhibit.browse_levels.each_with_index do |level,index| %>
               <tr data-id="<%= level.id %>" data-order="<%= level.level_number %>" class="ui-state-default">
                 <%= f.fields_for :browse_levels, level do |level_form| %>
-		  <%- collection_id = @exhibit.atrium_collection_id if @exhibit.atrium_collection_id -%>
-                  <%- level_query_params = {:collection_id=>collection_id,:edit_browse_level_filter=>level.id, :browse_level_id=>level.id, :exhibit_id=>@exhibit.id} -%>
-		  <%- level_query_params.merge!(level.filter_query_params) if level.filter_query_params -%>
+                  <% collection_id = @exhibit.atrium_collection_id if @exhibit.atrium_collection_id %>
+                  <% level_query_params = {:collection_id=>collection_id,:edit_browse_level_filter=>level.id, :browse_level_id=>level.id, :exhibit_id=>@exhibit.id} %>
+                  <% level_query_params.merge!(level.filter_query_params) if level.filter_query_params %>
                   <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
                   <td class="label"><%= level.level_number == 1 ? 'Group By:' : 'Then By:' %></td>
                   <td><%=facet_field_labels[level.solr_facet_name]%></td>
@@ -73,38 +70,36 @@
                   <td><%=level_form.check_box :_destroy %></td>
                 <% end %>
               </tr>
-            <%- end -%>
+            <% end %>
           </tbody>
         </table>
-      <%- end -%>
+      <% end %>
     </fieldset>
-    <p>
-      <%= f.submit 'Update Exhibit and Facets' %>
+    <p class="exhibit-facet-controls">
+      <%= f.submit 'Update Exhibit and Facets', :class => 'button' %>
     </p>
-  <%- end -%>
+  <% end %>
+
   <%= form_for(@exhibit) do |f| %>
-    <%- @level = Atrium::BrowseLevel.new-%>
-    <%- @exhibit.set_number = @atrium_collection.exhibits.size + 1 -%>
-    <%- @exhibit.atrium_collection_id = @atrium_collection.id %>
+    <% @level = Atrium::BrowseLevel.new%>
+    <% @exhibit.set_number = @atrium_collection.exhibits.size + 1 %>
+    <% @exhibit.atrium_collection_id = @atrium_collection.id %>
     <%= f.fields_for :browse_levels, @level do |level_fields| %>
-      <%- if @exhibit.browse_levels.empty? -%>
-        <%- available_facets = CatalogController.blacklight_config.facet_fields.keys -%>
-      <%- else -%>
-        <%- facet_names = @exhibit.browse_levels.collect {|level| level.solr_facet_name}-%>
-        <%- available_facets = CatalogController.blacklight_config.facet_fields.keys.reject {|facet| facet_names.include?(facet)} -%>
-      <%- end -%>
-      <%- @level.level_number = @exhibit.browse_levels.size + 1 -%>
-      <%= level_fields.hidden_field :level_number %>
-      <table>
-        <tr>
-          <td>
-            <%= level_fields.label :solr_facet_name, 'Solr Facet:' %>
-            <%= level_fields.select(:solr_facet_name, available_facets.collect {|solr_fname| [facet_field_labels[solr_fname],solr_fname]})%>
-          </td>
-          <td><%= f.submit 'Add A Facet' %></td>
-        </tr>
-      </table>
+      <% if @exhibit.browse_levels.empty? %>
+        <% available_facets = CatalogController.blacklight_config.facet_fields.keys %>
+      <% else %>
+        <% facet_names = @exhibit.browse_levels.collect {|level| level.solr_facet_name}%>
+        <% available_facets = CatalogController.blacklight_config.facet_fields.keys.reject {|facet| facet_names.include?(facet)} %>
+      <% end %>
+      <% @level.level_number = @exhibit.browse_levels.size + 1 %>
+      <fieldset>
+        <legend>Add Facets To This Exhibit</legend>
+        <%= level_fields.hidden_field :level_number %>
+        <%= level_fields.label :solr_facet_name, 'Solr Facet:' %>
+        <%= level_fields.select(:solr_facet_name, available_facets.collect {|solr_fname| [facet_field_labels[solr_fname],solr_fname]})%>
+        <%= f.submit 'Add Facet', :class => 'button' %></td>
+      </fieldset>
     <% end %>
   <% end %>
 
-<%- end -%>
+<% end %>

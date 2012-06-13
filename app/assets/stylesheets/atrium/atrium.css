@@ -8,7 +8,7 @@ body {
   border-top:5px solid #484748;
 }
 
-a.button {
+.button {
   background-color:#CCC;
   border-color: #FFF #000 #000 #FFF;
   border-style:solid;
@@ -105,18 +105,19 @@ select {
   margin-bottom:.3em;
 }
 
-.collection-controls {
-  margin-left:1em;
+.collection-controls,
+.exhibit-controls {
   margin-top:0;
 }
 
-.collection-controls li {
+.collection-controls li,
+.exhibit-controls li {
   list-style-type:none;
 }
 
-#exhibits dt {
-  font-weight:bold;
-  margin-top:.6em;
+.facet-list .collection-title,
+.facet-list .exhibit-title {
+  margin-bottom:0;
 }
 
 /** Banner **/

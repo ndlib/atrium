@@ -1,7 +1,6 @@
 class AtriumExhibitsController < AtriumController
 
   before_filter :initialize_collection, :except=>[:index, :create]
-  before_filter :atrium_html_head
 
   def new
     logger.debug("in create params: #{params.inspect}")
@@ -17,13 +16,11 @@ class AtriumExhibitsController < AtriumController
 
     @exhibit.save
     logger.debug("in create params: #{@exhibit.inspect}")
-    #respond_to do |format|
     if @exhibit.save
       @exhibit.update_attributes(params[:atrium_exhibit])
       flash[:notice] = 'Exhibit was successfully created.'
       redirect_to :controller=>"atrium_collections", :action => "edit", :id=>@exhibit.atrium_collection_id
     end
-    #end
   end
 
   def edit

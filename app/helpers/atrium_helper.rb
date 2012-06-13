@@ -8,21 +8,6 @@ module AtriumHelper
     'Atrium Application'
   end
 
-  def atrium_html_head
-    logger.debug("Into atrium_html_head html head")
-    #if use_asset_pipeline?
-    #  stylesheet_links  << ["application"]
-    #  javascript_includes << ["application"]
-    #else
-    #  stylesheet_links << ['colorbox', 'atrium/chosen', 'atrium/atrium', {:media=>'all'}]
-    #  javascript_includes << ['jquery.jeditable.mini','jquery.colorbox', 'atrium/chosen.jquery.min', 'ckeditor/ckeditor.js', 'jquery.ckeditor.min.js','ckeditor/jquery.generateId.js', 'ckeditor/jquery.jeditable.ckeditor.js','atrium/atrium']
-    #end
-    stylesheet_links << ['application','colorbox', 'atrium/chosen', 'atrium/atrium', {:media=>'all'}]
-    javascript_includes << ["application",'jquery.jeditable.mini', 'atrium/chosen.jquery.min', 'ckeditor/ckeditor.js', 'jquery.ckeditor.min.js','ckeditor/jquery.generateId.js', 'ckeditor/jquery.jeditable.ckeditor.js','atrium/atrium']
-
-    logger.debug("Into atrium_html_head html head #{stylesheet_links.inspect}")
-  end
-
   # An array of strings to be added to HTML HEAD section of view.
   def extra_head_content
     @extra_head_content ||= []
