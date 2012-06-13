@@ -420,6 +420,7 @@ module Atrium::SolrHelper
   def get_all_children(doc_list)
     parent_arr=[]
     modified_arr=[]
+    logger.debug("Get children for list: #{doc_list.count}")
     doc_list.each_with_index do |doc, i|
       parent_arr<< doc["id"] unless (doc["id"].blank?)
     end
@@ -434,10 +435,11 @@ module Atrium::SolrHelper
     params.delete(:q)
     params.delete(:fq)
     per_page=params[:per_page]
-    params[:per_page] = 1000
+    params[:rows] = 1000
     response, is_part_response_list = get_solr_response_for_field_values("is_part_of_s",modified_arr)   ##get child pages
     response, is_member_response_list = get_solr_response_for_field_values("is_member_of_s",modified_arr)        ## get any child components
     logger.debug("count: #{is_part_response_list.count}, #{is_member_response_list.count}")
+    params.delete(:rows)
     params[:f] = p[:f]
     params[:page] = p[:page]
     params[:q] = p[:q]

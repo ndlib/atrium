@@ -28,7 +28,8 @@ module Atrium::Catalog
     super
     if params[:atrium_collection_browse] || params[:atrium_exhibit_browse]
       @exhibit_navigation_data = get_exhibit_navigation_data
-      render "browse_show"
+      #logger.debug("render browse_show")
+      #render "browse_show"
     end
   end
 
