@@ -7,6 +7,7 @@ class CreateAtriumCollections < ActiveRecord::Migration
       t.string :theme
       t.text :title_markup
       t.text :collection_description
+      t.text :search_instructions
       t.text :collection_items
     end
     add_index :atrium_collections, :id

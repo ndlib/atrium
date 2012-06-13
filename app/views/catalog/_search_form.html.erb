@@ -1,12 +1,37 @@
-<%- if params[:add_featured] -%>
-  <h1> You can use either use search form or facet to search for items to be added featured source. Please use selected checkbox to select item </h1>
-<%- elsif params[:add_description] -%>
-  <h1> You can use either use search form to search for description.Please use selected checkbox to add description </h1>
-<%- end -%>
-
-<%- if @atrium_collection -%>
-  <%= render :partial => "shared/collection_title_header" %>
-<%- end -%>
+<% if params[:add_featured] %>
+  <h1>Select Featured Items</h1>
+  <p>
+    In a showcase the &#8220;Featured Items&#8221; are highlighted as exemplars
+    and placed at the top of the page. The rest of the items are present in a
+    paginated list at below them.
+  </p>
+  <p>
+    To select &#8220;Featured Items&#8221; use the &#8220;Select&#8221; checkbox
+    on the right side of the desired item. You can limit the items listed by
+    keyword search and or facet selection.
+  </p>
+  <p>
+    Each time you make a selection it is saved. When you are finished close the modal window.
+  </p>
+<% elsif params[:add_description] %>
+  <h1>Select Existing Description</h1>
+  <p>
+    Descriptions are blocks of text present at the top of the page when viewing
+    a showcase. They can be added from within Atrium or they can be ingested
+    into Solr through any process you like.
+  </p>
+  <p>
+    To associate a description that is already present in the Solr index with
+    this showcase find the item you are interested in and click the
+    &#8220;Select&#8221; checkbox. You can limit the items listed by keyword
+    search and or facet selection.
+  </p>
+  <p>
+    Each time you make a selection it is saved. When you are finished close the modal window.
+  </p>
+<% else %>
+  <%= render :partial => "shared/collection_title_header" if @atrium_collection %>
+<% end %>
 
 <div id="search" class="search">
   <%= form_tag catalog_index_path, :method => :get do %>
@@ -20,18 +45,18 @@
 
     <%= submit_tag 'search', :class=>'submit' %>
 
-    <%- if params[:collection_id] && params[:edit_collection_filter] -%>
+    <% if params[:collection_id] && params[:edit_collection_filter] %>
       <div id="prompt" class="ui-state-highlight ui-corner-all">
         <%= submit_tag 'Set Collection Scope to Here', :class=>'submit', :name=>'save_collection_filter_button' %>
       </div>
-    <%- elsif params[:edit_exhibit_filter] -%>
+    <% elsif params[:edit_exhibit_filter] %>
       <div id="prompt" class="ui-state-highlight ui-corner-all">
         <%= submit_tag 'Set Exhibit Scope to Here', :class=>'submit', :name=>'save_exhibit_filter_button' %>
       </div>
-    <%- elsif params[:edit_browse_level_filter] -%>
+    <% elsif params[:edit_browse_level_filter] %>
       <div id="prompt" class="ui-state-highlight ui-corner-all">
         <%= submit_tag 'Set Browse Level Scope to Here', :class=>'submit', :name=>'save_browse_level_filter_button' %>
       </div>
-    <%- end -%>
+    <% end %>
   <% end %>
 </div>

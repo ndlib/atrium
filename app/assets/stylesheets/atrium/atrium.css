@@ -22,7 +22,7 @@ a.button {
 
 #banner {
   background-color:#EFEFEF;
-  box-shadow:0 2px 3px #EFEFEF;
+  border-bottom:2px solid #333;
   font-size: 1.2em;
   line-height:3.2em;
   opacity:.95;
@@ -172,13 +172,22 @@ form.atrium ol li {
   list-style-type:none;
 }
 
-form.atrium label{
-  margin-top:1em;
+form.atrium label {
   display:block;
+  margin-top:1em;
+}
+
+form.atrium .inline {
+  margin-top:1em;
+}
+
+form.atrium .inline label {
+  display:inline;
+  margin-top:0;
 }
 
 form.atrium input[type=text],
-form.atrium select{
+form.atrium select {
   width:72%;
 }
 
@@ -186,7 +195,7 @@ form.atrium th {
   text-align:left;
 }
 
-.chzn-container-multi .chzn-choices .search-choice .search-choice-close{
+.chzn-container-multi .chzn-choices .search-choice .search-choice-close {
   border-bottom:none;
 }
 

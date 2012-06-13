@@ -46,7 +46,7 @@
           <% if params[:controller].eql?( "catalog") %>
             <% if (params[:atrium_collection_browse].blank? && params[:atrium_exhibit_browse].blank?) || params[:class] == "edit_collection" %>
               <% if params[:collection_id] %>
-                <h3 class="collection-browse-link"><%= link_to "Browse this Collection", atrium_collection_path(params[:collection_id]) %></h3>
+                <h3 class="collection-browse-link"><%= link_to "Browse This Collection", atrium_collection_path(params[:collection_id]) %></h3>
               <% end %>
             <% else %>
 	            <%= render :partial => 'shared/collection_search_form' %>
