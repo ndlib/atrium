@@ -9,7 +9,7 @@
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
     <%= raw(render_head_content) %>
-    <%= yield :theme_styles%>
+    <%= yield :theme_styles %>
   </head>
   <% if params[:q].to_s.empty? and params[:f].to_s.empty? and params[:id].nil? %>
   <body onload="$('input#q').focus();" class="<%= render_body_class.html_safe %>">
@@ -27,7 +27,9 @@
             <% if @atrium_collection && !@atrium_collection.new_record? %>
               <h3><%= link_to @atrium_collection.title, atrium_collection_home_path(@atrium_collection) %></h3>
             <% else %>
-              <h1 class="site_title"><%= link_to application_name, "/" %><%= (params[:controller] == "catalog" and !params[:id]) ? "<span id='results_text'>Search Results</span>".html_safe : "" %></h1>
+              <h1 class="site_title">
+                <%= link_to application_name, "/" %>
+              </h1>
             <% end %>
           <% end %>
         </div>
