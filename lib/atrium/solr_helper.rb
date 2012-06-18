@@ -180,11 +180,35 @@ module Atrium::SolrHelper
     end
   end
 
+    # added as part of solr search params to exclude items from search result
+    # as :f, to solr as appropriate :fq query.
+  def add_exclude_fq_to_solr(solr_parameters, user_params)
+    # :fq, map from :f.
+    #logger.debug("Solr exclude!!!: #{solr_parameters.inspect}, #{user_params.inspect}")
+    if ( user_params[:exclude])
+      exclude_request_params = user_params[:exclude]
+      #logger.debug("user_params[:exclude]!!!: #{user_params[:exclude].inspect}")
+      solr_parameters[:fq] ||= []
+      exclude_request_params.each_pair do |facet_field, value_list|
+        value_list ||= []
+        value_list = [value_list] unless value_list.respond_to? :each
+        value_list.each do |value|
+          exclude_query="-(#{facet_value_to_fq_string(facet_field, value)})"
+          solr_parameters[:fq] << exclude_query
+          #logger.debug("Solr exclude!!!: #{exclude_query.inspect},   #{solr_parameters.inspect}, #{user_params.inspect}")
+        end
+      end
+    end
+  end
+
   def get_current_filter_query_params(collection,exhibit,browse_level)
+    #params[:exclude]={:f=>{"collection_0_did_0_unittitle_0_imprint_0_publisher_facet"=>["Continental Currency"]}}
     filter_query_params = nil
     ex_filter_query_params = solr_search_params(collection.filter_query_params) if collection && !collection.filter_query_params.nil?
     exhibit_filter_query_params = solr_search_params(exhibit.filter_query_params) if exhibit && !exhibit.filter_query_params.nil?
     bl_filter_query_params = solr_search_params(browse_level.filter_query_params) if browse_level && !browse_level.filter_query_params.nil?
+    bl_exclude_query_params = solr_search_params(browse_level.exclude_query_params) if browse_level && !browse_level.exclude_query_params.nil?
+    #logger.debug("##### Exclude: #{bl_exclude_query_params.inspect}")
     queries = []
     queries << ex_filter_query_params[:q] if (ex_filter_query_params && ex_filter_query_params[:q])
     queries << exhibit_filter_query_params[:q] if (exhibit_filter_query_params && exhibit_filter_query_params[:q])
@@ -203,6 +227,12 @@ module Atrium::SolrHelper
         fq << fq_param unless fq.include?(fq_param)
       end
     end
+    if bl_exclude_query_params && bl_exclude_query_params[:fq]
+      bl_exclude_query_params[:fq].each do |fq_exclude_param|
+        fq << fq_exclude_param unless fq.include?(fq_exclude_param)
+      end
+    end
+
     unless fq.empty? && queries.empty?
       filter_query_params = {}
       filter_query_params.merge!(:fq=>fq) unless fq.empty?
@@ -434,11 +464,12 @@ module Atrium::SolrHelper
     params.delete(:page)
     params.delete(:q)
     params.delete(:fq)
-    per_page=params[:per_page]
+    params.delete(:per_page)
     params[:rows] = 1000
+    params[:per_page] = 1000
     response, is_part_response_list = get_solr_response_for_field_values("is_part_of_s",modified_arr)   ##get child pages
     response, is_member_response_list = get_solr_response_for_field_values("is_member_of_s",modified_arr)        ## get any child components
-    logger.debug("count: #{is_part_response_list.count}, #{is_member_response_list.count}")
+    logger.debug("Image Count:#{is_part_response_list.count}, Children count:#{is_member_response_list.count}")
     params.delete(:rows)
     params[:f] = p[:f]
     params[:page] = p[:page]
@@ -448,27 +479,26 @@ module Atrium::SolrHelper
     @image_hash={}
     @member_hash={}
     parent_arr.each do |parent|
-      logger.debug("Processing id: #{parent.inspect}")
+      #logger.debug("Processing id: #{parent.inspect}")
       image_arr=[]
       member_arr=[]
       is_part_response_list.each do |doc|
         parent_id = doc["is_part_of_s"].first.split("/").last
         if parent_id.eql?(parent)
-          logger.debug("is_part_response_list parent #{doc["is_part_of_s"].inspect}, id: #{doc["id"].inspect} ")
+          #logger.debug("is_part_response_list parent #{doc["is_part_of_s"].inspect}, id: #{doc["id"].inspect} ")
           image_arr<<doc
         end
       end
       is_member_response_list.each do |doc|
         parent_id = doc["is_member_of_s"].first.split("/").last
         if parent_id.eql?(parent)
-          logger.debug("is_member_of_s_response_list parent #{doc["is_member_of_s"].inspect}, id: #{doc["id"].inspect} ")
+          #logger.debug("is_member_of_s_response_list parent #{doc["is_member_of_s"].inspect}, id: #{doc["id"].inspect} ")
           member_arr<<doc
         end
       end
       @image_hash[parent]=image_arr
       @member_hash[parent]=member_arr
     end
-    #logger.debug("image_hash parent #{@image_hash.inspect}, member_hash: #{@member_hash.inspect} ")
     return [@image_hash, @member_hash ]
   end
 end

@@ -52,6 +52,7 @@
               <th>Facet</th>
               <th>Label</th>
               <th>Filter</th>
+              <th>Exclude</th>
               <th>Remove</th>
             </tr>
           </thead>
@@ -60,13 +61,15 @@
               <tr data-id="<%= level.id %>" data-order="<%= level.level_number %>" class="ui-state-default">
                 <%= f.fields_for :browse_levels, level do |level_form| %>
                   <% collection_id = @exhibit.atrium_collection_id if @exhibit.atrium_collection_id %>
-                  <% level_query_params = {:collection_id=>collection_id,:edit_browse_level_filter=>level.id, :browse_level_id=>level.id, :exhibit_id=>@exhibit.id} %>
+                  <% level_query_params = {:collection_id=>collection_id,:browse_level_id=>level.id, :exhibit_id=>@exhibit.id} %>
                   <% level_query_params.merge!(level.filter_query_params) if level.filter_query_params %>
+                  <% exclude_query_params = level_query_params.dup %>
                   <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
                   <td class="label"><%= level.level_number == 1 ? 'Group By:' : 'Then By:' %></td>
                   <td><%=facet_field_labels[level.solr_facet_name]%></td>
                   <td><%=level_form.text_field :label, :value=>level.label%></td>
-                  <td><%= link_to("Set Group By Filter", catalog_index_path(level_query_params)).html_safe %></td>
+                  <td><%= link_to("Set Group By Filter", catalog_index_path(level_query_params.merge!(:edit_browse_level_filter=>level.id))).html_safe %></td>
+                  <td><%= link_to("Set Exclude Filter", catalog_index_path(exclude_query_params.merge!(:exclude_browse_level_filter=>level.id))).html_safe %></td>
                   <td><%=level_form.check_box :_destroy %></td>
                 <% end %>
               </tr>
@@ -97,7 +100,7 @@
         <%= level_fields.hidden_field :level_number %>
         <%= level_fields.label :solr_facet_name, 'Solr Facet:' %>
         <%= level_fields.select(:solr_facet_name, available_facets.collect {|solr_fname| [facet_field_labels[solr_fname],solr_fname]})%>
-        <%= f.submit 'Add Facet', :class => 'button' %></td>
+        <%= f.submit 'Add Facet', :class => 'button' %>
       </fieldset>
     <% end %>
   <% end %>

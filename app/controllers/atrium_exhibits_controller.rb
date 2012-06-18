@@ -39,6 +39,7 @@ class AtriumExhibitsController < AtriumController
   end
 
   def show
+    #params[:fq] = "component_type_t:subcollection"
     @exhibit= Atrium::Exhibit.find(params[:id])
     @exhibit_navigation_data = get_exhibit_navigation_data
 

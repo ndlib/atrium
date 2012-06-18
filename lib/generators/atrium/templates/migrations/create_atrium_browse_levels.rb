@@ -6,6 +6,7 @@ class CreateAtriumBrowseLevels < ActiveRecord::Migration
       t.string :filter_query_params
       t.string :solr_facet_name
       t.string :label
+      t.string :exclude_query_params
     end
     add_index :atrium_browse_levels, :id
     add_index :atrium_browse_levels, :atrium_exhibit_id

@@ -37,6 +37,7 @@ class AtriumCollectionsController < AtriumController
   end
 
   def unset_collection_scope
+     @atrium_exhibit= Atrium::Exhibit.new
      @atrium_collection = Atrium::Collection.find(params[:id])
      @atrium_collection.update_attributes(:filter_query_params=>nil)
      flash[:notice] = 'Collection scope removed successfully'
@@ -86,6 +87,7 @@ class AtriumCollectionsController < AtriumController
 
   def update
     @atrium_collection = Atrium::Collection.find(params[:id])
+    @atrium_exhibit=Atrium::Exhibit.new
     if (params[:atrium_collection])
       params[:atrium_collection][:search_facet_names] ||= []
     end
@@ -101,6 +103,7 @@ class AtriumCollectionsController < AtriumController
   end
 
   def destroy
+    @atrium_exhibit= Atrium::Exhibit.new
     @atrium_collection = Atrium::Collection.find(params[:id])
     @atrium_collection.destroy
     flash[:notice] = 'Collection deleted.'

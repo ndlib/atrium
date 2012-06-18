@@ -109,6 +109,22 @@ module Atrium::Catalog
       else
         redirect_to new_atrium_exhibit_path
       end
+    elsif params[:save_browse_level_exclude_button]
+      params[:browse_level_id] ? browse_level_id = params[:browse_level_id] : browse_level_id = params[:edit_browse_level_filter]
+      @browse_level = Atrium::BrowseLevel.find(browse_level_id) if browse_level_id
+      logger.debug("pressed save browse level filter button")
+      if @browse_level
+        filter_query_params = search_session.clone
+        filter_query_params[:exclude] = filter_query_params[:f]
+        filter_query_params.delete(:f)
+        filter_query_params.delete(:save_browse_level_exclude_button)
+        filter_query_params.delete(:collection_id)
+        filter_query_params.delete(:browse_level_id)
+        @browse_level.update_attributes(:exclude_query_params=>filter_query_params)
+        redirect_to edit_atrium_exhibit_path(@browse_level.atrium_exhibit_id)
+      else
+        redirect_to new_atrium_exhibit_path
+      end
     else
       delete_or_assign_search_session_params if !params[:add_description]
 
@@ -134,8 +150,13 @@ module Atrium::Catalog
       logger.debug("collection is: #{collection.inspect}")
       logger.debug("exhibit is: #{exhibit.inspect}")
       logger.debug("browse level is: #{browse_level.inspect}")
-      @extra_controller_params = prepare_extra_controller_params_for_collection_query(collection,exhibit,browse_level,params,@extra_controller_params) if collection || exhibit || browse_level
       logger.debug("params before search are: #{params.inspect}")
+      if params[:add_description] || params[:edit_exhibit_filter] ||  params[:edit_collection_filter] || params[:edit_browse_level_filter] || params[:add_featured] || params[:CKEditor]
+        @extra_controller_params={}
+      else
+        @extra_controller_params = prepare_extra_controller_params_for_collection_query(collection,exhibit,browse_level,params,@extra_controller_params) if collection || exhibit || browse_level
+      end
+
       logger.debug("extra params before search are: #{@extra_controller_params.inspect}")
       (@response, @document_list) = get_search_results(params,@extra_controller_params)
       (@images, @members) = get_all_children(@document_list)

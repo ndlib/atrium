@@ -11,13 +11,19 @@ class Atrium::Description < ActiveRecord::Base
   accepts_nested_attributes_for :essay,   :allow_destroy => true
   accepts_nested_attributes_for :summary, :allow_destroy => true
 
-  after_save  :update_solr unless ENV['DO_NOT_INDEX']
-  after_destroy :remove_from_solr
+  after_save  :update_solr unless ENV['DO_NOT_INDEX'] || RAILS_ENV == "development" || RAILS_ENV == "staging"
+  after_destroy :remove_from_solr unless RAILS_ENV == "development" || RAILS_ENV == "staging"
 
   def self.get_description_from_solr_id(solr_id)
-    atrium_description=Atrium::Description.find(solr_id.split('_').last)
-    atrium_showcase=Atrium::Showcase.find(atrium_description.atrium_showcase_id)
-    return atrium_description , atrium_showcase
+    #atrium_description=Atrium::Description.find(solr_id.split('_').last)
+    atrium_description=Atrium::Description.find_by_description_solr_id(solr_id.to_s)
+    logger.debug("$$$$$desc: #{atrium_description.inspect}")
+    if atrium_description
+      atrium_showcase=Atrium::Showcase.find(atrium_description.atrium_showcase_id)
+      return atrium_description , atrium_showcase
+    else
+      return []
+    end
   end
 
   def pretty_title
@@ -32,7 +38,7 @@ class Atrium::Description < ActiveRecord::Base
     essay.blank? ? "" : summary.content
   end
 
-  def solr_id
+  def generate_solr_id
     "atrium_description_#{id}"
   end
 
@@ -44,7 +50,7 @@ class Atrium::Description < ActiveRecord::Base
     doc= {
       :active_fedora_model_s          => "Description",
       :page_display_s                 => (page_display unless page_display.blank?),
-      :id                             => solr_id,
+      :id                             => generate_solr_id,
       :format                         => "Description",
       :title_t                        => pretty_title,
       :title_s                        => pretty_title,
@@ -69,12 +75,12 @@ class Atrium::Description < ActiveRecord::Base
   end
 
   def to_solr
-    puts "Into to Solr"
+    #puts "Into to Solr"
     Blacklight.solr.add as_solr
   end
 
   def update_solr
-    if(description_solr_id.blank?)
+    if (description_solr_id.blank?)
       to_solr
       Blacklight.solr.commit
     end

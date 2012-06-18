@@ -13,4 +13,6 @@ class AtriumController < ApplicationController
 
   layout :current_layout
 
+  AtriumController.solr_search_params_logic += [:add_exclude_fq_to_solr]
+
 end

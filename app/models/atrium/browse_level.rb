@@ -6,6 +6,7 @@ class Atrium::BrowseLevel < ActiveRecord::Base
   validates_presence_of :atrium_exhibit_id, :level_number, :solr_facet_name
 
   serialize :filter_query_params
+  serialize :exclude_query_params
 
   attr_accessor :values, :selected
 
