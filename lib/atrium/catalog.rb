@@ -37,8 +37,6 @@ module Atrium::Catalog
   end
 
   def index
-    stylesheet_links << ['atrium/atrium', {:media=>'all'}]
-
     #put in atrium index code here
     if params[:save_collection_filter_button]
       logger.debug("pressed save collection filter button")

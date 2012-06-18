@@ -21,5 +21,4 @@ module Atrium::ApplicationHelper
     end
   end
 
-
 end
