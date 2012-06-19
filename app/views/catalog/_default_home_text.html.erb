@@ -1,6 +1,6 @@
-<h3>Welcome!</h3>
-<p>To modify this text to your specifications, copy this file located in the blacklight plugin directory:<br/>
-&nbsp;&nbsp;&nbsp;vendor/plugins/blacklight/app/views/catalog/_home_text.html.erb</p>
-<p>to your top level rails app:<br/>
-&nbsp;&nbsp;&nbsp;app/views/catalog/_home_text.html.erb</p>
-Note that you will need to create the 'catalog' directory under views.
+<h3><%= t(:welcome) %></h3>
+<p>To modify this text copy the following file within the Atirum gem:</p>
+<pre>GEM_HOME/atrium/app/views/catalog/_default_home_text.html.erb</pre>
+<p>to your rails application:<p>
+<code><pre>app/views/catalog/_default_home_text.html.erb</pre></code>
+<p><strong>NOTE:</strong> You will need to create the <em>views/catalog</em> directory if you haven't already.</p>
