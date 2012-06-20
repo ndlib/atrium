@@ -1,6 +1,6 @@
 require "blacklight"
 module Atrium
-  require 'engine' if defined?(Rails) && Rails::VERSION::MAJOR == 3
+  require 'atrium/engine' if defined?(Rails)
   require 'application_controller'
 
   require 'atrium/version'
@@ -11,7 +11,6 @@ module Atrium
   require 'loggable'
 
   include Loggable
-
 
   def self.version
     Atrium::VERSION
