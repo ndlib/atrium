@@ -77,7 +77,8 @@ module AtriumHelper
     params[:controller] == "atrium_exhibits" ? exhibit_id = params[:id] : exhibit_id = params[:exhibit_id]
     label = render_document_index_label doc, opts
     args = {}
-    args.merge!(:f=>params[:f]) if params[:f] && params[:controller] != "catalog"
+    args.merge!(:f=>params[:f]) if params[:f]
+    #&& params[:controller] != "catalog"
     #try to retrieve collection id if not set
     if exhibit_id && !collection_id
       begin
@@ -155,6 +156,14 @@ module AtriumHelper
   def set_edit_showcase_in_session
     logger.debug("Setting edit showcase")
     session[:edit_showcase] = true
+  end
+
+  def get_start_over_path
+    if (params[:collection_id])
+      atrium_collection_home_path(params[:collection_id])
+    else
+      catalog_index_path
+    end
   end
 
 end

@@ -12,10 +12,6 @@ module Atrium::SolrHelper
     pluralize(count, 'document')
   end
 
-  def get_collections_list
-    Atrium::Collection.find(:all)
-  end
-
   # Return the link to browse an collection
   # @return [String] a formatted url to be used in href's etc.
   def browse_collection_link
@@ -130,7 +126,7 @@ module Atrium::SolrHelper
       elsif(params[:showcase_id])
         @showcase= Atrium::Showcase.find(params[:showcase_id])
       end
-      #logger.debug("Showcase: #{@showcase.inspect}")
+      ##logger.debug("Showcase: #{@showcase.inspect}")
       if @showcase && @showcase.parent
         if @showcase.parent.is_a?(Atrium::Collection)
           @atrium_collection = @showcase.parent
@@ -153,7 +149,7 @@ module Atrium::SolrHelper
     end
 
     begin
-      @atrium_collection = Atrium::Collection.find(collection_id)
+      @atrium_collection = Atrium::Collection.find(collection_id) if @atrium_collection.nil?
       raise "No collection was found with id: #{collection_id}" if @atrium_collection.nil?
       @exhibits = @atrium_collection.exhibits
       if params[:exhibit_number]
@@ -162,19 +158,20 @@ module Atrium::SolrHelper
       elsif params[:exhibit_id]
         @exhibit = Atrium::Exhibit.find(params[:exhibit_id])
       end
-      #logger.debug("Collection: #{@atrium_collection}")
+      ##logger.debug("Collection: #{@atrium_collection}")
       @extra_controller_params ||= {}
       params[:browse_level_id] ? @browse_level = Atrium::BrowseLevel.find(params[:browse_level_id]): @browse_level = get_current_browse_level(@exhibit)
       @extra_controller_params = prepare_extra_controller_params_for_collection_query(@atrium_collection,@exhibit,@browse_level,params,@extra_controller_params)
       (@response, @document_list) = get_search_results(params, @extra_controller_params)
-      (@images, @members) = get_all_children(@document_list)
+      @images = get_all_children(@document_list, "is_part_of_s")
+      #@members = get_all_children(@document_list, "is_member_of_s")
       #reset to just filters in collection filter
       @extra_controller_params = reset_extra_controller_params_after_collection_query(@atrium_collection,@exhibit,@browse_level,@extra_controller_params)
       @browse_response = @response
       @browse_document_list = @document_list
-      #logger.debug("Collection: #{@atrium_collection}, Exhibit: #{@atrium_collection.exhibits}")
+      ##logger.debug("Collection: #{@atrium_collection}, Exhibit: #{@atrium_collection.exhibits}")
       @collection_showcase = Atrium::Showcase.with_selected_facets(@atrium_collection.id,@atrium_collection.class.name, params[:f]).first
-      #logger.debug("Collection level showcase: #{@collection_showcase.inspect}")
+      ##logger.debug("Collection level showcase: #{@collection_showcase.inspect}")
     rescue Exception=>e
       logger.error("Could not initialize collection information for id #{collection_id}. Reason - #{e.to_s}")
     end
@@ -184,10 +181,10 @@ module Atrium::SolrHelper
     # as :f, to solr as appropriate :fq query.
   def add_exclude_fq_to_solr(solr_parameters, user_params)
     # :fq, map from :f.
-    #logger.debug("Solr exclude!!!: #{solr_parameters.inspect}, #{user_params.inspect}")
+    ##logger.debug("Solr exclude!!!: #{solr_parameters.inspect}, #{user_params.inspect}")
     if ( user_params[:exclude])
       exclude_request_params = user_params[:exclude]
-      #logger.debug("user_params[:exclude]!!!: #{user_params[:exclude].inspect}")
+      ##logger.debug("user_params[:exclude]!!!: #{user_params[:exclude].inspect}")
       solr_parameters[:fq] ||= []
       exclude_request_params.each_pair do |facet_field, value_list|
         value_list ||= []
@@ -195,7 +192,7 @@ module Atrium::SolrHelper
         value_list.each do |value|
           exclude_query="-(#{facet_value_to_fq_string(facet_field, value)})"
           solr_parameters[:fq] << exclude_query
-          #logger.debug("Solr exclude!!!: #{exclude_query.inspect},   #{solr_parameters.inspect}, #{user_params.inspect}")
+          ##logger.debug("Solr exclude!!!: #{exclude_query.inspect},   #{solr_parameters.inspect}, #{user_params.inspect}")
         end
       end
     end
@@ -208,7 +205,7 @@ module Atrium::SolrHelper
     exhibit_filter_query_params = solr_search_params(exhibit.filter_query_params) if exhibit && !exhibit.filter_query_params.nil?
     bl_filter_query_params = solr_search_params(browse_level.filter_query_params) if browse_level && !browse_level.filter_query_params.nil?
     bl_exclude_query_params = solr_search_params(browse_level.exclude_query_params) if browse_level && !browse_level.exclude_query_params.nil?
-    #logger.debug("##### Exclude: #{bl_exclude_query_params.inspect}")
+    ##logger.debug("##### Exclude: #{bl_exclude_query_params.inspect}")
     queries = []
     queries << ex_filter_query_params[:q] if (ex_filter_query_params && ex_filter_query_params[:q])
     queries << exhibit_filter_query_params[:q] if (exhibit_filter_query_params && exhibit_filter_query_params[:q])
@@ -303,16 +300,16 @@ module Atrium::SolrHelper
   #
   #   One should use the above methods to generate data for expand/collapse controls, breadcrumbs, etc.
   def get_exhibit_navigation_data
-    #logger.debug("get_exhibit_navigation_data browse response: #{browse_response.inspect}")
+    ##logger.debug("get_exhibit_navigation_data browse response: #{browse_response.inspect}")
     initialize_collection if atrium_collection.nil?
     browse_data = []
     unless atrium_collection.nil? || atrium_collection.exhibits.nil?
       atrium_collection.exhibits.each do |exhibit|
         if exhibit.respond_to?(:browse_levels) && !exhibit.browse_levels.nil?
           updated_browse_levels = get_browse_level_data(atrium_collection,exhibit,exhibit.browse_levels,browse_response,current_extra_controller_params,true)
-          #logger.debug("Updated Browse Levels: #{updated_browse_levels.inspect}")
+          ##logger.debug("Updated Browse Levels: #{updated_browse_levels.inspect}")
           exhibit.browse_levels.each_index do |index|
-            #logger.debug("#{exhibit.browse_levels.inspect}")
+            ##logger.debug("#{exhibit.browse_levels.inspect}")
             exhibit.browse_levels.fetch(index).values = updated_browse_levels.fetch(index).values
             exhibit.browse_levels.fetch(index).label = updated_browse_levels.fetch(index).label
             exhibit.browse_levels.fetch(index).selected = updated_browse_levels.fetch(index).selected
@@ -322,12 +319,12 @@ module Atrium::SolrHelper
         end
       end
     end
-    #logger.debug("Before BrowseData: #{browse_data.inspect}")
+    ##logger.debug("Before BrowseData: #{browse_data.inspect}")
 
     browse_data=[] if check_for_scope(browse_data)
     @exhibit_navigation_data=browse_data
 
-    #logger.debug("After BrowseData: #{browse_data.inspect}")
+    ##logger.debug("After BrowseData: #{browse_data.inspect}")
     browse_data
   end
 
@@ -440,17 +437,18 @@ module Atrium::SolrHelper
   end
 
   def display_solr_essay(pid)
-    #logger.debug("description: #{pid.inspect}")
+    ##logger.debug("description: #{pid.inspect}")
     response, document = get_solr_response_for_doc_id(pid)
     content = render_document_show_field_value :document => document, :field => 'description_content_s'
-    #logger.debug("Content:#{content}")
+    ##logger.debug("Content:#{content}")
     return content.html_safe
   end
 
-  def get_all_children(doc_list)
+  def get_all_children(doc_list, relationship_field_names)
+    @child_hash={}
     parent_arr=[]
     modified_arr=[]
-    logger.debug("Get children for list: #{doc_list.count}")
+    #logger.debug("Get children for list: #{doc_list.count}")
     doc_list.each_with_index do |doc, i|
       parent_arr<< doc["id"] unless (doc["id"].blank?)
     end
@@ -458,7 +456,7 @@ module Atrium::SolrHelper
       rel_id="info:fedora/#{id}"
       modified_arr<< rel_id
     end
-    logger.debug("Get children for list: #{parent_arr.inspect}, #{modified_arr.inspect}")
+    #logger.debug("Get children for list: #{parent_arr.inspect}, #{modified_arr.inspect}")
     p = params.dup
     params.delete(:f)
     params.delete(:page)
@@ -467,38 +465,38 @@ module Atrium::SolrHelper
     params.delete(:per_page)
     params[:rows] = 1000
     params[:per_page] = 1000
-    response, is_part_response_list = get_solr_response_for_field_values("is_part_of_s",modified_arr)   ##get child pages
-    response, is_member_response_list = get_solr_response_for_field_values("is_member_of_s",modified_arr)        ## get any child components
-    logger.debug("Image Count:#{is_part_response_list.count}, Children count:#{is_member_response_list.count}")
+    response, response_list = get_solr_response_for_field_values(relationship_field_names,modified_arr)   ##get child pages
+    #response, is_member_response_list = get_solr_response_for_field_values("is_member_of_s",modified_arr)        ## get any child components
+    logger.debug("Relationship:#{relationship_field_names.inspect}, Children count:#{response_list.count}")
     params.delete(:rows)
     params[:f] = p[:f]
     params[:page] = p[:page]
     params[:q] = p[:q]
     params[:fq] = p[:fq]
     params[:per_page] = p[:per_page]
-    @image_hash={}
-    @member_hash={}
     parent_arr.each do |parent|
-      #logger.debug("Processing id: #{parent.inspect}")
-      image_arr=[]
+      ##logger.debug("Processing id: #{parent.inspect}")
+      child_arr=[]
       member_arr=[]
-      is_part_response_list.each do |doc|
-        parent_id = doc["is_part_of_s"].first.split("/").last
+      response_list.each do |doc|
+        parent_id = doc[relationship_field_names].first.split("/").last
         if parent_id.eql?(parent)
-          #logger.debug("is_part_response_list parent #{doc["is_part_of_s"].inspect}, id: #{doc["id"].inspect} ")
-          image_arr<<doc
+          #logger.debug("is_part_response_list parent #{doc[relationship_field_names.to_s].inspect}, id: #{doc["id"].inspect} ")
+          child_arr<<doc
         end
       end
-      is_member_response_list.each do |doc|
-        parent_id = doc["is_member_of_s"].first.split("/").last
-        if parent_id.eql?(parent)
-          #logger.debug("is_member_of_s_response_list parent #{doc["is_member_of_s"].inspect}, id: #{doc["id"].inspect} ")
-          member_arr<<doc
-        end
-      end
-      @image_hash[parent]=image_arr
-      @member_hash[parent]=member_arr
+      #is_member_response_list.each do |doc|
+      #  parent_id = doc["is_member_of_s"].first.split("/").last
+      #  if parent_id.eql?(parent)
+      #    ##logger.debug("is_member_of_s_response_list parent #{doc["is_member_of_s"].inspect}, id: #{doc["id"].inspect} ")
+      #    member_arr<<doc
+      #  end
+      #end
+      #@image_hash[parent]=image_arr
+      #@member_hash[parent]=member_arr
+      @child_hash[parent]=child_arr
     end
-    return [@image_hash, @member_hash ]
+    #return [@image_hash, @member_hash ]
+    return @child_hash
   end
 end

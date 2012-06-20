@@ -3,7 +3,7 @@ class AtriumExhibitsController < AtriumController
   before_filter :initialize_collection, :except=>[:index, :create]
 
   def new
-    logger.debug("in create params: #{params.inspect}")
+    #logger.debug("in create params: #{params.inspect}")
     @exhibit = Atrium::Exhibit.new
     respond_to do |format|
       format.html
@@ -11,11 +11,11 @@ class AtriumExhibitsController < AtriumController
   end
 
   def create
-    logger.debug("in create params: #{params.inspect}")
+    #logger.debug("in create params: #{params.inspect}")
     @exhibit = Atrium::Exhibit.new(params[:atrium_exhibit])
 
     @exhibit.save
-    logger.debug("in create params: #{@exhibit.inspect}")
+    #logger.debug("in create params: #{@exhibit.inspect}")
     if @exhibit.save
       @exhibit.update_attributes(params[:atrium_exhibit])
       flash[:notice] = 'Exhibit was successfully created.'
@@ -39,23 +39,23 @@ class AtriumExhibitsController < AtriumController
   end
 
   def show
-    #params[:fq] = "component_type_t:subcollection"
+    #get children of emission dates
+    @members = get_all_children(@browse_document_list, "is_member_of_s")
     @exhibit= Atrium::Exhibit.find(params[:id])
     @exhibit_navigation_data = get_exhibit_navigation_data
-
     if @exhibit && @exhibit.filter_query_params && @exhibit.filter_query_params[:solr_doc_ids]
-      logger.debug("Items in Exhibit: #{@exhibit.filter_query_params[:solr_doc_ids]}")
+      #logger.debug("Items in Exhibit: #{@exhibit.filter_query_params[:solr_doc_ids]}")
       items_document_ids = @exhibit.filter_query_params[:solr_doc_ids].split(',')
-      logger.debug("Exhibit items: #{items_document_ids.inspect}")
+      #logger.debug("Exhibit items: #{items_document_ids.inspect}")
       @collection_items_response, @collection_items_documents = get_solr_response_for_field_values("id",items_document_ids || [])
     end
 
-    logger.debug("Browse page: #{@exhibit.showcases}")
+    #logger.debug("Browse page: #{@exhibit.showcases}")
     @atrium_showcase=Atrium::Showcase.with_selected_facets(@exhibit.id, @exhibit.class.name, params[:f]).first
     if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
-      logger.debug("#{@atrium_showcase.inspect}, #{@atrium_showcase.showcase_items[:solr_doc_ids]}")
+      #logger.debug("#{@atrium_showcase.inspect}, #{@atrium_showcase.showcase_items[:solr_doc_ids]}")
       selected_document_ids = @atrium_showcase.showcase_items[:solr_doc_ids].split(',')
-      logger.debug("Collection Selected Highlight: #{selected_document_ids.inspect}")
+      #logger.debug("Collection Selected Highlight: #{selected_document_ids.inspect}")
       @response, @documents = get_solr_response_for_field_values("id",selected_document_ids || [])
     end
     @description_hash=get_description_for_showcase(@atrium_showcase) unless @atrium_showcase.nil?
@@ -66,7 +66,7 @@ class AtriumExhibitsController < AtriumController
     session[:copy_folder_document_ids] = session[:folder_document_ids]
     session[:folder_document_ids] = []
     @exhibit = Atrium::Exhibit.find(params[:id])
-    logger.debug("#{@exhibit.inspect}, #{@exhibit.filter_query_params[:solr_doc_ids] if @exhibit.filter_query_params}")
+    #logger.debug("#{@exhibit.inspect}, #{@exhibit.filter_query_params[:solr_doc_ids] if @exhibit.filter_query_params}")
     session[:folder_document_ids] = @exhibit.filter_query_params[:solr_doc_ids].split(',') if @exhibit.filter_query_params && @exhibit.filter_query_params[:solr_doc_ids]
     p = params.dup
     p.delete :action

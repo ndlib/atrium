@@ -28,7 +28,7 @@ module Atrium::Catalog
     super
     if params[:atrium_collection_browse] || params[:atrium_exhibit_browse]
       @exhibit_navigation_data = get_exhibit_navigation_data
-      #logger.debug("render browse_show")
+      ##logger.debug("render browse_show")
       #render "browse_show"
     end
   end
@@ -39,7 +39,7 @@ module Atrium::Catalog
   def index
     #put in atrium index code here
     if params[:save_collection_filter_button]
-      logger.debug("pressed save collection filter button")
+      #logger.debug("pressed save collection filter button")
       if @atrium_collection
         if !session[:folder_document_ids].blank?
           @atrium_collection.collection_items ||= Hash.new
@@ -50,7 +50,7 @@ module Atrium::Catalog
           @atrium_collection.update_attributes(:filter_query_params=>collection_items)
           session[:folder_document_ids] = session[:copy_folder_document_ids]
           session[:copy_folder_document_ids]=nil
-          logger.debug("@@atrium_collection: #{@atrium_collection.inspect},Selected Items: #{@atrium_collection.filter_query_params.inspect}, folders_selected: #{session[:folder_document_ids].inspect}")
+          #logger.debug("@@atrium_collection: #{@atrium_collection.inspect},Selected Items: #{@atrium_collection.filter_query_params.inspect}, folders_selected: #{session[:folder_document_ids].inspect}")
         else
           filter_query_params = search_session.clone
           filter_query_params.delete(:save_collection_filter_button)
@@ -68,7 +68,7 @@ module Atrium::Catalog
     elsif params[:save_exhibit_filter_button]
       params[:exhibit_id] ? exhibit_id = params[:exhibit_id] : exhibit_id = params[:edit_exhibit_filter]
       @exhibit = Atrium::Exhibit.find(exhibit_id) if exhibit_id
-      logger.debug("pressed save exhibit filter button")
+      #logger.debug("pressed save exhibit filter button")
       if @exhibit
         if !session[:folder_document_ids].blank?
           selected_document_ids = session[:folder_document_ids]
@@ -77,7 +77,7 @@ module Atrium::Catalog
           @exhibit.update_attributes(:filter_query_params=>exhibit_items)
           session[:folder_document_ids] = session[:copy_folder_document_ids]
           session[:copy_folder_document_ids]=nil
-          logger.debug("exhibit: #{@exhibit.inspect},Selected Items: #{@exhibit.filter_query_params.inspect}, folders_selected: #{session[:folder_document_ids].inspect}")
+          #logger.debug("exhibit: #{@exhibit.inspect},Selected Items: #{@exhibit.filter_query_params.inspect}, folders_selected: #{session[:folder_document_ids].inspect}")
         else
           filter_query_params = search_session.clone
           filter_query_params.delete(:save_exhibit_filter_button)
@@ -96,7 +96,7 @@ module Atrium::Catalog
     elsif params[:save_browse_level_filter_button]
       params[:browse_level_id] ? browse_level_id = params[:browse_level_id] : browse_level_id = params[:edit_browse_level_filter]
       @browse_level = Atrium::BrowseLevel.find(browse_level_id) if browse_level_id
-      logger.debug("pressed save browse level filter button")
+      #logger.debug("pressed save browse level filter button")
       if @browse_level
         filter_query_params = search_session.clone
         filter_query_params.delete(:save_browse_level_filter_button)
@@ -110,7 +110,7 @@ module Atrium::Catalog
     elsif params[:save_browse_level_exclude_button]
       params[:browse_level_id] ? browse_level_id = params[:browse_level_id] : browse_level_id = params[:edit_browse_level_filter]
       @browse_level = Atrium::BrowseLevel.find(browse_level_id) if browse_level_id
-      logger.debug("pressed save browse level filter button")
+      #logger.debug("pressed save browse level filter button")
       if @browse_level
         filter_query_params = search_session.clone
         filter_query_params[:exclude] = filter_query_params[:f]
@@ -145,19 +145,21 @@ module Atrium::Catalog
       collection = @atrium_collection unless params[:edit_collection_filter]
       exhibit = @exhibit unless params[:edit_exhibit_filter] || params[:edit_collection_filter]
       browse_level = @browse_level unless params[:edit_exhibit_filter] || params[:edit_collection_filter] || params[:edit_browse_level_filter]
-      logger.debug("collection is: #{collection.inspect}")
-      logger.debug("exhibit is: #{exhibit.inspect}")
-      logger.debug("browse level is: #{browse_level.inspect}")
-      logger.debug("params before search are: #{params.inspect}")
+      #logger.debug("collection is: #{collection.inspect}")
+      #logger.debug("exhibit is: #{exhibit.inspect}")
+      #logger.debug("browse level is: #{browse_level.inspect}")
+      #logger.debug("params before search are: #{params.inspect}")
       if params[:add_description] || params[:edit_exhibit_filter] ||  params[:edit_collection_filter] || params[:edit_browse_level_filter] || params[:add_featured] || params[:CKEditor]
         @extra_controller_params={}
       else
         @extra_controller_params = prepare_extra_controller_params_for_collection_query(collection,exhibit,browse_level,params,@extra_controller_params) if collection || exhibit || browse_level
       end
 
-      logger.debug("extra params before search are: #{@extra_controller_params.inspect}")
+      #logger.debug("extra params before search are: #{@extra_controller_params.inspect}")
       (@response, @document_list) = get_search_results(params,@extra_controller_params)
-      (@images, @members) = get_all_children(@document_list)
+      @images = get_all_children(@document_list, "is_part_of_s")
+      #@members = get_all_children(@document_list, "is_member_of_s")
+
       #reset to settings before was merged with user params
       @extra_controller_params = reset_extra_controller_params_after_collection_query(collection,exhibit,browse_level,@extra_controller_params) if collection || exhibit || browse_level
       @filters = params[:f] || []
