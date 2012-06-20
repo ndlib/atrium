@@ -130,11 +130,11 @@ select {
 }
 
 /** Pages **/
-#show_description ul {
+#show-description ul {
   margin-left:0;
 }
 
-#show_description ul li {
+#show-description ul li {
   list-style-type:none;
 }
 

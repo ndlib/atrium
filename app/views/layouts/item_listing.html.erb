@@ -1,5 +1,5 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><%= h(@page_title || application_name) %></title>
@@ -12,7 +12,7 @@
   </head>
   <% if params[:q].to_s.empty? and params[:f].to_s.empty? and params[:id].nil? %>
   <body onload="$('input#q').focus();" class="<%= render_body_class.html_safe %>">
-    <% else %>
+  <% else %>
   <body class="<%= render_body_class.html_safe %>">
   <% end %>
     <%= render :partial => 'shared/banner' %>
@@ -32,7 +32,5 @@
         <%= raw(@footer) %>
       </div>
     </div>
-
   </body>
-
 </html>

@@ -6,7 +6,7 @@
     <fieldset>
      <legend>Browse Page</legend>
        <div id="catalog-form" title="Catalog" style="display:none">
-         <span id="show_selected"> </span>
+         <span id="show-selected"> </span>
          <%- unless @atrium_showcase.nil?-%>
            <%= form_for(@atrium_showcase) do |f| %>
             <%= f.text_field :atrium_exhibit_id %>

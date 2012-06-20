@@ -84,7 +84,7 @@
             $('#cboxLoadingGraphic').hide();
           },
           success: function(data) {
-            $('#show_selected').html(data);
+            $('#show-selected').html(data);
             $('#catalog-form').show();
           }
         });
@@ -110,7 +110,7 @@
           },
           success: function(data) {
             var html= loadMore(data);
-            $('#show_description').html(html);
+            $('#show-description').html(html);
             $('#catalog-form').show();
 
 
