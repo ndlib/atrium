@@ -8,11 +8,15 @@ class Atrium::Description < ActiveRecord::Base
 
   validates_presence_of :atrium_showcase_id
 
+  attr_accessible :description_solr_id, :page_display, :title
+
   accepts_nested_attributes_for :essay,   :allow_destroy => true
   accepts_nested_attributes_for :summary, :allow_destroy => true
+  attr_accessible :essay_attributes, :summary_attributes
 
   #after_save  :update_solr unless ENV['DO_NOT_INDEX'] || RAILS_ENV == "development" || RAILS_ENV == "staging"
   #after_destroy :remove_from_solr unless RAILS_ENV == "development" || RAILS_ENV == "staging"
+
 
   def self.get_description_from_solr_id(solr_id)
     #atrium_description=Atrium::Description.find(solr_id.split('_').last)

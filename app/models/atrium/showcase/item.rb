@@ -5,4 +5,5 @@ class Atrium::Showcase::Item < ActiveRecord::Base
 
   validates_presence_of :solr_doc_id, :atrium_showcase_id
 
+  attr_accessible :solr_doc_id, :type
 end

@@ -2,18 +2,22 @@ class Atrium::Showcase < ActiveRecord::Base
   self.table_name = 'atrium_showcases'
 
   has_many :descriptions,     :class_name => 'Atrium::Description',              :foreign_key => 'atrium_showcase_id', :dependent => :destroy
-  has_many :facet_selections, :class_name => 'Atrium::Showcase::FacetSelection', :foreign_key => 'atrium_showcase_id'
-  has_many :featured_items,   :class_name => 'Atrium::Showcase::Item::Featured', :foreign_key => 'atrium_showcase_id'
-  has_many :related_items,    :class_name => 'Atrium::Showcase::Item::Related',  :foreign_key => 'atrium_showcase_id'
+  has_many :facet_selections, :class_name => 'Atrium::Showcase::FacetSelection', :foreign_key => 'atrium_showcase_id', :dependent => :destroy
+  has_many :featured_items,   :class_name => 'Atrium::Showcase::Item::Featured', :foreign_key => 'atrium_showcase_id', :dependent => :destroy
+  has_many :related_items,    :class_name => 'Atrium::Showcase::Item::Related',  :foreign_key => 'atrium_showcase_id', :dependent => :destroy
 
   belongs_to :showcases, :polymorphic => true
 
   serialize :showcase_items, Hash
 
+  # TODO: remove the need to expose the showcase_id to the AtriumShowcasesController
+  attr_accessible :showcases_id, :showcases_type, :showcase_items, :solr_facet_name, :value
+
   accepts_nested_attributes_for :descriptions,    :allow_destroy => true
   accepts_nested_attributes_for :facet_selections
   accepts_nested_attributes_for :featured_items,  :allow_destroy => true
   accepts_nested_attributes_for :related_items,   :allow_destroy => true
+  attr_accessible :descriptions_attributes, :facet_selections_attributes, :featured_items_attributes, :related_items_attributes
 
   def showcase_items
     read_attribute(:showcase_items) || write_attribute(:showcase_items, {})

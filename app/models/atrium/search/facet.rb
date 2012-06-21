@@ -5,6 +5,8 @@ class Atrium::Search::Facet < ActiveRecord::Base
 
   validates_presence_of :atrium_collection_id, :name
 
+  attr_accessible :atrium_collection_id, :name
+
   scope :find_by_name_and_collection_id, lambda {|name, collection_id|
     where("#{self.quoted_table_name}.`name` = ? AND #{self.quoted_table_name}.`atrium_collection_id` = ?", name, collection_id)
   }

@@ -6,10 +6,13 @@ class Atrium::Exhibit < ActiveRecord::Base
 
   belongs_to :collection, :class_name => 'Atrium::Collection', :foreign_key => 'atrium_collection_id'
 
+  serialize :filter_query_params
+
+  attr_accessible :atrium_collection_id, :filter_query_params, :label, :set_number
+
   accepts_nested_attributes_for :browse_levels, :allow_destroy => true
   accepts_nested_attributes_for :showcases
-
-  serialize :filter_query_params
+  attr_accessible :browse_levels_attributes, :showcases_attributes
 
   def pretty_title
     label.blank? ? "Exhibit #{set_number}" : label

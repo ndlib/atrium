@@ -5,12 +5,14 @@ class Atrium::Collection < ActiveRecord::Base
   has_many :search_facets, :class_name => 'Atrium::Search::Facet', :foreign_key => 'atrium_collection_id', :dependent => :destroy
   has_many :showcases,     :class_name => 'Atrium::Showcase',      :as => :showcases
 
+  serialize :filter_query_params
+  serialize :collection_items, Hash
+
+  attr_accessible :collection_items, :filter_query_params, :theme, :title, :title_markup, :collection_description, :search_instructions
+
   accepts_nested_attributes_for :exhibits,      :allow_destroy => true
   accepts_nested_attributes_for :search_facets, :allow_destroy => true
-
-  serialize :filter_query_params
-
-  serialize :collection_items, Hash
+  attr_accessible :exhibits_attributes, :search_facets_attributes
 
   @@included_themes = ['default']
 

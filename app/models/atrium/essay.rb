@@ -5,6 +5,8 @@ class Atrium::Essay < ActiveRecord::Base
 
   validates_presence_of :atrium_description_id
 
+  attr_accessible :content_type, :content
+
   def blank?
     content.blank?
   end

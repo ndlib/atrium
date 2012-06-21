@@ -5,4 +5,5 @@ class Atrium::Showcase::FacetSelection < ActiveRecord::Base
 
   validates_presence_of :atrium_showcase_id, :value, :solr_facet_name
 
+  attr_accessible :atrium_showcase_id, :solr_facet_name, :value
 end
