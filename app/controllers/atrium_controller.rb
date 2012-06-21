@@ -1,4 +1,5 @@
 require 'atrium/layout_helper'
+require 'atrium/atrium_helper'
 
 class AtriumController < ApplicationController
 
