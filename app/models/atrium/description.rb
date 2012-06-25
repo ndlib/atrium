@@ -8,7 +8,7 @@ class Atrium::Description < ActiveRecord::Base
 
   validates_presence_of :atrium_showcase_id
 
-  attr_accessible :description_solr_id, :page_display, :title
+  attr_accessible :description_solr_id, :page_display, :title, :atrium_showcase_id
 
   accepts_nested_attributes_for :essay,   :allow_destroy => true
   accepts_nested_attributes_for :summary, :allow_destroy => true

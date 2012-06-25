@@ -29,7 +29,7 @@ namespace :atrium do
 
   namespace :rspec do
 
-    desc "Run the hydra-head specs - need to have jetty running, test host set up and fixtures loaded."
+    desc "Run the atrium specs - need to have jetty running, test host set up and fixtures loaded."
     task :run => :use_test_app do
       puts "Running rspec tests"
       puts  %x[bundle exec rake atrium:spec:run]
@@ -167,8 +167,8 @@ namespace :atrium do
 
     puts FileUtils.cp('../../lib/generators/atrium/templates/db/seeds.rb','db/seeds.rb')
 
-    puts "Loading blacklight marc test data into Solr"
-    %x[bundle exec rake solr:marc:index_test_data]
+    #puts "Loading blacklight marc test data into Solr"
+    #%x[bundle exec rake solr:marc:index_test_data]
 
     puts "Running rake db:migrate"
     puts %x[bundle exec rake db:migrate]    
@@ -185,7 +185,6 @@ namespace :atrium do
 
   task :set_test_host_path do
     TEST_HOST_PATH = File.join(File.expand_path(File.dirname(__FILE__)),'..','tmp','test_app')
-    #TEST_HOST_PATH = '/home/blakshmi/project/atrium/tmp/test_app'
     puts "Test app path:\n#{TEST_HOST_PATH}"
   end
 

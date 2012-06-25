@@ -149,7 +149,7 @@ module Atrium::Catalog
       #logger.debug("exhibit is: #{exhibit.inspect}")
       #logger.debug("browse level is: #{browse_level.inspect}")
       #logger.debug("params before search are: #{params.inspect}")
-      if params[:add_description] || params[:edit_exhibit_filter] ||  params[:edit_collection_filter] || params[:edit_browse_level_filter] || params[:add_featured] || params[:CKEditor]
+      if params[:add_description] || params[:edit_exhibit_filter] ||  params[:edit_collection_filter] || params[:edit_browse_level_filter] || params[:CKEditor]
         @extra_controller_params={}
       else
         @extra_controller_params = prepare_extra_controller_params_for_collection_query(collection,exhibit,browse_level,params,@extra_controller_params) if collection || exhibit || browse_level

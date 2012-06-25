@@ -76,15 +76,22 @@ class AtriumShowcasesController < AtriumController
       selected_document_ids = session[:folder_document_ids]
       @atrium_showcase.showcase_items[:type]="featured"
       @atrium_showcase.showcase_items[:solr_doc_ids]=selected_document_ids.join(',')
-      @atrium_showcase.save
-      logger.debug("Copy of session#{session[:copy_folder_document_ids].inspect}")
+    else
+      logger.debug("No featured")
+      @atrium_showcase.showcase_items={}
     end
+    @atrium_showcase.save
+    logger.debug("Copy of session#{session[:copy_folder_document_ids].inspect}")
     session_folder_ids=[] || session[:copy_folder_document_ids]
     session[:folder_document_ids] = session_folder_ids
     session[:copy_folder_document_ids]=nil
     logger.debug("@atrium_showcase: #{@atrium_showcase.inspect},Selected Highlight: #{selected_document_ids.inspect}, folders_selected: #{session[:folder_document_ids].inspect}")
-    @response, @documents = get_solr_response_for_field_values("id",@atrium_showcase.showcase_items[:solr_doc_ids].split(',') || [])
-    render :layout => false, :locals=>{:selected_document_ids=>selected_document_ids}
+    if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
+      @response, @featured_documents = get_solr_response_for_field_values("id",@atrium_showcase.showcase_items[:solr_doc_ids].split(',') || [])
+    end
+    if params[:no_layout]
+      render :layout=>false
+    end
   end
 
   def destroy

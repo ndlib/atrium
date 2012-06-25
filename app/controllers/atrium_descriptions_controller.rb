@@ -6,10 +6,8 @@ class AtriumDescriptionsController < AtriumController
     atrium_showcase=Atrium::Showcase.find(params[:showcase_id])
     @atrium_descriptions = atrium_showcase.descriptions
     @description_hash=get_description_for_showcase(atrium_showcase)
-    respond_to do |want|
-      want.inline {
-        render :action =>'index.html', :layout=>false
-      }
+    if params[:no_layout]
+      render :layout=>false
     end
   end
 
@@ -101,7 +99,7 @@ class AtriumDescriptionsController < AtriumController
       session[:copy_folder_document_ids]=nil
       #logger.debug("folders_selected: #{session[:folder_document_ids].inspect}")
     end
-    redirect_to :action => "index", :showcase_id=>params[:showcase_id]
+    redirect_to :action => "index", :showcase_id=>params[:showcase_id], :no_layout=>true
   end
 
   def destroy

@@ -1,9 +1,7 @@
 
-module AtriumHelper
+module Atrium::AtriumHelperBehavior
   include BlacklightHelper
   include FacetsHelper
-  #include Blacklight::Configurable
-  #include Blacklight::FacetsHelperBehavior
 
   def application_name
     'Atrium Application'
@@ -30,21 +28,22 @@ module AtriumHelper
   end
 
   # used in the catalog/_facets partial
-  def facet_field_names
-    collection = Atrium::Collection.find(params[:collection_id]) if params[:collection_id] && !params[:edit_collection_filter]
-    if params[:add_featured]
-      []
-    #elsif params[:exhibit_id]
-    #  exhibit = Atrium::Exhibit.find(params[:exhibit_id])
-    #  logger.debug("$$$$Facets are: #{ exhibit.browse_facet_names.inspect}")
-    #  exhibit.browse_facet_names
-    #elsif collection && params[:edit_collection_filter]
-     # logger.debug("%%%%%%%%%Facets are: #{ collection.search_facets.inspect}")
-       #collection.search_facets.collect {|f| f.name}
-    else
-      super
-    end
-  end
+  #def facet_field_names
+  #  logger.debug("facet_field_names in atrium")
+  #  collection = Atrium::Collection.find(params[:collection_id]) if params[:collection_id] && !params[:edit_collection_filter]
+  #  if params[:add_featured]
+  #    []
+  #  #elsif params[:exhibit_id]
+  #  #  exhibit = Atrium::Exhibit.find(params[:exhibit_id])
+  #  #  logger.debug("$$$$Facets are: #{ exhibit.browse_facet_names.inspect}")
+  #  #  exhibit.browse_facet_names
+  #  #elsif collection && params[:edit_collection_filter]
+  #   # logger.debug("%%%%%%%%%Facets are: #{ collection.search_facets.inspect}")
+  #     #collection.search_facets.collect {|f| f.name}
+  #  else
+  #    super
+  #  end
+  #end
 
   def render_facet_limit(display_facet, options = {})
     if params[:edit_exhibit_filter] ||  params[:edit_collection_filter] || params[:edit_browse_level_filter] || params[:add_featured]  || params[:exclude_browse_level_filter]

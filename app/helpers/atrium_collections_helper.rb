@@ -5,6 +5,6 @@ module AtriumCollectionsHelper
 
   def blacklight_config
     CatalogController.blacklight_config
-end
+  end
 
 end

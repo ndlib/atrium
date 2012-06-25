@@ -28,7 +28,7 @@ begin
   ENV['RAILS_ROOT'] = Rails.root.to_s
 
   namespace :atrium do
-
+    puts "into atrium namespace"
     desc "Run all specs in spec directory (excluding plugin specs)"
     RSpec::Core::RakeTask.new(:spec => spec_prereq) do |t|
       # the user might not have run rspec generator because they don't
@@ -44,6 +44,7 @@ begin
     #task :stats => "spec:statsetup"
 
     namespace :spec do
+      puts "into spec namespace"
       [:requests, :models,:helpers, :controllers, :views,  :mailers, :lib, :routing, :generators, :utilities].each do |sub|
         desc "Run the code examples in spec/#{sub}"
         RSpec::Core::RakeTask.new(sub => spec_prereq) do |t|

@@ -22,7 +22,7 @@
   <% else %>
     <%# Recursively render the browse sets. %>
     <% @exhibit_navigation_data.each do |exhibit| %>
-      <h3 class="facet-heading">
+      <h3 class="facet-heading <%= exhibit.pretty_title%>">
         <%= link_to exhibit.pretty_title, exhibit %>
        </h3>
       <% unless exhibit.browse_levels.nil? || exhibit.browse_levels.empty? %>

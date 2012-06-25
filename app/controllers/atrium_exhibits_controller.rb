@@ -56,9 +56,12 @@ class AtriumExhibitsController < AtriumController
       #logger.debug("#{@atrium_showcase.inspect}, #{@atrium_showcase.showcase_items[:solr_doc_ids]}")
       selected_document_ids = @atrium_showcase.showcase_items[:solr_doc_ids].split(',')
       #logger.debug("Collection Selected Highlight: #{selected_document_ids.inspect}")
-      @response, @documents = get_solr_response_for_field_values("id",selected_document_ids || [])
+      @response, @featured_documents = get_solr_response_for_field_values("id",selected_document_ids || [])
     end
     @description_hash=get_description_for_showcase(@atrium_showcase) unless @atrium_showcase.nil?
+    if params[:no_layout]
+      render :layout=>false
+    end
   end
 
   def set_exhibit_scope

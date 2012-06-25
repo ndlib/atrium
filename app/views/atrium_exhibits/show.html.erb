@@ -4,12 +4,14 @@
   </div>
 </h2>
 
-<%- if @atrium_showcase && @atrium_showcase.descriptions-%>
-  <%= render :partial=>'shared/list_descriptions', :locals=>{:descriptions=>@atrium_showcase.descriptions} %>
-<%- end -%>
+<div id="show-description">
+  <%- if @atrium_showcase && @atrium_showcase.descriptions-%>
+    <%= render :partial=>'shared/list_descriptions', :locals=>{:descriptions=>@atrium_showcase.descriptions} %>
+  <%- end -%>
+</div>
 
 <div id="show-selected">
-<%- if !@documents.blank? && @documents.any? -%>
+<%- if !@featured_documents.blank? && @featured_documents.any? -%>
   <%= render :partial=>'shared/featured_sources' %>
 <%- end -%>
 </div>
