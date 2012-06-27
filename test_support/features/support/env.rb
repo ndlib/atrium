@@ -19,10 +19,12 @@
 # * http://elabs.se/blog/15-you-re-cuking-it-wrong 
 #
 
+ENV["RAILS_ENV"] ||= "test"
+require File.expand_path("../../../../tmp/test_app/config/environment.rb", __FILE__)
+ENV["RAILS_ROOT"] ||= File.dirname(__FILE__) + "../../../../tmp/test_app"
+
 require 'cucumber/rails'
 #Dir.glob(File.join(File.dirname(__FILE__), '../factories/*.rb')).each {|f| require f }
-ENV["RAILS_ENV"] ||= 'test'
-
 
 # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
 # order to ease the transition to Capybara we set the default here. If you'd
@@ -55,5 +57,11 @@ DatabaseCleaner.strategy = :transaction
 # ~/.rvm/gems/ruby-1.9.2-p0@global/gems/rack-1.2.1/lib/rack/utils.rb:16: 
 # warning: regexp match /.../n against to UTF-8 string
 $VERBOSE = nil
+
+# include Engine routes in Cucumber world
+module EngineRoutesHelper
+  include Atrium::Engine.routes.url_helpers
+end
+World(EngineRoutesHelper)
 
 

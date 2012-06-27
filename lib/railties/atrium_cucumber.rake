@@ -7,15 +7,14 @@
 # Atrium customization, trick Cucumber into looking in our current
 # location for Rails.root, even though we're going to give it features
 # from elsewhere.
-ENV['RAILS_ROOT'] = Rails.root.to_s
-ENV['RAILS_ENV'] = 'test'
+#ENV['RAILS_ROOT'] = Rails.root.to_s
+#ENV['RAILS_ENV'] = 'test'
 
 # atrium_features, where to find features inside atrium source?
-atrium_features = File.expand_path("./test_support/features",Atrium.root)
-
+atrium_features = File.expand_path("../test_support/features",File.dirname(__FILE__))
 unless ARGV.any? {|a| a =~ /^gems/} # Don't load anything when running the gems:* tasks
 
-vendored_cucumber_bin = Dir["#{Rails.root}/vendor/{gems,plugins}/cucumber*/bin/cucumber"].first
+vendored_cucumber_bin = Dir[File.expand_path("../vendor/{gems,plugins}/cucumber*/bin/cucumber",File.dirname(__FILE__))].first
 $LOAD_PATH.unshift(File.dirname(vendored_cucumber_bin) + '/../lib') unless vendored_cucumber_bin.nil?
 
 begin
@@ -25,7 +24,7 @@ begin
     desc 'Alias for atrium:cucumber:ok'
     task :cucumber => 'atrium:cucumber:ok'
     namespace :cucumber do
-      Cucumber::Rake::Task.new({:ok => ['db:test:prepare', 'db:seed']}, 'Run features that should pass') do |t|
+      Cucumber::Rake::Task.new({:ok => ['atrium:test:prepare', 'db:seed']}, 'Run features that should pass') do |t|
         # Atrium customization, call features from external location, pass
         # in feature location wtih cucumber_opts, yeah it's weird but that's how.
         t.cucumber_opts = atrium_features
@@ -64,14 +63,12 @@ begin
         t.binary = vendored_cucumber_bin # If nil, the gem's binary is used.
         t.fork = true # You may get faster startup if you set this to false
         t.profile = 'default'
-        t.rcov = true
-        t.rcov_opts = %w{--rails --exclude osx\/objc,gems\/,spec\/,features\/ --aggregate atrium-coverage.data}
-        t.rcov_opts << %[-o "#{Atrium.root}/coverage"]
+
       end
       end
 
       desc 'Run all features'
-      task :all => [:ok, :wip]
+      task :all => [:ok]
 
 
       # Solr wrapper. for now just for atrium:cucumber, plan to

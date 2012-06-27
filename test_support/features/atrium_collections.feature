@@ -1,4 +1,4 @@
-@atrium_collections
+@atrium_collections,@atrium_showcase
 
 Feature: Collections
   In order to create a custom browse of a collection
@@ -34,6 +34,7 @@ Feature: Collections
 #    And I should see select list "select#atrium_collection_search_facet_names" with "Language" selected
 #    When I am on the collection search page for id 2
 #    Then I should see a "h3" element containing "Language"
+#    Then show me the page
 #    And I should have "div.facet_limit" containing only 1 "h3"
 #
 #
@@ -125,31 +126,31 @@ Feature: Collections
 #    When I follow "Stop Editing"
 #    And I should not see "essay"
 #
-#  Scenario: Adding featured items to Collection
-#    Given User exists with a login of "test"
-#    Given "collection" exists with id 1
-#    And I am on the collection home page for id 1
-#    And I follow "Customize this page"
-#    And I follow "Select Featured Items"
-#    Then I should see "You can use either use search form or facet to search for items to be added featured source. Please use selected checkbox to select item"
-#    When I add record "2009373513" to featured to the "collection" with id "1" and facet ""
-#    Then I am on the collection page with id 1 having showcase with id 1
-#    And I should have link to "ci-an-zhou-bian" in featured list
-
-  Scenario: Adding description to Collection from solr items
+  Scenario: Adding featured items to Collection
     Given User exists with a login of "test"
     Given "collection" exists with id 1
     And I am on the collection home page for id 1
     And I follow "Customize this page"
-    Then I should have showcase for collection with id 1
-    When I follow "Add Description From Solr"
-    Then I should see "You can use either use search form to search for description.Please use selected checkbox to add description"
-    When I add description with id "desc_solr:1" to collection with id "1" and facet ""
+    And I follow "Select Featured Items"
+    Then I should see a "h1" element containing "Select Featured Items"
+    When I add record "2009373513" to featured to the "collection" with id "1" and facet ""
     Then I am on the collection page with id 1 having showcase with id 1
-    And I should see description with title "Land Office Bank Currency" in description list
-    When I follow "View this page"
-    And I should see "Land Office Bank Currency"
-
+    And I should have link to "ci-an-zhou-bian" in featured list
+#
+#  Scenario: Adding description to Collection from solr items
+#    Given User exists with a login of "test"
+#    Given "collection" exists with id 1
+#    And I am on the collection home page for id 1
+#    And I follow "Customize this page"
+#    Then I should have showcase for collection with id 1
+#    When I follow "Add Description From Solr"
+#    Then I should see a "h1" element containing "Select Existing Description"
+#    When I add description with id "desc_solr:1" to collection with id "1" and facet ""
+#    Then I am on the collection page with id 1 having showcase with id 1
+#    And I should see description with title "Land Office Bank Currency" in description list
+#    When I follow "View this page"
+#    And I should see "Land Office Bank Currency"
+#
 #  Scenario: Modifying featured items from Collection
 #    Pending
 #

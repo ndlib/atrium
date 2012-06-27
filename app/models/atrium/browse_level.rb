@@ -8,7 +8,7 @@ class Atrium::BrowseLevel < ActiveRecord::Base
   serialize :filter_query_params
   serialize :exclude_query_params
 
-  attr_accessible :atrium_exhibit_id, :exclude_query_params, :filter_query_params, :level_number, :solr_facet_name
+  attr_accessible :atrium_exhibit_id, :exclude_query_params, :filter_query_params, :level_number, :solr_facet_name, :label
 
   attr_accessor :values, :selected
 

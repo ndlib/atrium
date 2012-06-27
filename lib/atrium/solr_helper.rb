@@ -113,6 +113,7 @@ module Atrium::SolrHelper
           collection_id = params[:collection_id]
         end
       end
+      puts "Collection: #{collection_id.inspect}"
     elsif params[:controller] == "atrium_descriptions"
       if params[:id]
         begin

@@ -50,7 +50,7 @@ When /^I add "([^"]*)" with content "([^"]*)" to the collection with id "([^"]*)
   collection= Atrium::Collection.find(collection_id)
   showcase= Atrium::Showcase.with_selected_facets(collection_id,collection.class.name, nil).first
   fill_in "atrium_description_#{field}_attributes_content", :with => content
-  click_button "Update"
+  click_button "Save"
   page.should have_content(content)
   visit atrium_collection_showcase_path(collection.id, showcase.id, nil)
 end
@@ -64,18 +64,21 @@ end
 
 Then /^I should have link to "([^"]*)" in featured list$/ do |name|
   #puts "#{page.find("span#show_selected div#documents div.document h3.index_title a")['href'].inspect}"
-  page.should have_selector("span#show_selected div#documents div.document h3.index_title", :content => name)
+  page.should have_selector("div#show-selected div#documents div.document h3.index_title", :content => name)
 end
 
 When /^I add record "([^"]*)" to featured to the "([^"]*)" with id "([^"]*)" and facet "([^"]*)"$/  do |record_id, collection_or_exhibit, id, facet|
   click_button("folder_submit_#{record_id}")
   asset= collection_or_exhibit.eql?("collection") ?  Atrium::Collection.find(id) : Atrium::Exhibit.find(id)
-  puts asset.inspect
   selected_facet= collection_or_exhibit.eql?("collection") ? nil : {"pub_date"=>["#{facet}"]}
   showcase= Atrium::Showcase.with_selected_facets(asset.id, asset.class.name, selected_facet).first
   showcase.should_not be nil
-  puts showcase.inspect
+  @atrium_showcase=showcase
+  @atrium_collection = collection_or_exhibit.eql?("collection") ? asset : Atrium::Collection.find(asset.atrium_collection_id)
+  puts @atrium_collection.inspect
+  puts @atrium_showcase.inspect
   path = collection_or_exhibit.eql?("collection") ?  atrium_collection_atrium_showcases_path(asset, :showcase_id => showcase.id) : atrium_exhibit_atrium_showcases_path(asset.id, :f => selected_facet,:showcase_id => showcase.id)
+  puts path.inspect
   visit path
 end
 
@@ -93,7 +96,7 @@ end
 
 Then /^I should see description with title "([^"]*)" in description list$/ do |title|
   content="Essay: #{title}"
-  page.should have_selector("div#show_description h3", :content => content)
+  page.should have_selector("div#show-description h3", :content => content)
 end
 
 

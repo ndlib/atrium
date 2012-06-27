@@ -14,21 +14,23 @@ begin
     default.prerequisites.delete('test')
   end
 
-  spec_prereq = Rails.configuration.generators.options[:rails][:orm] == :active_record ?  "db:test:prepare" : :noop
-  task :noop do; end
+  #spec_prereq = Rails.configuration.generators.options[:rails][:orm] == :active_record ?  "db:test:prepare" : :noop
+  #task :noop do; end
+  #task :default => :spec
+  spec_prereq = "atrium:test:prepare"
   #task :default => :spec
 
-  atrium_spec = File.expand_path("./test_support/spec", Atrium.root)
+  #atrium_spec = File.expand_path("./test_support/spec", Atrium.root)
+  atrium_spec = File.expand_path("../test_support/spec",File.dirname(__FILE__))
 
   # Set env variable to tell our spec/spec_helper.rb where we really are,
   # so it doesn't have to guess with relative path, which will be wrong
   # since we allow spec_dir to be in a remote location. spec_helper.rb
   # needs it before Rails.root is defined there, even though we can
   # oddly get it here, i dunno.
-  ENV['RAILS_ROOT'] = Rails.root.to_s
+  #ENV['RAILS_ROOT'] = Rails.root.to_s
 
   namespace :atrium do
-    puts "into atrium namespace"
     desc "Run all specs in spec directory (excluding plugin specs)"
     RSpec::Core::RakeTask.new(:spec => spec_prereq) do |t|
       # the user might not have run rspec generator because they don't
@@ -43,6 +45,23 @@ begin
     # Don't understand what this does or how to make it use our remote stats_directory
     #task :stats => "spec:statsetup"
 
+    namespace :spec do
+      [:controllers, :generators, :helpers, :integration, :lib, :mailers, :models, :requests, :routing, :unit, :utilities, :views].each do |sub|
+        desc "Run the code examples in spec/#{sub}"
+        RSpec::Core::RakeTask.new(sub => spec_prereq) do |t|
+        #RSpec::Core::RakeTask.new(sub) do |t|
+          # the user might not have run rspec generator because they don't
+          # actually need it, but without an ./.rspec they won't get color,
+          # let's insist.
+          t.rspec_opts = "--colour"
+
+          # pattern directory name defaults to ./**/*_spec.rb, but has a more concise command line echo
+          t.pattern = "#{atrium_spec}/#{sub}"
+        end
+      end
+    end
+
+=begin
     namespace :spec do
       puts "into spec namespace"
       [:requests, :models,:helpers, :controllers, :views,  :mailers, :lib, :routing, :generators, :utilities].each do |sub|
@@ -126,6 +145,7 @@ begin
       # ::CodeStatistics::TEST_TYPES << "Request specs" if File.exist?('spec/requests')
       # end
     end
+=end
   end
 rescue LoadError
   # This rescue pattern stolen from cucumber; rspec didn't need it before since

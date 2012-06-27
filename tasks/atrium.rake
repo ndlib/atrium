@@ -77,20 +77,31 @@ namespace :atrium do
     end
   end
 
-  #
+   #
   # Cucumber
   #
 
-  task :cucumber => "cucumber:run"
+
+  desc "Run cucumber tests for atrium - need to have jetty running, test host set up and fixtures loaded."
+  task :cucumber => ['test:prepare'] do
+    within_test_app do
+      puts "Running cucumber features in test host app #{Dir.pwd}"
+      puts Rake::Task["atrium:cucumber:cmd"].invoke
+    end
+  end
+
 
   namespace :cucumber do
-    desc "Run cucumber tests for atrium - need to have jetty running, test host set up and fixtures loaded."
-    task :run => :set_test_host_path do
-      Dir.chdir(TEST_HOST_PATH)
-      puts "Running cucumber features in test host app"
-      puts %x[bundle exec rake atrium:cucumber]
-      raise "Cucumber tests failed" unless $?.success?
-      FileUtils.cd('../../')
+    # atrium_features, where to find features inside atrium source?
+    atrium_features = File.expand_path("../test_support/features",File.dirname(__FILE__))
+    vendored_cucumber_bin = Dir[File.expand_path("../vendor/{gems,plugins}/cucumber*/bin/cucumber",File.dirname(__FILE__))].first
+    $LOAD_PATH.unshift(File.dirname(vendored_cucumber_bin) + '/../lib') unless vendored_cucumber_bin.nil?
+    require 'cucumber/rake/task'
+    ### Don't call this directly, use atrium:cucumber
+    #Cucumber::Rake::Task.new(:cmd => 'atrium:db:seed') do |t|
+    Cucumber::Rake::Task.new(:cmd => 'atrium:db:seed') do |t|
+      t.cucumber_opts = atrium_features
+      t.binary = vendored_cucumber_bin # If nil, the gem's binary is used.
     end
   end
 
@@ -206,6 +217,31 @@ namespace :atrium do
     puts "Completed test suite"
   end
 
+  namespace :test do
+
+    desc "run db:test:prepare in the test app"
+    task :prepare => :test_app_exists do
+      within_test_app do
+        %x[rake db:test:prepare]
+      end
+    end
+
+    desc "Make sure the test app is installed"
+    task :test_app_exists => [:set_test_host_path] do
+      Rake::Task['atrium:setup_test_app'].invoke unless File.exist?(TEST_HOST_PATH)
+    end
+
+  end
+
+  namespace :db do
+    desc "Seed the database with once/ and always/ fixtures."
+    task :seed => ["atrium:test:test_app_exists"] do
+      within_test_app do
+          puts %x[bundle exec rake db:seed RAILS_ENV=test]
+      end
+    end
+  end
+
   desc "Make sure the test app is installed, then run the tasks from its root directory"
   task :use_test_app => [:set_test_host_path] do
     Rake::Task['atrium:setup_test_app'].invoke unless File.exist?(TEST_HOST_PATH)
@@ -214,10 +250,18 @@ namespace :atrium do
 end
 
 
+
+
 # Adds the content to the file.
 #
 def replace!(destination, regexp, string)
   content = File.binread(destination)
   content.gsub!(regexp, string)
   File.open(destination, 'wb') { |file| file.write(content) }
+end
+
+def within_test_app
+  FileUtils.cd(TEST_HOST_PATH)
+  yield
+  FileUtils.cd('../../')
 end

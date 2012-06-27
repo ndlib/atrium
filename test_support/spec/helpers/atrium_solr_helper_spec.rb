@@ -35,7 +35,7 @@ describe Atrium::SolrHelper do
       helper.expects(:build_lucene_query).returns("_query_:id\:test_id")
       helper.expects(:get_search_results)
       @collection.save!
-      logger.expects(:error).once
+      logger.expects(:error).twice
       helper.initialize_collection
       #check valid case as well
       helper.expects(:params).returns({:id=>@collection.id,:controller=>"atrium_collections"}).at_least_once
@@ -46,7 +46,7 @@ describe Atrium::SolrHelper do
       helper.stubs(:params).returns({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}})
       @collection.filter_query_params = {:q=>"testing",:f=>{"season"=>["spring"]}}
       Atrium::Collection.expects(:find).with("test_id").returns(@collection)
-      helper.expects(:solr_search_params).with(@collection.filter_query_params).returns(:q=>"testing",:fq=>["{!raw f=season_facet}Spring"]).twice
+      helper.expects(:solr_search_params).with(@collection.filter_query_params).returns(:q=>"testing",:fq=>["{!raw f=season_facet}Spring"]).at_least_once
       helper.expects(:solr_search_params).with({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}}).returns(:fq=>["{!raw f=continent}North America"])
       #it will combine param facet and filter facet into extra params so that the params facets are not overwritten when the filter facet is applied
       extra_params = {:q=>"testing", :fq=>["{!raw f=continent}North America","{!raw f=season_facet}Spring"]}
@@ -58,7 +58,7 @@ describe Atrium::SolrHelper do
       helper.stubs(:params).returns({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}})
       @collection.filter_query_params = {:q=>"testing"}
       Atrium::Collection.expects(:find).with("test_id").returns(@collection)
-      helper.expects(:solr_search_params).with(@collection.filter_query_params).returns(:q=>"testing").twice
+      helper.expects(:solr_search_params).with(@collection.filter_query_params).returns(:q=>"testing").once
       #it will combine param facet and filter facet into extra params so that the params facets are not overwritten when the filter facet is applied
       extra_params = {:q=>"testing"}
       helper.expects(:get_search_results).with({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}},extra_params)
@@ -69,7 +69,7 @@ describe Atrium::SolrHelper do
       helper.stubs(:params).returns({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}})
       @collection.filter_query_params = {:q=>"testing",:f=>{"continent"=>["North America"]}}
       Atrium::Collection.expects(:find).with("test_id").returns(@collection)
-      helper.expects(:solr_search_params).with(@collection.filter_query_params).returns(:q=>"testing",:fq=>["{!raw f=continent}North America"]).twice
+      helper.expects(:solr_search_params).with(@collection.filter_query_params).returns(:q=>"testing",:fq=>["{!raw f=continent}North America"]).once
       helper.expects(:solr_search_params).with({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}}).returns(:fq=>["{!raw f=continent}North America"])
       #it will combine param facet and filter facet into extra params so that the params facets are not overwritten when the filter facet is applied
       extra_params = {:q=>"testing", :fq=>["{!raw f=continent}North America"]}
