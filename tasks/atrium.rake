@@ -32,7 +32,7 @@ namespace :atrium do
     desc "Run the atrium specs - need to have jetty running, test host set up and fixtures loaded."
     task :run => :use_test_app do
       puts "Running rspec tests"
-      puts  %x[bundle exec rake atrium:spec:run]
+      puts Rake::Task["atrium:spec"].invoke
       FileUtils.cd('../../')
     end
 
@@ -40,6 +40,7 @@ namespace :atrium do
     task :setup_and_run => ["atrium:setup_test_app"] do
       puts "Reloading fixtures"
       Rake::Task["atrium:rspec:run"].invoke
+
     end
 
   end
@@ -208,7 +209,7 @@ namespace :atrium do
 
     puts "Running rspec tests"
     puts  %x[bundle exec rake atrium:spec:rcov]
-    puts  %x[bundle exec rake atrium:spec]
+    puts  %x[bundle exec rake atrium:rspec:run]
 
     puts "Running cucumber tests"
     puts %x[bundle exec rake atrium:cucumber]

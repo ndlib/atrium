@@ -62,7 +62,7 @@ class AtriumCollectionsController < AtriumController
       @collection_items_response, @collection_items_documents = get_solr_response_for_field_values("id",items_document_ids || [])
     end
     logger.debug("Finding Atrium Showcase Page: #{@atrium_showcase.inspect}")
-    puts "Finding Atrium Showcase Page: #{@atrium_showcase.inspect}"
+    #puts "Finding Atrium Showcase Page: #{@atrium_showcase.inspect}"
 
     if(params[:showcase_id] && @atrium_showcase.nil?)
       @atrium_showcase = Atrium::Showcase.find(params[:showcase_id])
@@ -90,6 +90,7 @@ class AtriumCollectionsController < AtriumController
     @atrium_exhibit=Atrium::Exhibit.new
     if (params[:atrium_collection])
       params[:atrium_collection][:search_facet_names] ||= []
+      params[:atrium_collection][:search_facet_names].delete_if { |elem| elem.empty? }  if params[:atrium_collection][:search_facet_names].length > 0
     end
     respond_to do |format|
       if @atrium_collection.update_attributes(params[:atrium_collection])

@@ -7,11 +7,8 @@ class Atrium::Search::FacetSelection
   end
 
   def label
-
-    #@label ||= Blacklight.config[:facet][:labels][field_name]
-    # DEPRECATED
-    logger.debug("Label Hash: #{Hash[*CatalogController.blacklight_config.facet_fields.map { |key, facet| [key, facet.label] }.flatten].inspect}")
-    @label ||= Hash[*CatalogController.blacklight_config.facet_fields.map { |key, facet| [key, facet.label] }.flatten]
+    facet_hash= Hash[*CatalogController.blacklight_config.facet_fields.map { |key, facet| [key, facet.label] }.flatten]
+    @label ||= facet_hash[field_name]
   end
 
 end

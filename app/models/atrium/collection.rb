@@ -8,11 +8,12 @@ class Atrium::Collection < ActiveRecord::Base
   serialize :filter_query_params
   serialize :collection_items, Hash
 
-  attr_accessible :collection_items, :filter_query_params, :theme, :title, :title_markup, :collection_description, :search_instructions
+  attr_accessible :collection_items, :filter_query_params, :theme, :title, :title_markup, :collection_description, :search_instructions, :search_facet_names,:url_slug, :exhibits_attributes, :search_facets_attributes
 
   accepts_nested_attributes_for :exhibits,      :allow_destroy => true
   accepts_nested_attributes_for :search_facets, :allow_destroy => true
-  attr_accessible :exhibits_attributes, :search_facets_attributes
+  #attr_accessible :exhibits_attributes, :search_facets_attributes
+  #attr_accessible :exhibits_attributes, :search_facets_attributes
 
   @@included_themes = ['default']
 

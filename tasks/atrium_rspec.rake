@@ -14,13 +14,7 @@ begin
     default.prerequisites.delete('test')
   end
 
-  #spec_prereq = Rails.configuration.generators.options[:rails][:orm] == :active_record ?  "db:test:prepare" : :noop
-  #task :noop do; end
-  #task :default => :spec
   spec_prereq = "atrium:test:prepare"
-  #task :default => :spec
-
-  #atrium_spec = File.expand_path("./test_support/spec", Atrium.root)
   atrium_spec = File.expand_path("../test_support/spec",File.dirname(__FILE__))
 
   # Set env variable to tell our spec/spec_helper.rb where we really are,
@@ -61,91 +55,6 @@ begin
       end
     end
 
-=begin
-    namespace :spec do
-      puts "into spec namespace"
-      [:requests, :models,:helpers, :controllers, :views,  :mailers, :lib, :routing, :generators, :utilities].each do |sub|
-        desc "Run the code examples in spec/#{sub}"
-        RSpec::Core::RakeTask.new(sub => spec_prereq) do |t|
-          # the user might not have run rspec generator because they don't
-          # actually need it, but without an ./.rspec they won't get color,
-          # let's insist.
-          t.rspec_opts = "--colour"
-
-          # pattern directory name defaults to ./**/*_spec.rb, but has a more concise command line echo
-          t.pattern = "#{atrium_spec}/#{sub}"
-        end
-      end
-
-      desc "Run all specs"
-      task :run => spec_prereq do
-        [:models, :helpers, :controllers,  :lib, :generators, :utilities].each do |sub|
-          puts "invoking: atrium:spec:#{sub}"
-          Rake::Task["atrium:spec:#{sub}"].invoke
-        end
-      end
-
-      desc "Run all specs with rcov"
-      RSpec::Core::RakeTask.new(:rcov => spec_prereq) do |t|
-        t.rcov = true
-        # pattern directory name defaults to ./**/*_spec.rb, but has a more concise command line echo
-        t.pattern = File.join(atrium_spec, "/**/*_spec.rb")
-        t.rspec_opts = "--colour"
-        t.rcov_opts = '-o "' + Atrium.root + '/coverage" --exclude /gems/,/Library/,/usr/,test_support,lib/tasks,.bundle,config,/lib/rspec/,/lib/rspec-'
-      end
-
-      # Atrium. Solr wrapper. for now just for atrium:spec, plan to
-      # provide it for all variants eventually.
-      # if you would like to see solr startup messages on STDERR
-      # when starting solr test server during functional tests use:
-      #
-      #    rake SOLR_CONSOLE=true
-      require File.expand_path('../jetty_solr_server.rb', __FILE__)
-      desc "atrium:solr with jetty/solr launch"
-      task :with_solr do
-        # wrap tests with a test-specific Solr server
-        # Need to look  up where the test jetty is located
-        # from solr.yml, we don't hardcode it anymore.
-
-        solr_yml_path = locate_path("config", "solr.yml")
-        jetty_path = if ( File.exists?( solr_yml_path ))
-                       solr_config = YAML::load(File.open(solr_yml_path))
-                       solr_config["test"]["jetty_path"] if solr_config["test"]
-                     end
-        raise Exception.new("Can't find jetty path to start test jetty. Expect a jetty_path key in config/solr.yml for test environment.") unless jetty_path
-
-
-        # wrap tests with a test-specific Solr server
-        JettySolrServer.new(
-          :jetty_home => File.expand_path(jetty_path, Rails.root),
-          :sleep_after_start => 2).wrap do
-          Rake::Task["atrium:spec"].invoke
-          end
-      end
-
-
-      # Don't understand what this does or how to make it use our remote stats_directory.
-      # task :statsetup do
-      # require 'rails/code_statistics'
-      # ::STATS_DIRECTORIES << %w(Model\ specs spec/models) if File.exist?('spec/models')
-      # ::STATS_DIRECTORIES << %w(View\ specs spec/views) if File.exist?('spec/views')
-      # ::STATS_DIRECTORIES << %w(Controller\ specs spec/controllers) if File.exist?('spec/controllers')
-      # ::STATS_DIRECTORIES << %w(Helper\ specs spec/helpers) if File.exist?('spec/helpers')
-      # ::STATS_DIRECTORIES << %w(Library\ specs spec/lib) if File.exist?('spec/lib')
-      # ::STATS_DIRECTORIES << %w(Mailer\ specs spec/mailers) if File.exist?('spec/mailers')
-      # ::STATS_DIRECTORIES << %w(Routing\ specs spec/routing) if File.exist?('spec/routing')
-      # ::STATS_DIRECTORIES << %w(Request\ specs spec/requests) if File.exist?('spec/requests')
-      # ::CodeStatistics::TEST_TYPES << "Model specs" if File.exist?('spec/models')
-      # ::CodeStatistics::TEST_TYPES << "View specs" if File.exist?('spec/views')
-      # ::CodeStatistics::TEST_TYPES << "Controller specs" if File.exist?('spec/controllers')
-      # ::CodeStatistics::TEST_TYPES << "Helper specs" if File.exist?('spec/helpers')
-      # ::CodeStatistics::TEST_TYPES << "Library specs" if File.exist?('spec/lib')
-      # ::CodeStatistics::TEST_TYPES << "Mailer specs" if File.exist?('spec/mailers')
-      # ::CodeStatistics::TEST_TYPES << "Routing specs" if File.exist?('spec/routing')
-      # ::CodeStatistics::TEST_TYPES << "Request specs" if File.exist?('spec/requests')
-      # end
-    end
-=end
   end
 rescue LoadError
   # This rescue pattern stolen from cucumber; rspec didn't need it before since

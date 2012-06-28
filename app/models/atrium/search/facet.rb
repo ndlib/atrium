@@ -3,7 +3,7 @@ class Atrium::Search::Facet < ActiveRecord::Base
 
   belongs_to :collection, :class_name => 'Atrium::Collection', :foreign_key => 'atrium_collection_id'
 
-  validates_presence_of :atrium_collection_id, :name
+  validates_presence_of :collection, :name
 
   attr_accessible :atrium_collection_id, :name
 

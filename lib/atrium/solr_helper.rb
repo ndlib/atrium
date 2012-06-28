@@ -99,8 +99,13 @@ module Atrium::SolrHelper
         rescue
           #just do nothing here if
         end
+      elsif params[:showcase_id]
+        begin
+          @showcase = Atrium::Showcase.find(params[:showcase_id])
+        rescue
+          #just do nothing here if
+        end
       end
-
       if @showcase && @showcase.parent
         if @showcase.parent.is_a?(Atrium::Collection)
           @atrium_collection = @showcase.parent
@@ -113,7 +118,6 @@ module Atrium::SolrHelper
           collection_id = params[:collection_id]
         end
       end
-      puts "Collection: #{collection_id.inspect}"
     elsif params[:controller] == "atrium_descriptions"
       if params[:id]
         begin
