@@ -129,7 +129,7 @@ module Atrium::Catalog
       extra_head_content << view_context.auto_discovery_link_tag(:rss, url_for(params.merge(:format => 'rss')), :title => "RSS for results")
       extra_head_content << view_context.auto_discovery_link_tag(:atom, url_for(params.merge(:format => 'atom')), :title => "Atom for results")
 
-      @extra_controller_params = {}
+      @extra_controller_params ||= {}
       if params[:exhibit_id]
         @exhibit = Atrium::Exhibit.find(params[:exhibit_id])
         @atrium_collection = @exhibit.collection if @exhibit
@@ -155,7 +155,7 @@ module Atrium::Catalog
         @extra_controller_params = prepare_extra_controller_params_for_collection_query(collection,exhibit,browse_level,params,@extra_controller_params) if collection || exhibit || browse_level
       end
 
-      #logger.debug("extra params before search are: #{@extra_controller_params.inspect}")
+      logger.debug("extra params before search are: #{@extra_controller_params.inspect}")
       (@response, @document_list) = get_search_results(params,@extra_controller_params)
       @images = get_all_children(@document_list, "is_part_of_s")
       #@members = get_all_children(@document_list, "is_member_of_s")

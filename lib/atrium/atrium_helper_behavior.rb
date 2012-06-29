@@ -28,16 +28,17 @@ module Atrium::AtriumHelperBehavior
   end
 
   # used in the catalog/_facets partial
-  def facet_field_names
-    if params[:collection_id] && params[:controller] == 'catalog' && params[:action] = 'index'
-      collection = @atrium_collection?  @atrium_collection : Atrium::Collection.find(params[:collection_id])
-      if collection
-        collection.search_facets.collect {|f| f.name}
-      end
-    else
-      super
-    end
-  end
+  #def facet_field_names
+  #  if params[:collection_id] && params[:controller] == 'catalog' && params[:action] = 'index'
+  #    logger.debug("Into get facets")
+  #    collection = @atrium_collection?  @atrium_collection : Atrium::Collection.find(params[:collection_id])
+  #    if collection
+  #      collection.search_facets.collect {|f| f.name}
+  #    end
+  #  else
+  #    super
+  #  end
+  #end
 
   def render_facet_limit(display_facet, options = {})
     if params[:edit_exhibit_filter] ||  params[:edit_collection_filter] || params[:edit_browse_level_filter] || params[:add_featured]  || params[:exclude_browse_level_filter]
@@ -64,10 +65,10 @@ module Atrium::AtriumHelperBehavior
   # catalog_path accepts a HashWithIndifferentAccess object. The solr query params are stored in the session,
   # so we only need the +counter+ param here. We also need to know if we are viewing to document as part of search results.
   def link_to_document(doc, opts={:label=>blacklight_config.index.show_link.to_sym, :counter => nil, :results_view => true})
-    #logger.debug("Label: #{opts[:label]}")
-    params[:controller] == "atrium_collections" ? collection_id = params[:id] : collection_id = params[:collection_id]
+    logger.debug("Atrium link_to_document Label: #{opts[:label]}")
+    collection_id =  params[:controller] == "atrium_collections" ? params[:id] :  params[:collection_id]
     params[:controller] == "atrium_showcases" ? exhibit_id = params[:id] : exhibit_id = params[:showcase_id]
-    params[:controller] == "atrium_exhibits" ? exhibit_id = params[:id] : exhibit_id = params[:exhibit_id]
+    exhibit_id = params[:controller] == "atrium_exhibits" ?  params[:id] :  params[:exhibit_id]
     label = render_document_index_label doc, opts
     args = {}
     args.merge!(:f=>params[:f]) if params[:f]
@@ -84,7 +85,7 @@ module Atrium::AtriumHelperBehavior
     if exhibit_id && collection_id
       #link_to_with_data(label, atrium_collection_exhibit_browse_path(collection_id, exhibit_id, doc.id, args), {:method => :put, :class => label.parameterize, :data => opts}).html_safe
       label = render_document_index_label doc, opts
-      #logger.debug("URL: #{atrium_collection_exhibit_browse_path(collection_id, exhibit_id, doc.id, args).inspect}")
+      logger.debug("URL: #{atrium_collection_exhibit_browse_path(collection_id, exhibit_id, doc.id, args).inspect}")
       link_to label, atrium_collection_exhibit_browse_path(collection_id, exhibit_id, doc.id, args)
     #elsif exhibit_id
     #  link_to_with_data(label, atrium_exhibit_browse_path(exhibit_id, doc.id, args), {:method => :put, :class => label.parameterize, :data => opts}).html_safe

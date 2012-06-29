@@ -449,7 +449,7 @@ module Atrium::SolrHelper
     return content.html_safe
   end
 
-  def get_all_children(doc_list, relationship_field_names)
+  def get_all_children(doc_list, relationship_field_names, opts={})
     @child_hash={}
     parent_arr=[]
     modified_arr=[]
