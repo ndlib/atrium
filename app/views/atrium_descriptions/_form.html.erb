@@ -18,6 +18,13 @@
 <%= form_for(@atrium_description, :html => { :class => 'atrium' }) do |f| %>
   <fieldset>
     <legend>Description</legend>
+    <% if @atrium_description.errors.any? %>
+      <ul class="errors">
+        <% @atrium_description.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end %>
     <% @atrium_description.atrium_showcase_id = params[:showcase_id] if (params[:showcase_id]) %>
     <%= f.hidden_field :atrium_showcase_id %>
     <ol>

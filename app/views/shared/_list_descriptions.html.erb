@@ -30,7 +30,7 @@
       <h4>Essay: </h4><blockquote> <%= desc.essay.content.html_safe unless desc.essay.nil? %> </blockquote>
       <h4>From Solr:</h4> <%= desc.description_solr_id.blank? ? "" : get_essay_from_description(@description_hash,desc.description_solr_id).html_safe%>
       <% if (can? :create, Atrium::Description)%>
-        <%= link_to 'Edit Description', edit_atrium_description_path(desc.id), :class => 'description_colorbox button', :action=> atrium_descriptions_path(@atrium_showcase.id) if desc.description_solr_id.blank? %>
+        <%= link_to 'Edit Description', edit_atrium_description_path(desc.id), :class => 'description_colorbox button', :action=> atrium_descriptions_path(:showcase_id=>desc.atrium_showcase_id, :id=>desc.id, :no_layout=>true)  if desc.description_solr_id.blank? %>
         <a class="destroy_description button" href=# action="<%= atrium_description_path(desc.id)%>" title="Remove Description"> Delete this description</a>
       <% end %>
     </dl>

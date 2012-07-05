@@ -19,11 +19,10 @@ class AtriumDescriptionsController < AtriumController
 
   def create
     logger.debug("in create params: #{params.inspect}")
+    puts "in create params: #{params.inspect}"
     @atrium_description = Atrium::Description.new(:atrium_showcase_id=>params[:showcase_id])
     @atrium_description.save!
-    logger.info("@atrium_description = #{@atrium_description.inspect}")
-    if @atrium_description.save
-      @atrium_description.update_attributes(params[:atrium_description])
+    if @atrium_description.update_attributes(params[:atrium_description])
       flash[:notice] = 'Description was successfully created.'
       redirect_to :action => "edit", :id=>@atrium_description.id
     else
@@ -33,7 +32,8 @@ class AtriumDescriptionsController < AtriumController
 
   def edit
     @atrium_description = Atrium::Description.find(params[:id])
-    logger.debug("Desc: #{@atrium_description.inspect}, essay = #{@atrium_description.essay.inspect},summary = #{@atrium_description.summary.inspect}")
+    #logger.debug("Desc: #{@atrium_description.inspect}, essay = #{@atrium_description.essay.inspect},summary = #{@atrium_description.summary.inspect}")
+    #puts "Desc: #{@atrium_description.inspect}, essay = #{@atrium_description.essay.inspect},summary = #{@atrium_description.summary.inspect}"
     @atrium_description.build_essay(:content_type=>"essay") unless @atrium_description.essay
     @atrium_description.build_summary(:content_type=>"summary") unless @atrium_description.summary
   end
@@ -106,7 +106,7 @@ class AtriumDescriptionsController < AtriumController
     #Need to delete in AJAX way
     @atrium_description = Atrium::Description.find(params[:id])
     Atrium::Description.destroy(params[:id])
-    text = 'Description'+params[:id] +'was deleted successfully.'
+    text = 'Description '+params[:id] +' was deleted successfully.'
     render :text => text
   end
 
