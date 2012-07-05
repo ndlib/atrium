@@ -3,7 +3,6 @@ class AtriumExhibitsController < AtriumController
   before_filter :initialize_collection, :except=>[:index, :create]
 
   def new
-    #logger.debug("in create params: #{params.inspect}")
     @exhibit = Atrium::Exhibit.new
     respond_to do |format|
       format.html
@@ -11,13 +10,8 @@ class AtriumExhibitsController < AtriumController
   end
 
   def create
-    #logger.debug("in create params: #{params.inspect}")
     @exhibit = Atrium::Exhibit.new(params[:atrium_exhibit])
-
-    @exhibit.save
-    #logger.debug("in create params: #{@exhibit.inspect}")
-    if @exhibit.save
-      @exhibit.update_attributes(params[:atrium_exhibit])
+    if @exhibit.update_attributes(params[:atrium_exhibit])
       flash[:notice] = 'Exhibit was successfully created.'
       redirect_to :controller=>"atrium_collections", :action => "edit", :id=>@exhibit.atrium_collection_id
     end
@@ -32,7 +26,6 @@ class AtriumExhibitsController < AtriumController
   def update
     @exhibit = Atrium::Exhibit.find(params[:id])
     if @exhibit.update_attributes(params[:atrium_exhibit])
-      #refresh_browse_level_label(@atrium_collection)
       flash[:notice] = 'Exhibit was successfully updated.'
     end
     redirect_to :action => "edit"
@@ -89,7 +82,7 @@ class AtriumExhibitsController < AtriumController
   def destroy
     @exhibit = Atrium::Exhibit.find(params[:id])
     Atrium::Exhibit.destroy(params[:id])
-    flash[:notice] = 'Exhibit'+params[:id] +'was deleted successfully.'
+    flash[:notice] = 'Exhibit '+params[:id] +' was deleted successfully.'
     redirect_to :controller=>"atrium_collections", :action => "edit", :id=>@exhibit.atrium_collection_id
   end
 

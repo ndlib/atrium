@@ -1,7 +1,6 @@
 class AtriumCollectionExhibitOrderController < ApplicationController
   def index
     @exhibit_order = Atrium::Collection.find(params[:id]).exhibit_order rescue nil
-
     respond_to do |format|
       format.json  { render :json => @exhibit_order }
     end

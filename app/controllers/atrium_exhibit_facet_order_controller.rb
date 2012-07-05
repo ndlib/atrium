@@ -1,6 +1,6 @@
 class AtriumExhibitFacetOrderController < ApplicationController
   def index
-    @facet_order = Atrium::Collection.find(params[:id]).facet_order rescue nil
+    @facet_order = Atrium::Exhibit.find(params[:id]).facet_order rescue nil
 
     respond_to do |format|
       format.json  { render :json => @facet_order }
@@ -9,11 +9,11 @@ class AtriumExhibitFacetOrderController < ApplicationController
 
   # NOTE this action is not currently protected from unauthorized use.
   def update
-    @collection = Atrium::Exhibit.find(params[:id])
-    @collection.facet_order = params[:collection]
+    @exhibit = Atrium::Exhibit.find(params[:id])
+    @exhibit.facet_order = params[:collection]
 
     respond_to do |format|
-      format.json  { render :json => @collection.facet_order }
+      format.json  { render :json => @exhibit.facet_order }
     end
   end
 end

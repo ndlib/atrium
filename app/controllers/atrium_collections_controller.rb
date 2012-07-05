@@ -13,9 +13,9 @@ class AtriumCollectionsController < AtriumController
     redirect_to :action => "edit", :id=>@atrium_collection.id
   end
 
-  def update_embedded_search
-    render :partial => "shared/featured_search", :locals=>{:content=>params[:content_type]}
-  end
+  #def update_embedded_search
+  #  render :partial => "shared/featured_search", :locals=>{:content=>params[:content_type]}
+  #end
 
   def home_page_text_config
     @atrium_collection= Atrium::Collection.find(params[:id])
