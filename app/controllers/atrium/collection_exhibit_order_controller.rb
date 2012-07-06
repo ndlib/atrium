@@ -1,4 +1,4 @@
-class AtriumCollectionExhibitOrderController < ApplicationController
+class Atrium::CollectionExhibitOrderController < Atrium::BaseController
   def index
     respond_to do |format|
       format.json  { render :json => collection.exhibit_order }

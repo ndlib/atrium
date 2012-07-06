@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe AtriumCollectionExhibitOrderController do
+describe Atrium::CollectionExhibitOrderController do
 
   describe "Get index" do
     it "should render JSON of session" do
