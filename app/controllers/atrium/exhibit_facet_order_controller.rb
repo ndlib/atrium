@@ -1,4 +1,4 @@
-class AtriumExhibitFacetOrderController < ApplicationController
+class Atrium::ExhibitFacetOrderController < Atrium::BaseController
   def index
     @facet_order = Atrium::Exhibit.find(params[:id]).facet_order rescue nil
 

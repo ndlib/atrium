@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe AtriumDescriptionsController do
+describe Atrium::DescriptionsController do
    before do
       #Atrium::Description.stubs(:new).returns(@atrium_description)
       @collection = Atrium::Collection.new

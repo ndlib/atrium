@@ -1,4 +1,4 @@
-class AtriumExhibitsController < AtriumController
+class Atrium::ExhibitsController < Atrium::BaseController
 
   before_filter :initialize_collection, :except=>[:index, :create]
 
@@ -83,7 +83,7 @@ class AtriumExhibitsController < AtriumController
     @exhibit = Atrium::Exhibit.find(params[:id])
     Atrium::Exhibit.destroy(params[:id])
     flash[:notice] = 'Exhibit '+params[:id] +' was deleted successfully.'
-    redirect_to :controller=>"atrium_collections", :action => "edit", :id=>@exhibit.atrium_collection_id
+    redirect_to edit_atrium_collection_path(@exhibit.atrium_collection_id)
   end
 
   def blacklight_config

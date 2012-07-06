@@ -1,4 +1,4 @@
-class AtriumShowcasesController < AtriumController
+class Atrium::ShowcasesController < Atrium::BaseController
 
   before_filter :initialize_collection
 

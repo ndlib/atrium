@@ -1,4 +1,4 @@
-class AtriumCollectionsController < AtriumController
+class Atrium::CollectionsController < Atrium::BaseController
 
   before_filter :initialize_collection, :except=>[:index, :new]
 

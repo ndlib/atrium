@@ -1,4 +1,4 @@
-class AtriumDescriptionsController < AtriumController
+class Atrium::DescriptionsController < Atrium::BaseController
 
   before_filter :initialize_collection, :get_exhibit_navigation_data
 

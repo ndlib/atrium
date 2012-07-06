@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe AtriumCollectionsController do
+describe Atrium::CollectionsController do
    before do
      @collection = mock("atrium_collection")
      Atrium::Collection.stubs(:find).with("1").returns(@collection)

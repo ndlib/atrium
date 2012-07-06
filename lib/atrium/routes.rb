@@ -31,36 +31,38 @@ module Atrium
 
       def atrium_collections
         add_routes do |options|
-          resources :atrium_collections, :atrium_exhibits do
-            resource :atrium_showcases
-          end
-          resources :atrium_descriptions do
-            resource :atrium_essays
+          namespace :atrium do
+            resources :collections, :exhibits do
+              resource :showcases
+            end
+            resources :descriptions do
+              resource :essays
+            end
           end
           match 'atrium_collections/:id/exhibit_order',                              :to => 'atrium/collection_exhibit_order#index',      :as => 'atrium_collection_exhibit_order'
           match 'atrium_collections/:id/exhibit_order/update',                       :to => 'atrium/collection_exhibit_order#update',     :as => 'update_atrium_collection_exhibit_order', :via => :post
           match 'atrium_collections/:collection_id/catalog',                         :to => 'catalog#index',                              :as => 'atrium_collection_home', :via => :get
-          match 'atrium_collections/configure/:id',                                  :to => 'atrium_collections#home_page_text_config',   :as => 'atrium_collection_text_configure'
-          match 'atrium_collections/set_scope/:id',                                  :to => 'atrium_collections#set_collection_scope',    :as => 'atrium_set_collection_scope'
-          match 'atrium_collections/unset_scope/:id',                                :to => 'atrium_collections#unset_collection_scope',  :as => 'atrium_unset_collection_scope'
-          match 'atrium_exhibits/:id/facet_order',                                   :to => 'atrium_exhibit_facet_order#index',           :as => 'atrium_exhibit_facet_order'
-          match 'atrium_exhibits/:id/facet_order/update',                            :to => 'atrium_exhibit_facet_order#update',          :as => 'update_atrium_exhibit_facet_order', :via => :post
-          match 'atrium_exhibits/set_scope/:id',                                     :to => 'atrium_exhibits#set_exhibit_scope',          :as => 'atrium_set_exhibit_scope'
-          match 'atrium_exhibits/unset_scope/:id',                                   :to => 'atrium_exhibits#unset_exhibit_scope',        :as => 'atrium_unset_exhibit_scope'
-          match 'atrium_showcases/featured/:id',                                     :to => 'atrium_showcases#featured',                  :as => 'atrium_showcase_featured'
-          match 'atrium_showcases/refresh/:id',                                      :to => 'atrium_showcases#refresh_showcase',          :as => 'atrium_showcase_refresh'
+          match 'atrium_collections/configure/:id',                                  :to => 'atrium/collections#home_page_text_config',   :as => 'atrium_collection_text_configure'
+          match 'atrium_collections/set_scope/:id',                                  :to => 'atrium/collections#set_collection_scope',    :as => 'atrium_set_collection_scope'
+          match 'atrium_collections/unset_scope/:id',                                :to => 'atrium/collections#unset_collection_scope',  :as => 'atrium_unset_collection_scope'
+          match 'atrium_exhibits/:id/facet_order',                                   :to => 'atrium/exhibit_facet_order#index',           :as => 'atrium_exhibit_facet_order'
+          match 'atrium_exhibits/:id/facet_order/update',                            :to => 'atrium/exhibit_facet_order#update',          :as => 'update_atrium_exhibit_facet_order', :via => :post
+          match 'atrium_exhibits/set_scope/:id',                                     :to => 'atrium/exhibits#set_exhibit_scope',          :as => 'atrium_set_exhibit_scope'
+          match 'atrium_exhibits/unset_scope/:id',                                   :to => 'atrium/exhibits#unset_exhibit_scope',        :as => 'atrium_unset_exhibit_scope'
+          match 'atrium_showcases/featured/:id',                                     :to => 'atrium/showcases#featured',                  :as => 'atrium_showcase_featured'
+          match 'atrium_showcases/refresh/:id',                                      :to => 'atrium/showcases#refresh_showcase',          :as => 'atrium_showcase_refresh'
           match 'atrium_collections/:collection_id/catalog/:id',                     :to => 'catalog#show',                               :as => 'atrium_collection_catalog'
           match 'atrium_collections/:collection_id/browse/:id',                      :to => 'catalog#show',                               :as => 'atrium_collection_browse', :defaults=>{:atrium_collection_browse=>true}
           match 'atrium_collections/:collection_id/exhibits/:exhibit_id/browse/:id', :to => 'catalog#show',                               :as => 'atrium_collection_exhibit_browse', :defaults=>{:atrium_exhibit_browse=>true}
-          match 'atrium_collections/:id/showcases/:showcase_id',                     :to => 'atrium_collections#show',                    :as => 'atrium_collection_showcase'
+          match 'atrium_collections/:id/showcases/:showcase_id',                     :to => 'atrium/collections#show',                    :as => 'atrium_collection_showcase'
           match 'atrium_exhibits/:exhibit_id/browse/:id',                            :to => 'catalog#show',                               :as => 'atrium_exhibit_browse', :defaults=>{:atrium_exhibit_browse=>true}
-          match 'atrium_showcases/:showcase_id/descriptions',                        :to => 'atrium_descriptions#index',                  :as => 'atrium_descriptions', :via => :get
-          match 'atrium_showcases/:showcase_id/descriptions',                        :to => 'atrium_descriptions#create',                 :as => 'atrium_descriptions', :via => :post
-          match 'atrium_showcases/:showcase_id/descriptions/new',                    :to => 'atrium_descriptions#new',                    :as => 'new_atrium_description'
+          match 'atrium_showcases/:showcase_id/descriptions',                        :to => 'atrium/descriptions#index',                  :as => 'atrium_descriptions', :via => :get
+          match 'atrium_showcases/:showcase_id/descriptions',                        :to => 'atrium/descriptions#create',                 :as => 'atrium_descriptions', :via => :post
+          match 'atrium_showcases/:showcase_id/descriptions/new',                    :to => 'atrium/descriptions#new',                    :as => 'new_atrium_description'
           match 'atrium/customization/start',                                        :to => 'atrium/customization#start',                 :as => 'start_atrium_customization'
           match 'atrium/customization/stop',                                         :to => 'atrium/customization#stop',                  :as => 'stop_atrium_customization'
-          match 'atrium_descriptions/add/:showcase_id',                              :to => 'atrium_descriptions#add_from_solr',          :as => 'atrium_descriptions_add'
-          match 'atrium_descriptions/link/:showcase_id',                             :to => 'atrium_descriptions#save_ids_to_descriptions',      :as => 'atrium_descriptions_link'
+          match 'atrium_descriptions/add/:showcase_id',                              :to => 'atrium/descriptions#add_from_solr',          :as => 'atrium_descriptions_add'
+          match 'atrium_descriptions/link/:showcase_id',                             :to => 'atrium/descriptions#save_ids_to_descriptions',      :as => 'atrium_descriptions_link'
         end
       end
 
