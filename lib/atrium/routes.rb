@@ -37,8 +37,8 @@ module Atrium
           resources :atrium_descriptions do
             resource :atrium_essays
           end
-          match 'atrium_collections/:id/exhibit_order',                              :to => 'atrium_collection_exhibit_order#index',      :as => 'atrium_collection_exhibit_order'
-          match 'atrium_collections/:id/exhibit_order/update',                       :to => 'atrium_collection_exhibit_order#update',     :as => 'update_atrium_collection_exhibit_order', :via => :post
+          match 'atrium_collections/:id/exhibit_order',                              :to => 'atrium/collection_exhibit_order#index',      :as => 'atrium_collection_exhibit_order'
+          match 'atrium_collections/:id/exhibit_order/update',                       :to => 'atrium/collection_exhibit_order#update',     :as => 'update_atrium_collection_exhibit_order', :via => :post
           match 'atrium_collections/:collection_id/catalog',                         :to => 'catalog#index',                              :as => 'atrium_collection_home', :via => :get
           match 'atrium_collections/configure/:id',                                  :to => 'atrium_collections#home_page_text_config',   :as => 'atrium_collection_text_configure'
           match 'atrium_collections/set_scope/:id',                                  :to => 'atrium_collections#set_collection_scope',    :as => 'atrium_set_collection_scope'
