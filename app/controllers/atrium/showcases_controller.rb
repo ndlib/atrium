@@ -3,10 +3,10 @@ class Atrium::ShowcasesController < Atrium::BaseController
   before_filter :initialize_collection
 
   def index
-    logger.debug("in Index params: #{params.inspect}")
+
     @exhibit = Atrium::Exhibit.find(params[:atrium_exhibit_id])
     @exhibit_navigation_data = get_exhibit_navigation_data
-    logger.debug("Exhibit: #{@exhibit.inspect}, Browse level:#{@exhibit.browse_levels.inspect}")
+
     set_edit_showcase_in_session
     redirect_to atrium_collection_path(:id=>@exhibit.atrium_collection_id, :exhibit_number=>@exhibit.id)
   end
@@ -14,15 +14,15 @@ class Atrium::ShowcasesController < Atrium::BaseController
   def new
     @parent=parent_object
     @atrium_showcase= Atrium::Showcase.with_selected_facets(@parent.id, @parent.class.name, params[:facet_selection]).first
-    logger.debug("in new: #{@atrium_showcase.inspect}")
+
     unless  @atrium_showcase
-      logger.debug("in create params: #{params.inspect}")
+
       @atrium_showcase = @parent.showcases.build({:showcases_id=>@parent.id, :showcases_type=>@parent.class.name})
       @atrium_showcase.save!
       if(params[:facet_selection])
         params[:facet_selection].collect {|key,value|
           facet_selection = @atrium_showcase.facet_selections.create({:solr_facet_name=>key,:value=>value.first})
-          logger.debug("to browse page adding facet selection: #{facet_selection.inspect}")
+
         }
         @atrium_showcase.save!
       end
@@ -37,7 +37,7 @@ class Atrium::ShowcasesController < Atrium::BaseController
   end
 
   def create
-    logger.debug("in create params: #{params.inspect}")
+
     @atrium_showcase = Atrium::Showcase.new(params[:atrium_exhibit_id])
     @atrium_showcase.showcase_items ||= Hash.new
     logger.info("atrium_showcase = #{@atrium_showcase.inspect}")
@@ -77,15 +77,15 @@ class Atrium::ShowcasesController < Atrium::BaseController
       @atrium_showcase.showcase_items[:type]="featured"
       @atrium_showcase.showcase_items[:solr_doc_ids]=selected_document_ids.join(',')
     else
-      logger.debug("No featured")
+
       @atrium_showcase.showcase_items={}
     end
     @atrium_showcase.save
-    logger.debug("Copy of session#{session[:copy_folder_document_ids].inspect}")
+
     session_folder_ids=[] || session[:copy_folder_document_ids]
     session[:folder_document_ids] = session_folder_ids
     session[:copy_folder_document_ids]=nil
-    logger.debug("@atrium_showcase: #{@atrium_showcase.inspect},Selected Highlight: #{selected_document_ids.inspect}, folders_selected: #{session[:folder_document_ids].inspect}")
+
     if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
       @response, @featured_documents = get_solr_response_for_field_values("id",@atrium_showcase.showcase_items[:solr_doc_ids].split(',') || [])
     end
@@ -99,13 +99,13 @@ class Atrium::ShowcasesController < Atrium::BaseController
   end
 
   def configure_showcase
-    logger.debug("in configure_showcase params: #{params.inspect}")
+
     unless  @atrium_showcase
       @atrium_showcase=Atrium::Showcase.find(params[:id])
     end
 
     @exhibit_navigation_data = get_exhibit_navigation_data
-    logger.debug("Exhibit: #{@exhibit.inspect}")
+
     set_edit_showcase_in_session
     if @atrium_showcase.showcases_type=="Atrium::Exhibit"
       redirect_to atrium_exhibit_path(:id=>@atrium_showcase.showcases_id, :f=>params[:f])
@@ -131,7 +131,7 @@ class Atrium::ShowcasesController < Atrium::BaseController
       collection_id = params[:collection_id]
       exhibit_id = params[:exhibit_id]
     end
-    logger.debug("#{@atrium_showcase.inspect}, #{@atrium_showcase.showcase_items[:solr_doc_ids]}")
+
     session[:folder_document_ids] = @atrium_showcase.showcase_items[:solr_doc_ids].split(',') unless @atrium_showcase.showcase_items[:solr_doc_ids].nil?
     #make sure to pass in a search_fields parameter so that it shows search results immediately
     redirect_to catalog_index_path(:add_featured=>true,:collection_id=>collection_id,:exhibit_id=>exhibit_id,:search_field=>"all_fields",:f=>params[:f])
@@ -141,7 +141,7 @@ class Atrium::ShowcasesController < Atrium::BaseController
      @atrium_showcase = Atrium::Showcase.find(params[:id])
     selected_document_ids = session[:folder_document_ids]
     session[:folder_document_ids] = session[:copy_folder_document_ids]
-    logger.debug("Selected Highlight: #{selected_document_ids.inspect}, folders_selected: #{session[:folder_document_ids].inspect}")
+
     @response, @documents = get_solr_response_for_field_values("id",selected_document_ids || [])
     render :layout => false, :locals=>{:selected_document_ids=>selected_document_ids}
   end
@@ -165,7 +165,7 @@ class Atrium::ShowcasesController < Atrium::BaseController
       when params[:atrium_exhibit_id] then parent= Atrium::Exhibit.find_by_id(params[:atrium_exhibit_id])
       when params[:atrium_collection_id] then parent = Atrium::Collection.find_by_id(params[:atrium_collection_id])
     end
-    logger.debug("Parent: #{parent.inspect}")
+
     return parent
   end
 
@@ -177,7 +177,7 @@ class Atrium::ShowcasesController < Atrium::BaseController
   end
 
   def unset_edit_showcase_in_session
-    logger.debug("unsetting edit showcase")
+
     session[:edit_showcase] = nil
   end
 

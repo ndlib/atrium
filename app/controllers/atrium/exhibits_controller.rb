@@ -37,18 +37,18 @@ class Atrium::ExhibitsController < Atrium::BaseController
     @exhibit= Atrium::Exhibit.find(params[:id])
     @exhibit_navigation_data = get_exhibit_navigation_data
     if @exhibit && @exhibit.filter_query_params && @exhibit.filter_query_params[:solr_doc_ids]
-      #logger.debug("Items in Exhibit: #{@exhibit.filter_query_params[:solr_doc_ids]}")
+
       items_document_ids = @exhibit.filter_query_params[:solr_doc_ids].split(',')
-      #logger.debug("Exhibit items: #{items_document_ids.inspect}")
+
       @collection_items_response, @collection_items_documents = get_solr_response_for_field_values("id",items_document_ids || [])
     end
 
-    #logger.debug("Browse page: #{@exhibit.showcases}")
+
     @atrium_showcase=Atrium::Showcase.with_selected_facets(@exhibit.id, @exhibit.class.name, params[:f]).first
     if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
-      #logger.debug("#{@atrium_showcase.inspect}, #{@atrium_showcase.showcase_items[:solr_doc_ids]}")
+
       selected_document_ids = @atrium_showcase.showcase_items[:solr_doc_ids].split(',')
-      #logger.debug("Collection Selected Highlight: #{selected_document_ids.inspect}")
+
       @response, @featured_documents = get_solr_response_for_field_values("id",selected_document_ids || [])
     end
     @description_hash=get_description_for_showcase(@atrium_showcase) unless @atrium_showcase.nil?
@@ -62,7 +62,7 @@ class Atrium::ExhibitsController < Atrium::BaseController
     session[:copy_folder_document_ids] = session[:folder_document_ids]
     session[:folder_document_ids] = []
     @exhibit = Atrium::Exhibit.find(params[:id])
-    #logger.debug("#{@exhibit.inspect}, #{@exhibit.filter_query_params[:solr_doc_ids] if @exhibit.filter_query_params}")
+
     session[:folder_document_ids] = @exhibit.filter_query_params[:solr_doc_ids].split(',') if @exhibit.filter_query_params && @exhibit.filter_query_params[:solr_doc_ids]
     p = params.dup
     p.delete :action

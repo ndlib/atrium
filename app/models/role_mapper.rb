@@ -11,7 +11,7 @@ class RoleMapper
       @@map.keys
     end
     def roles(username)
-      logger.debug("byname: #{@@byname.inspect}, Belongs to:#{@@byname[username].inspect}")
+
       @@byname[username]||[]
     end
     
