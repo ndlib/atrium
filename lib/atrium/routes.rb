@@ -57,8 +57,8 @@ module Atrium
           match 'atrium_showcases/:showcase_id/descriptions',                        :to => 'atrium_descriptions#index',                  :as => 'atrium_descriptions', :via => :get
           match 'atrium_showcases/:showcase_id/descriptions',                        :to => 'atrium_descriptions#create',                 :as => 'atrium_descriptions', :via => :post
           match 'atrium_showcases/:showcase_id/descriptions/new',                    :to => 'atrium_descriptions#new',                    :as => 'new_atrium_description'
-          match 'atrium/customization/start',                                        :to => 'atrium_customization#start',                 :as => 'start_atrium_customization'
-          match 'atrium/customization/stop',                                         :to => 'atrium_customization#stop',                  :as => 'stop_atrium_customization'
+          match 'atrium/customization/start',                                        :to => 'atrium/customization#start',                 :as => 'start_atrium_customization'
+          match 'atrium/customization/stop',                                         :to => 'atrium/customization#stop',                  :as => 'stop_atrium_customization'
           match 'atrium_descriptions/add/:showcase_id',                              :to => 'atrium_descriptions#add_from_solr',          :as => 'atrium_descriptions_add'
           match 'atrium_descriptions/link/:showcase_id',                             :to => 'atrium_descriptions#save_ids_to_descriptions',      :as => 'atrium_descriptions_link'
         end

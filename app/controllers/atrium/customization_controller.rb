@@ -1,4 +1,4 @@
-class AtriumCustomizationController < ApplicationController
+class Atrium::CustomizationController < Atrium::BaseController
   def start
     session[:edit_showcase] = true
 
