@@ -33,4 +33,8 @@ class Atrium::BrowseLevel < ActiveRecord::Base
     @values ||= []
   end
 
+  def to_s
+    "#{solr_facet_name}"
+  end
+
 end
