@@ -1,23 +1,37 @@
 class Atrium::Exhibit < ActiveRecord::Base
   self.table_name = 'atrium_exhibits'
 
-  has_many :browse_levels, :class_name => 'Atrium::BrowseLevel', :foreign_key => 'atrium_exhibit_id', :order => 'level_number ASC'
-  has_many :showcases,     :class_name => 'Atrium::Showcase',  :as => :showcases
+  attr_accessible(
+    :atrium_collection_id,
+    :filter_query_params,
+    :label,
+    :set_number,
+    :browse_levels_attributes,
+    :showcases_attributes
+  )
 
-  belongs_to :collection, :class_name => 'Atrium::Collection', :foreign_key => 'atrium_collection_id'
+  belongs_to(
+    :collection,
+    :class_name => 'Atrium::Collection',
+    :foreign_key => 'atrium_collection_id'
+  )
 
-  serialize :filter_query_params
+  has_many(
+    :showcases,
+    :class_name => 'Atrium::Showcase',
+    :as => :showcases
+  )
+  accepts_nested_attributes_for :showcases
 
-  attr_accessible :atrium_collection_id, :filter_query_params, :label, :set_number
+
+  has_many(
+    :browse_levels,
+    :class_name => 'Atrium::BrowseLevel',
+    :foreign_key => 'atrium_exhibit_id',
+    :order => 'level_number ASC'
+  )
 
   accepts_nested_attributes_for :browse_levels, :allow_destroy => true
-  accepts_nested_attributes_for :showcases
-  attr_accessible :browse_levels_attributes, :showcases_attributes
-
-  def pretty_title
-    label.blank? ? "Exhibit #{set_number}" : label
-  end
-
   def browse_facet_names
     browse_levels.collect {|facet| facet.solr_facet_name} rescue []
   end
@@ -35,4 +49,10 @@ class Atrium::Exhibit < ActiveRecord::Base
     end
   end
 
+
+  serialize :filter_query_params
+
+  def pretty_title
+    label.blank? ? "Exhibit #{set_number}" : label
+  end
 end
