@@ -125,11 +125,11 @@ class Atrium::Showcase < ActiveRecord::Base
     if selected_facets
       selected_facets.collect {|key,value|
         facet_condition_values << key
-        facet_condition_values << value.is_a?(String) ? value : value.flatten
+        facet_condition_values << (value.is_a?(String) ? value : value.flatten.compact.to_s)
 
         %((
-          #{Atrium::Showcase::FacetSelection.quoted_table_name}.`solr_facet_name` = '#{key}'
-          AND #{Atrium::Showcase::FacetSelection.quoted_table_name}.`value` = '#{value}'
+          #{Atrium::Showcase::FacetSelection.quoted_table_name}.`solr_facet_name` = ?
+          AND #{Atrium::Showcase::FacetSelection.quoted_table_name}.`value` = ?
          ))
       }
     else
@@ -145,7 +145,6 @@ class Atrium::Showcase < ActiveRecord::Base
       where("#{Atrium::Showcase::FacetSelection.quoted_table_name}.`id` is NULL")
     else
       # unfortunately have to do subselect here to get this correct
-      # require 'ruby-debug'; debugger
       conditions = [%(
         #{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id`
         IN (
@@ -153,11 +152,11 @@ class Atrium::Showcase < ActiveRecord::Base
           FROM #{Atrium::Showcase::FacetSelection.quoted_table_name}
           INNER JOIN #{quoted_table_name}
           ON #{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id` = #{quoted_table_name}.`id`
-          WHERE #{quoted_table_name}.showcases_id = #{parent_id}
-          AND #{quoted_table_name}.`showcases_type` = \"#{parent_type}\"
+          WHERE #{quoted_table_name}.showcases_id = ?
+          AND #{quoted_table_name}.`showcases_type` = ?
           AND (#{facet_conditions.join(" OR ")})
         )
-      )]# + facet_condition_values
+      ), parent_id, parent_type] + facet_condition_values
 
       having_str = %(
         COUNT(#{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id`) = #{facet_conditions.size}
