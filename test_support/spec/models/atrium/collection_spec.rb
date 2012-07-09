@@ -1,43 +1,30 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Atrium::Collection do
-  before(:each) do
-    @collection = Atrium::Collection.new
-    @collection.save
-  end
+  it { should have_many :showcases }
+  it { should have_many :search_facets }
+  it { should have_many :exhibits }
 
-  after(:each) do
-    @collection.delete
-  end
-
-  describe "#title" do
-    it "should return the collection title" do
-      @collection.update_attributes({:title=>"My title"})
-      @collection.title.should == "My title"
+  describe "#theme_path" do
+    it 'should default to "atrium_themes/default"' do
+      subject.theme_path.should == "atrium_themes/default"
+    end
+    it 'should be updatable' do
+      theme_name = 'chunky_bacon'
+      subject.theme = theme_name
+      subject.theme_path.should == "atrium_themes/#{theme_name}"
     end
   end
 
-  describe "search_facets" do
-    it "should return array of facets used in searching" do
-      @collection.search_facets.create({:name=>"my_facet_2"})
-      @collection.search_facets.create({:name=>"my_facet_4"})
-      (@collection.search_facets.collect {|x| x.name}).should == ["my_facet_2","my_facet_4"]
+  describe "#display_title" do
+    it "should default to 'Unnamed Collection'" do
+      subject.display_title.should == "<h2>#{subject.pretty_title}</h2>"
+    end
+
+    it "should use #title_markup when set" do
+      string = '<h2>Saving <em>the World</em></h2>'
+      subject.title_markup = string
+      subject.display_title.should == string
     end
   end
-
-  describe "exhibits" do
-    it "should return array of browse sets used in browsing" do
-      @collection.exhibits.create({:label=>"My Browse Set",:set_number=>1})
-      @collection.exhibits.create({:label=>"",:set_number=>2})
-      (@collection.exhibits.collect {|x| x.label}).should == ["My Browse Set",""]
-    end
-
-    it "should return browse sets sorted by set number" do
-      @collection.exhibits.create({:label=>"My Browse Set",:set_number=>2})
-      @collection.exhibits.create({:label=>"",:set_number=>1})
-      (@collection.exhibits.collect {|x| x.label}).should == ["","My Browse Set"]
-    end
-  end
-
-  
 end
