@@ -47,6 +47,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'yard'
   s.add_dependency 'block_helpers'
   s.add_dependency 'sanitize'
+  s.add_dependency 'morphine'
   s.add_development_dependency 'cucumber', '>=0.8.5'
   s.add_development_dependency 'cucumber-rails', '>=1.0.0'
   s.add_development_dependency 'devise' # Expected by Blacklight generator in test app
