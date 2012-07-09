@@ -108,44 +108,38 @@ describe AtriumCollectionsController do
       response.should render_template("edit")
     end
   end
-  #
-  #describe "Get Show"  do
-  #  before do
-  #    @exhibit = mock("atrium_exhibit")
-  #    Atrium::Exhibit.stubs(:find).with("1").returns(@exhibit)
-  #    controller.stubs(:get_all_children).returns([])
-  #    controller.stubs(:get_exhibit_navigation_data).returns([])
-  #    @exhibit.expects(:filter_query_params).returns(nil)
-  #  end
-  #  it "returns exhibit of the given exhibit id with template" do
-  #    Atrium::Showcase.expects(:with_selected_facets).returns([])
-  #    get :show, { :id => "1" }
-  #    response.should render_template 'layouts/atrium'
-  #    response.should render_template("show")
-  #  end
-  #
-  #  it "returns exhibit of the given exhibit id without template" do
-  #    Atrium::Showcase.expects(:with_selected_facets).returns([])
-  #    get :show, { :id => "1", :no_layout=>true }
-  #    response.should_not render_template 'layouts/atrium'
-  #    response.should render_template("show")
-  #  end
-  #
-  #  it "should return only items that are through exhibit scope filter" do
-  #    pending
-  #  end
-  #
-  #  it "should return any featured item added through showcase" do
-  #    pending
-  #  end
-  #
-  #  it "should return any descriptions added through showcase" do
-  #    pending
-  #  end
-  #end
-  #
-  #
-  #
+
+  describe "Get Show"  do
+    before do
+      controller.stubs(:get_exhibit_navigation_data).returns([])
+    end
+    it "returns collection of the given collection id with template" do
+      Atrium::Showcase.expects(:with_selected_facets).returns([])
+      @collection.expects(:filter_query_params).returns(nil)
+      get :show, { :id => "1" }
+      response.should render_template 'layouts/atrium'
+      response.should render_template("show")
+    end
+
+    it "should return only items that are added through collection scope filter" do
+      @collection.stubs(:filter_query_params).returns({:solr_doc_ids=>"1,2,3"})
+      controller.expects(:get_solr_response_for_field_values).returns([])
+      assigns(:items_document_ids) == ["1", "2", "3"]
+    end
+
+    #it "should return any featured item added through showcase" do
+    #  @showcase = mock("atrium_showcase")
+    #  Atrium::Showcase.expects(:with_selected_facets).returns([@showcase])
+    #  @collection.stubs(:filter_query_params).returns({:solr_doc_ids=>"1,2,3"})
+    #  controller.expects(:get_solr_response_for_field_values).returns([])
+    #  assigns(:items_document_ids) == ["1", "2", "3"]
+    #end
+    #
+    #it "should return any descriptions added through showcase" do
+    #  pending
+    #end
+  end
+
   describe "Delete" do
     before do
      @exhibit = mock("atrium_exhibit")

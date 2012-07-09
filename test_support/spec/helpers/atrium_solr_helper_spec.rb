@@ -1,6 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 Blacklight::SolrHelper.stubs(:class_inheritable_accessor)
+include Blacklight::SolrHelper
 
 describe Atrium::SolrHelper do
 
@@ -21,6 +22,9 @@ describe Atrium::SolrHelper do
   end
 
   describe "initialize_collection" do
+    before(:each) do
+      helper.stubs(:get_all_children).returns([])
+    end
     it "atrium_collection should be nil if both :id (if atrium_collections controller) and :collection_id not in params" do
       helper.stubs(:params).returns({:id=>"test_id"})
       helper.initialize_collection
@@ -69,8 +73,8 @@ describe Atrium::SolrHelper do
       helper.stubs(:params).returns({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}})
       @collection.filter_query_params = {:q=>"testing",:f=>{"continent"=>["North America"]}}
       Atrium::Collection.expects(:find).with("test_id").returns(@collection)
-      helper.expects(:solr_search_params).with(@collection.filter_query_params).returns(:q=>"testing",:fq=>["{!raw f=continent}North America"]).once
-      helper.expects(:solr_search_params).with({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}}).returns(:fq=>["{!raw f=continent}North America"])
+      helper.expects(:prepare_extra_controller_params_for_collection_query).returns(:q=>"testing",:fq=>["{!raw f=continent}North America"])
+      helper.expects(:reset_extra_controller_params_after_collection_query).returns(:fq=>["{!raw f=continent}North America"])
       #it will combine param facet and filter facet into extra params so that the params facets are not overwritten when the filter facet is applied
       extra_params = {:q=>"testing", :fq=>["{!raw f=continent}North America"]}
       helper.expects(:get_search_results).with({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}},extra_params)
@@ -80,9 +84,10 @@ describe Atrium::SolrHelper do
 
   describe "get_exhibit_navigation_data" do
     it "if atrium collection still nil after calling initialize collection than should return empty array" do
-      helper.expects(:params).returns({:collection_id=>"test_id"}).at_least_once
+      helper.expects(:initialize_collection).returns(nil)
+      helper.expects(:params).returns({:collection_id=>"test_id"})
       Atrium::Collection.expects(:find).with("test_id").returns(nil)
-      helper.expects(:get_browse_level_data).times(0)
+      helper.expects(:get_browse_level_data).returns([])
       helper.get_exhibit_navigation_data.should == []
     end
 
@@ -434,4 +439,73 @@ describe Atrium::SolrHelper do
       browse_data.first.browse_levels.second.selected.should == "my_val3"
     end
   end
+
+  describe "add_exclude_fq_to_solr" do
+    before(:each) do
+      @exclude_facets = {:test=>'exclude'}
+    end
+    self.solr_search_params_logic += [:add_exclude_fq_to_solr]
+    it "should have exclude solr parameters included in proper way" do
+      solr_params = solr_search_params(:exclude => @exclude_facets)
+      solr_params[:q].should be_blank
+      solr_params["spellcheck.q"].should be_blank
+      solr_params[:"facet.field"].should == blacklight_config[:default_solr_params][:"facet.field"]
+
+      @exclude_facets.each_value do |value|
+        solr_params[:fq].should include("-({!raw f=#{@exclude_facets.keys[0]}}#{value})")
+      end
+    end
+  end
+
+  describe "get_current_filter_query_params" do
+    self.solr_search_params_logic += [:add_exclude_fq_to_solr]
+    it "should return filters from collection in solr way" do
+      @collection.filter_query_params = {:q=>"testing",:f=>{"continent"=>["North America"]}}
+      filter_queries= get_current_filter_query_params(@collection,nil,nil)
+      filter_queries[:q].should == "testing"
+      filter_queries[:fq].should_not be_blank
+    end
+
+    it "should return filters from collection, exhibit and browse level in solr way" do
+      @collection.filter_query_params = {:q=>"testing",:f=>{"continent"=>["North America"]}}
+      exhibit=mock("atrium_exhibit")
+      exhibit.stubs(:filter_query_params).returns({:f=>{"format"=>["books"]}})
+      browse_level=mock("atrium_browse_level")
+      browse_level.stubs(:filter_query_params).returns({:f=>{"bl"=>["exhibit_level_1"]}})
+      ex_facet={:bl_exclude=>["disc"]}
+      browse_level.stubs(:exclude_query_params).returns({:exclude=>ex_facet})
+      filter_queries= get_current_filter_query_params(@collection,exhibit,browse_level)
+       ex_facet.each_value do |value|
+        filter_queries[:fq].should include("-({!raw f=#{ex_facet.keys[0]}}#{value})")
+       end
+      ##TODO need to test other filters in the same way as above test in different scenarios
+    end
+  end
+
+
+  describe "prepare_extra_controller_params_for_collection_query" do
+
+    it "should add collection query params with params to extra_controller_params" do
+      @collection.filter_query_params = {:q=>"testing",:f=>{"continent"=>["North America"]}}
+      helper.expects(:get_current_filter_query_params).returns({:q=>"testing", :fq=>["{!raw f=continent}North America"]})
+      extra_queries= prepare_extra_controller_params_for_collection_query(@collection,nil,nil,{:q=>"include params"},{})
+      extra_queries[:q].should == "testing AND include params"
+      extra_queries[:fq].should_not be_blank
+    end
+
+  end
+
+  describe "get_all_children" do
+    #TODO need to have solr running and process the real solr response for this test
+    #before do
+    #  @mock_response = mock()
+    #  @mock_response.stubs(:docs => [])
+    #  @mock_document = mock()
+    #  helper.expects(:get_solr_response_for_field_values).returns([@mock_response,@mock_document])
+    #end
+    #  it "should return document matching given relationship name" do
+    #    get_all_children([], "is_member_of")
+    #  end
+  end
+
 end
