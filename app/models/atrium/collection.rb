@@ -18,7 +18,8 @@ class Atrium::Collection < ActiveRecord::Base
   has_many(
     :showcases,
     :class_name => 'Atrium::Showcase',
-    :as => :showcases
+    :as => :showcases,
+    :dependent => :destroy
   )
 
   has_many(
