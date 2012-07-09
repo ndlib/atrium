@@ -2,24 +2,49 @@ require 'sanitize'
 class Atrium::Description < ActiveRecord::Base
   self.table_name = 'atrium_descriptions'
 
-  belongs_to :showcase, :class_name => 'Atrium::Showcase', :foreign_key => 'atrium_showcase_id'
-  has_one :summary, :class_name => 'Atrium::Essay',  :conditions => "\"atrium_essays\".content_type = \"summary\"", :foreign_key => 'atrium_description_id', :dependent => :destroy
-  has_one :essay,   :class_name => 'Atrium::Essay',  :conditions => "\"atrium_essays\".content_type = \"essay\"", :foreign_key => 'atrium_description_id', :dependent => :destroy
+  belongs_to(
+    :showcase,
+    :class_name => 'Atrium::Showcase',
+    :foreign_key => 'atrium_showcase_id'
+  )
+
+  has_one(
+    :summary,
+    :class_name => 'Atrium::Essay',
+    :conditions => "\"atrium_essays\".content_type = \"summary\"",
+    :foreign_key => 'atrium_description_id',
+    :dependent => :destroy
+  )
+  accepts_nested_attributes_for :summary, :allow_destroy => true
+  def get_summary
+    essay.blank? ? "" : summary.content
+  end
+
+  has_one(
+    :essay,
+    :class_name => 'Atrium::Essay',
+    :conditions => "\"atrium_essays\".content_type = \"essay\"",
+    :foreign_key => 'atrium_description_id',
+    :dependent => :destroy
+  )
+  accepts_nested_attributes_for :essay,   :allow_destroy => true
+  def get_essay
+    essay.blank? ? "" : essay.content
+  end
+
 
   validates_presence_of :atrium_showcase_id
 
-  attr_accessible :description_solr_id, :page_display, :title, :atrium_showcase_id
-
-  accepts_nested_attributes_for :essay,   :allow_destroy => true
-  accepts_nested_attributes_for :summary, :allow_destroy => true
-  attr_accessible :essay_attributes, :summary_attributes
-
-  #after_save  :update_solr unless ENV['DO_NOT_INDEX'] || RAILS_ENV == "development" || RAILS_ENV == "staging"
-  #after_destroy :remove_from_solr unless RAILS_ENV == "development" || RAILS_ENV == "staging"
-
+  attr_accessible(
+    :description_solr_id,
+    :page_display,
+    :title,
+    :atrium_showcase_id,
+    :essay_attributes,
+    :summary_attributes
+  )
 
   def self.get_description_from_solr_id(solr_id)
-    #atrium_description=Atrium::Description.find(solr_id.split('_').last)
     atrium_description=Atrium::Description.find_by_description_solr_id(solr_id.to_s)
 
     if atrium_description
@@ -30,24 +55,8 @@ class Atrium::Description < ActiveRecord::Base
     end
   end
 
-  def pretty_title
-    title.blank? ? "Description #{id}" : title
-  end
-
-  def get_essay
-    essay.blank? ? "" : essay.content
-  end
-
-  def get_summary
-    essay.blank? ? "" : summary.content
-  end
-
   def generate_solr_id
     "atrium_description_#{id}"
-  end
-
-  def get_atrium_showcase_id
-    "atrium_showcase_#{id}"
   end
 
   def as_solr
@@ -66,20 +75,10 @@ class Atrium::Description < ActiveRecord::Base
       :atrium_showcase_id_t           => get_atrium_showcase_id,
       :atrium_showcase_id_display     => get_atrium_showcase_id
     }.reject{|key, value| value.blank?}
-    puts "Doc: #{doc.inspect}"
     return doc
   end
 
-  def summary_text
-    ::Sanitize.clean(summary.content).squish unless summary.blank?
-  end
-
-  def essay_text
-    ::Sanitize.clean(essay.content).squish unless essay.blank?
-  end
-
   def to_solr
-    #puts "Into to Solr"
     Blacklight.solr.add as_solr
   end
 
@@ -90,23 +89,40 @@ class Atrium::Description < ActiveRecord::Base
     end
   end
 
-  def show_on_this_page?
-    page_display.nil? || page_display == "newpage"
+  def summary_text
+    ::Sanitize.clean(summary.content).squish unless summary.blank?
   end
+  private :summary_text
 
-  def blank?
-    title.blank? && essay.blank?
+  def essay_text
+    ::Sanitize.clean(essay.content).squish unless essay.blank?
   end
-
-
-
-  private
+  private :essay_text
 
   def remove_from_solr
     if(description_solr_id.blank?)
       Blacklight.solr.delete_by_id solr_id
       Blacklight.solr.commit
     end
+  end
+  private :remove_from_solr
+
+  def get_atrium_showcase_id
+    "atrium_showcase_#{id}"
+  end
+  private :get_atrium_showcase_id
+
+
+  def pretty_title
+    title.blank? ? "Description #{id}" : title
+  end
+
+  def show_on_this_page?
+    page_display.nil? || page_display == "newpage"
+  end
+
+  def blank?
+    title.blank? && essay.blank?
   end
 
 end
