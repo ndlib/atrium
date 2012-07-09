@@ -120,13 +120,20 @@ class Atrium::Showcase < ActiveRecord::Base
     else
       selected_facets
     end
+    facet_condition_values = []
     facet_conditions =
     if selected_facets
       selected_facets.collect {|key,value|
-        "(#{Atrium::Showcase::FacetSelection.quoted_table_name}.`solr_facet_name` = '#{key}' and #{Atrium::Showcase::FacetSelection.quoted_table_name}.`value` = '#{(value.is_a?(String) ? value : value.flatten)}')"
+        facet_condition_values << key
+        facet_condition_values << value.is_a?(String) ? value : value.flatten
+
+        %((
+          #{Atrium::Showcase::FacetSelection.quoted_table_name}.`solr_facet_name` = '#{key}'
+          AND #{Atrium::Showcase::FacetSelection.quoted_table_name}.`value` = '#{value}'
+         ))
       }
     else
-      {}
+      []
     end
 
     if facet_conditions.empty?
@@ -137,14 +144,29 @@ class Atrium::Showcase < ActiveRecord::Base
       where(:showcases_id => parent_id,:showcases_type => parent_type).
       where("#{Atrium::Showcase::FacetSelection.quoted_table_name}.`id` is NULL")
     else
-      #unfortunately have to do subselect here to get this correct
-      conditions = "#{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id` in (select #{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id`
-from #{Atrium::Showcase::FacetSelection.quoted_table_name} INNER JOIN #{quoted_table_name} ON #{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id` = #{quoted_table_name}.`id`
-where #{quoted_table_name}.showcases_id = #{parent_id} AND #{quoted_table_name}.`showcases_type` = \"#{parent_type}\" AND (#{facet_conditions.join(" OR ")}))"
+      # unfortunately have to do subselect here to get this correct
+      # require 'ruby-debug'; debugger
+      conditions = [%(
+        #{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id`
+        IN (
+          SELECT #{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id`
+          FROM #{Atrium::Showcase::FacetSelection.quoted_table_name}
+          INNER JOIN #{quoted_table_name}
+          ON #{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id` = #{quoted_table_name}.`id`
+          WHERE #{quoted_table_name}.showcases_id = #{parent_id}
+          AND #{quoted_table_name}.`showcases_type` = \"#{parent_type}\"
+          AND (#{facet_conditions.join(" OR ")})
+        )
+      )]# + facet_condition_values
 
-having_str = "count(#{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id`) = #{facet_conditions.size}"
-      joins("INNER JOIN #{Atrium::Showcase::FacetSelection.quoted_table_name} ON #{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id` = #{quoted_table_name}.`id`").
-where(conditions).group("#{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id`").having(having_str)
+      having_str = %(
+        COUNT(#{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id`) = #{facet_conditions.size}
+      )
+
+      joins(:facet_selections).
+      where(conditions).
+      group("#{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id`").
+      having(having_str)
     end
   }
 
