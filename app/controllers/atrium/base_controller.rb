@@ -1,7 +1,7 @@
 require 'atrium/layout_helper'
 require 'atrium/atrium_helper_behavior'
 
-class AtriumController < ApplicationController
+class Atrium::BaseController < ApplicationController
 
   include CatalogHelper
   include BlacklightHelper
@@ -14,6 +14,6 @@ class AtriumController < ApplicationController
 
   layout :current_layout
 
-  AtriumController.solr_search_params_logic += [:add_exclude_fq_to_solr]
+  self.solr_search_params_logic += [:add_exclude_fq_to_solr]
 
 end

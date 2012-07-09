@@ -1,4 +1,4 @@
-class AtriumExhibitsController < AtriumController
+class Atrium::ExhibitsController < Atrium::BaseController
 
   before_filter :initialize_collection, :except=>[:index, :create]
 
@@ -13,7 +13,7 @@ class AtriumExhibitsController < AtriumController
     @exhibit = Atrium::Exhibit.new(params[:atrium_exhibit])
     if @exhibit.update_attributes(params[:atrium_exhibit])
       flash[:notice] = 'Exhibit was successfully created.'
-      redirect_to :controller=>"atrium_collections", :action => "edit", :id=>@exhibit.atrium_collection_id
+      redirect_to :controller=>"atrium/collections", :action => "edit", :id=>@exhibit.atrium_collection_id
     end
   end
 
@@ -37,18 +37,18 @@ class AtriumExhibitsController < AtriumController
     @exhibit= Atrium::Exhibit.find(params[:id])
     @exhibit_navigation_data = get_exhibit_navigation_data
     if @exhibit && @exhibit.filter_query_params && @exhibit.filter_query_params[:solr_doc_ids]
-      #logger.debug("Items in Exhibit: #{@exhibit.filter_query_params[:solr_doc_ids]}")
+
       items_document_ids = @exhibit.filter_query_params[:solr_doc_ids].split(',')
-      #logger.debug("Exhibit items: #{items_document_ids.inspect}")
+
       @collection_items_response, @collection_items_documents = get_solr_response_for_field_values("id",items_document_ids || [])
     end
 
-    #logger.debug("Browse page: #{@exhibit.showcases}")
+
     @atrium_showcase=Atrium::Showcase.with_selected_facets(@exhibit.id, @exhibit.class.name, params[:f]).first
     if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
-      #logger.debug("#{@atrium_showcase.inspect}, #{@atrium_showcase.showcase_items[:solr_doc_ids]}")
+
       selected_document_ids = @atrium_showcase.showcase_items[:solr_doc_ids].split(',')
-      #logger.debug("Collection Selected Highlight: #{selected_document_ids.inspect}")
+
       @response, @featured_documents = get_solr_response_for_field_values("id",selected_document_ids || [])
     end
     @description_hash=get_description_for_showcase(@atrium_showcase) unless @atrium_showcase.nil?
@@ -62,7 +62,7 @@ class AtriumExhibitsController < AtriumController
     session[:copy_folder_document_ids] = session[:folder_document_ids]
     session[:folder_document_ids] = []
     @exhibit = Atrium::Exhibit.find(params[:id])
-    #logger.debug("#{@exhibit.inspect}, #{@exhibit.filter_query_params[:solr_doc_ids] if @exhibit.filter_query_params}")
+
     session[:folder_document_ids] = @exhibit.filter_query_params[:solr_doc_ids].split(',') if @exhibit.filter_query_params && @exhibit.filter_query_params[:solr_doc_ids]
     p = params.dup
     p.delete :action
@@ -83,10 +83,30 @@ class AtriumExhibitsController < AtriumController
     @exhibit = Atrium::Exhibit.find(params[:id])
     Atrium::Exhibit.destroy(params[:id])
     flash[:notice] = 'Exhibit '+params[:id] +' was deleted successfully.'
-    redirect_to :controller=>"atrium_collections", :action => "edit", :id=>@exhibit.atrium_collection_id
+    redirect_to edit_atrium_collection_path(@exhibit.atrium_collection_id)
   end
 
   def blacklight_config
     CatalogController.blacklight_config
   end
+
+  def initialize_collection
+    if collection_id = determine_collection_id
+      return __initialize_collection( collection_id )
+    else
+      return false
+    end
+  end
+
+
+private
+
+def determine_collection_id
+  if params[:id]
+    exhibit = Atrium::Exhibit.find(params[:id])
+    collection_id = exhibit.atrium_collection_id if exhibit
+  end
+  return collection_id
+end
+
 end

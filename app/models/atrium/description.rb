@@ -21,7 +21,7 @@ class Atrium::Description < ActiveRecord::Base
   def self.get_description_from_solr_id(solr_id)
     #atrium_description=Atrium::Description.find(solr_id.split('_').last)
     atrium_description=Atrium::Description.find_by_description_solr_id(solr_id.to_s)
-    logger.debug("$$$$$desc: #{atrium_description.inspect}")
+
     if atrium_description
       atrium_showcase=Atrium::Showcase.find(atrium_description.atrium_showcase_id)
       return atrium_description , atrium_showcase

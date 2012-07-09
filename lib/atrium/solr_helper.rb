@@ -79,74 +79,7 @@ module Atrium::SolrHelper
   #      @browse_response [Solr::Response] The response from solr for current collection browse scope (will include any filters/facets applied by browse)
   #      @browse_document_list [Array] An array of SolrDocuments for the current browse scope
   #
-  def initialize_collection
-    #debugger; true
-    if params[:controller] == "atrium_collections"
-      collection_id = params[:id]            if params.has_key? :id
-      collection_id = params[:collection_id] if params.has_key? :collection_id
-    elsif params[:controller] =="atrium_exhibits"
-      @exhibit = Atrium::Exhibit.find(params[:id])
-      collection = @exhibit.collection if @exhibit
-      collection_id = collection.id if collection
-    elsif params[:atrium_exhibit_id]
-      @exhibit = Atrium::Exhibit.find(params[:atrium_exhibit_id])
-      collection = @exhibit.collection if @exhibit
-      collection_id = collection.id if collection
-    elsif params[:controller] == "atrium_showcases"
-      if params[:id]
-        begin
-          @showcase = Atrium::Showcase.find(params[:id])
-        rescue
-          #just do nothing here if
-        end
-      elsif params[:showcase_id]
-        begin
-          @showcase = Atrium::Showcase.find(params[:showcase_id])
-        rescue
-          #just do nothing here if
-        end
-      end
-      if @showcase && @showcase.parent
-        if @showcase.parent.is_a?(Atrium::Collection)
-          @atrium_collection = @showcase.parent
-          collection_id = @atrium_collection.id
-        elsif @showcase.parent.is_a?(Atrium::Exhibit)
-          @exhibit = @showcase.parent
-          @atrium_collection = @exhibit.collection
-          collection_id = @atrium_collection.id
-        else
-          collection_id = params[:collection_id]
-        end
-      end
-    elsif params[:controller] == "atrium_descriptions"
-      if params[:id]
-        begin
-          @description = Atrium::Description.find(params[:id])
-          if @description
-            @showcase= Atrium::Showcase.find(@description.atrium_showcase_id)
-          end
-        rescue
-          #just do nothing here if
-        end
-      elsif(params[:showcase_id])
-        @showcase= Atrium::Showcase.find(params[:showcase_id])
-      end
-      ##logger.debug("Showcase: #{@showcase.inspect}")
-      if @showcase && @showcase.parent
-        if @showcase.parent.is_a?(Atrium::Collection)
-          @atrium_collection = @showcase.parent
-          collection_id = @atrium_collection.id
-        elsif @showcase.parent.is_a?(Atrium::Exhibit)
-          @exhibit = @showcase.parent
-          @atrium_collection = @exhibit.collection
-          collection_id = @atrium_collection.id
-        else
-          collection_id = params[:collection_id]
-        end
-      end
-    else
-      collection_id = params[:collection_id]
-    end
+  def __initialize_collection(collection_id)
 
     unless collection_id
       logger.error("Could not initialize collection. If controller is 'atrium_collections' than :id must be defined.  Otherwise, :collection_id must be defined.  Params were: #{params.inspect}")
@@ -155,7 +88,7 @@ module Atrium::SolrHelper
 
     begin
       @atrium_collection = Atrium::Collection.find(collection_id) if @atrium_collection.nil?
-      raise "No collection was found with id: #{collection_id}" if @atrium_collection.nil?
+      #raise "No collection was found with id: #{collection_id}" if @atrium_collection.nil?
       @exhibits = @atrium_collection.exhibits
       if params[:exhibit_number]
         exhibit_index = params[:exhibit_number].to_i

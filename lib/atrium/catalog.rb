@@ -178,5 +178,26 @@ module Atrium::Catalog
       end
     end
   end
+
+  def initialize_collection
+  if collection_id = determine_collection_id
+    return __initialize_collection( collection_id )
+  else
+    return false
+  end
+  end
+
+  #protected :initialize_collection
+
+  private
+
+  def determine_collection_id
+    if params.has_key? :collection_id
+        return params[:collection_id]
+    elsif params.has_key? :collection_number
+      return params[:collection_number]
+    end
+  end
+
 end
 

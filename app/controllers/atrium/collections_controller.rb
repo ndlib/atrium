@@ -1,4 +1,4 @@
-class AtriumCollectionsController < AtriumController
+class Atrium::CollectionsController < Atrium::BaseController
 
   before_filter :initialize_collection, :except=>[:index, :new]
 
@@ -7,7 +7,6 @@ class AtriumCollectionsController < AtriumController
   end
 
   def create
-    #logger.debug("in create params: #{params.inspect}")
     @atrium_collection = Atrium::Collection.new
     @atrium_collection.save
     redirect_to :action => "edit", :id=>@atrium_collection.id
@@ -26,7 +25,6 @@ class AtriumCollectionsController < AtriumController
     session[:copy_folder_document_ids] = session[:folder_document_ids]
     session[:folder_document_ids] = []
     @atrium_collection = Atrium::Collection.find(params[:id])
-    #logger.debug("#{@atrium_collection.inspect}, #{@atrium_collection.filter_query_params[:solr_doc_ids] if @atrium_collection.filter_query_params}")
     session[:folder_document_ids] = @atrium_collection.filter_query_params[:solr_doc_ids].split(',') if @atrium_collection.filter_query_params && @atrium_collection.filter_query_params[:solr_doc_ids]
     p = params.dup
     p.delete :action
@@ -56,27 +54,19 @@ class AtriumCollectionsController < AtriumController
     end
 
     if @atrium_collection && @atrium_collection.filter_query_params && @atrium_collection.filter_query_params[:solr_doc_ids]
-      #logger.debug("Items in Collection: #{@atrium_collection.filter_query_params[:solr_doc_ids]}")
+
       items_document_ids = @atrium_collection.filter_query_params[:solr_doc_ids].split(',')
-      #logger.debug("Collection items: #{items_document_ids.inspect}")
       @collection_items_response, @collection_items_documents = get_solr_response_for_field_values("id",items_document_ids || [])
     end
-    #logger.debug("Finding Atrium Showcase Page: #{@atrium_showcase.inspect}")
-    #puts "Finding Atrium Showcase Page: #{@atrium_showcase.inspect}"
-
     if(params[:showcase_id] && @atrium_showcase.nil?)
       @atrium_showcase = Atrium::Showcase.find(params[:showcase_id])
     end
-
-    #logger.debug("Atrium Browse Page: #{@atrium_showcase.inspect}")
     if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
-      #logger.debug("#{@atrium_showcase.inspect}, #{@atrium_showcase.showcase_items[:solr_doc_ids]}")
       selected_document_ids = @atrium_showcase.showcase_items[:solr_doc_ids].split(',')
-      #logger.debug("Collection Selected Highlight: #{selected_document_ids.inspect}")
       @response, @documents = get_solr_response_for_field_values("id",selected_document_ids || [])
     end
     @description_hash=get_description_for_showcase(@atrium_showcase) unless @atrium_showcase.nil?
-    #logger.debug("Atrium Hash: #{@description_hash.inspect}")
+
   end
 
   def edit
@@ -131,7 +121,29 @@ def blacklight_config
   CatalogController.blacklight_config
 end
 
+
+
+def initialize_collection
+  if collection_id = determine_collection_id
+    return __initialize_collection( collection_id )
+  else
+    return false
+  end
+end
+
+#protected :initialize_collection
+
 private
+
+def determine_collection_id
+  if params.has_key? :collection_id
+      return params[:collection_id]
+  elsif params.has_key? :id
+    return params[:id]
+  elsif params.has_key? :collection_number
+    return params[:collection_number]
+  end
+end
 
 def refresh_collection
   @exhibit_navigation_data = get_exhibit_navigation_data

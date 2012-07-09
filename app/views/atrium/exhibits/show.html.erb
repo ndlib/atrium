@@ -19,8 +19,8 @@
 <h3 class="list-heading">Complete Sources</h3>
 <div id="complete-sources">
   <%- if !@collection_items_documents.blank? -%>
-    <%= render :partial=>'atrium_collections/collection_items_index' %>
+    <%= render :partial=>'atrium/collections/collection_items_index' %>
   <%- else -%>
-    <%= render :partial=>'atrium_collections/browse_index'%>
+    <%= render :partial=>'atrium/collections/browse_index'%>
   <%- end -%>
 </div>

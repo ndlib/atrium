@@ -27,23 +27,23 @@ describe Atrium::SolrHelper do
     end
     it "atrium_collection should be nil if both :id (if atrium_collections controller) and :collection_id not in params" do
       helper.stubs(:params).returns({:id=>"test_id"})
-      helper.initialize_collection
+      helper.__initialize_collection(nil)
       helper.atrium_collection.should == nil
-      helper.stubs(:params).returns({:controller=>"atrium_collections",:collection_id=>"test_id"})
-      helper.atrium_collection.should == nil
+      #helper.stubs(:params).returns({:controller=>"atrium_collections",:collection_id=>"test_id"})
+      #helper.atrium_collection.should == nil
     end
 
     it "should raise an exception if the collection_id passed in does not exist" do
-      helper.expects(:params).returns({:id=>"test_id",:controller=>"atrium_collections"}).at_least_once
+      helper.expects(:params).returns({:id=>"test_id",:controller=>"atrium_collections"})
       #these only get called once if an collection is found
       helper.expects(:build_lucene_query).returns("_query_:id\:test_id")
       helper.expects(:get_search_results)
       @collection.save!
       logger.expects(:error).twice
-      helper.initialize_collection
+      helper.__initialize_collection("test_id")
       #check valid case as well
-      helper.expects(:params).returns({:id=>@collection.id,:controller=>"atrium_collections"}).at_least_once
-      helper.initialize_collection
+      helper.expects(:params).returns({:id=>@collection.id,:controller=>"atrium_collections"})
+      helper.__initialize_collection(@collection.id)
     end
 
     it "should configure params correctly if facet selected and facet in filter" do
@@ -55,18 +55,19 @@ describe Atrium::SolrHelper do
       #it will combine param facet and filter facet into extra params so that the params facets are not overwritten when the filter facet is applied
       extra_params = {:q=>"testing", :fq=>["{!raw f=continent}North America","{!raw f=season_facet}Spring"]}
       helper.expects(:get_search_results).with({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}},extra_params)
-      helper.initialize_collection
+      helper.__initialize_collection("test_id")
     end
 
     it "should configure params correctly if facet selected and no facet in filter" do
       helper.stubs(:params).returns({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}})
       @collection.filter_query_params = {:q=>"testing"}
       Atrium::Collection.expects(:find).with("test_id").returns(@collection)
-      helper.expects(:solr_search_params).with(@collection.filter_query_params).returns(:q=>"testing").once
+      helper.expects(:prepare_extra_controller_params_for_collection_query).returns(:q=>"testing")
+      helper.expects(:reset_extra_controller_params_after_collection_query).returns(:fq=>["{!raw f=continent}North America"])
       #it will combine param facet and filter facet into extra params so that the params facets are not overwritten when the filter facet is applied
       extra_params = {:q=>"testing"}
       helper.expects(:get_search_results).with({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}},extra_params)
-      helper.initialize_collection
+      helper.__initialize_collection("test_id")
     end
 
     it "should configure params correctly if facet selected with same facet in filter" do
@@ -78,7 +79,7 @@ describe Atrium::SolrHelper do
       #it will combine param facet and filter facet into extra params so that the params facets are not overwritten when the filter facet is applied
       extra_params = {:q=>"testing", :fq=>["{!raw f=continent}North America"]}
       helper.expects(:get_search_results).with({:collection_id=>"test_id",:f=>{"continent"=>["North America"]}},extra_params)
-      helper.initialize_collection
+      helper.__initialize_collection("test_id")
     end
   end
 

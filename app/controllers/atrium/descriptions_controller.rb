@@ -1,4 +1,4 @@
-class AtriumDescriptionsController < AtriumController
+class Atrium::DescriptionsController < Atrium::BaseController
 
   before_filter :initialize_collection, :get_exhibit_navigation_data
 
@@ -18,7 +18,7 @@ class AtriumDescriptionsController < AtriumController
   end
 
   def create
-    logger.debug("in create params: #{params.inspect}")
+
     puts "in create params: #{params.inspect}"
     @atrium_description = Atrium::Description.new(:atrium_showcase_id=>params[:showcase_id])
     @atrium_description.save!
@@ -32,7 +32,7 @@ class AtriumDescriptionsController < AtriumController
 
   def edit
     @atrium_description = Atrium::Description.find(params[:id])
-    #logger.debug("Desc: #{@atrium_description.inspect}, essay = #{@atrium_description.essay.inspect},summary = #{@atrium_description.summary.inspect}")
+
     #puts "Desc: #{@atrium_description.inspect}, essay = #{@atrium_description.essay.inspect},summary = #{@atrium_description.summary.inspect}"
     @atrium_description.build_essay(:content_type=>"essay") unless @atrium_description.essay
     @atrium_description.build_summary(:content_type=>"summary") unless @atrium_description.summary
@@ -40,20 +40,20 @@ class AtriumDescriptionsController < AtriumController
 
   def update
     @atrium_description = Atrium::Description.find(params[:id])
-    logger.debug("params: #{params[:atrium_description]}")
+
     if((params[:atrium_description]) && @atrium_description.update_attributes(params[:atrium_description]))
-      logger.debug("@atrium_description = #{@atrium_description.inspect}")
-      logger.debug("essay updated as = #{@atrium_description.essay.inspect}")
+
+
       flash[:notice] = 'Description was successfully updated.'
     elsif(params[:essay_attributes] && @atrium_description.essay.update_attributes(params[:essay_attributes]))
       #if @atrium_description.essay.update_attributes(params[:essay_attributes])
         #refresh_browse_level_label(@atrium_collection)
-        logger.debug("@atrium_description = #{@atrium_description.inspect}")
-        logger.debug("essay updated as = #{@atrium_description.essay.inspect}")
+
+
         flash[:notice] = 'Description was successfully updated.'
       #end
     else
-      logger.debug("into else: #{@atrium_description.inspect}")
+
       if @atrium_description.update_attributes(params[:atrium_description])
         #refresh_browse_level_label(@atrium_collection)
         flash[:notice] = 'Exhibit was successfully updated.'
@@ -93,11 +93,11 @@ class AtriumDescriptionsController < AtriumController
         @atrium_description = Atrium::Description.new(:atrium_showcase_id=>params[:showcase_id], :description_solr_id=>solr_id, :page_display=>doc["page_display"], :title=>doc["title"])
         @atrium_description.save!
       end
-      #logger.debug("Copy of session#{session[:copy_folder_document_ids].inspect}")
+
       session_folder_ids=[] || session[:copy_folder_document_ids]
       session[:folder_document_ids] = session_folder_ids
       session[:copy_folder_document_ids]=nil
-      #logger.debug("folders_selected: #{session[:folder_document_ids].inspect}")
+
     end
     redirect_to :action => "index", :showcase_id=>params[:showcase_id], :no_layout=>true
   end
@@ -138,6 +138,46 @@ class AtriumDescriptionsController < AtriumController
   def blacklight_config
     CatalogController.blacklight_config
   end
+
+  def initialize_collection
+    if collection_id = determine_collection_id
+      return __initialize_collection( collection_id )
+    else
+      return false
+    end
+  end
+
+
+private
+
+def determine_collection_id
+  if params[:id]
+    begin
+      @description = Atrium::Description.find(params[:id])
+      if @description
+        @showcase= Atrium::Showcase.find(@description.atrium_showcase_id)
+      end
+    rescue
+      raise "unable to find description or showcase from id"
+    end
+  elsif(params[:showcase_id])
+    @showcase= Atrium::Showcase.find(params[:showcase_id])
+  end
+  ##logger.debug("Showcase: #{@showcase.inspect}")
+  if @showcase && @showcase.parent
+    if @showcase.parent.is_a?(Atrium::Collection)
+      @atrium_collection = @showcase.parent
+      collection_id = @atrium_collection.id
+    elsif @showcase.parent.is_a?(Atrium::Exhibit)
+      @exhibit = @showcase.parent
+      @atrium_collection = @exhibit.collection
+      collection_id = @atrium_collection.id
+    else
+      collection_id = params[:collection_id]
+    end
+  end
+  return collection_id
+end
 
 
 end
