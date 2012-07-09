@@ -53,6 +53,8 @@ class Atrium::Collection < ActiveRecord::Base
     end
   end
   private :remove_collection_of_facets_by_name
+
+
   has_many(
     :exhibits,
     :class_name => 'Atrium::Exhibit',
@@ -61,10 +63,7 @@ class Atrium::Collection < ActiveRecord::Base
     :dependent => :destroy
   )
 
-  accepts_nested_attributes_for(
-    :exhibits,
-    :allow_destroy => true
-  )
+  accepts_nested_attributes_for :exhibits, :allow_destroy => true
 
   def exhibit_order
     exhibit_order = {}
