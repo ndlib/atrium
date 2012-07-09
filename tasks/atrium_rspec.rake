@@ -18,17 +18,17 @@ begin
   atrium_spec = File.expand_path("../test_support/spec",File.dirname(__FILE__))
   directories_to_test = [
     :controllers,
-    :generators,
+    # :generators,
     :helpers,
-    :integration,
-    :lib,
-    :mailers,
+    # :integration,
+    # :lib,
+    # :mailers,
     :models,
-    :requests,
-    :routing,
-    :unit,
-    :utilities,
-    :views
+    # :requests,
+    # :routing,
+    # :unit,
+    # :utilities,
+    # :views
   ]
 
   # Set env variable to tell our spec/spec_helper.rb where we really are,
