@@ -1,23 +1,79 @@
 class Atrium::Showcase < ActiveRecord::Base
   self.table_name = 'atrium_showcases'
 
-  has_many :descriptions,     :class_name => 'Atrium::Description',              :foreign_key => 'atrium_showcase_id', :dependent => :destroy
-  has_many :facet_selections, :class_name => 'Atrium::Showcase::FacetSelection', :foreign_key => 'atrium_showcase_id', :dependent => :destroy
-  has_many :featured_items,   :class_name => 'Atrium::Showcase::Item::Featured', :foreign_key => 'atrium_showcase_id', :dependent => :destroy
-  has_many :related_items,    :class_name => 'Atrium::Showcase::Item::Related',  :foreign_key => 'atrium_showcase_id', :dependent => :destroy
+  # TODO: remove the need to expose the showcase_id to the AtriumShowcasesController
+  attr_accessible(
+    :showcases_id,
+    :showcases_type,
+    :showcase_items,
+    :solr_facet_name,
+    :value,
+    :descriptions_attributes,
+    :facet_selections_attributes,
+    :featured_items_attributes,
+    :related_items_attributes
+  )
 
-  belongs_to :showcases, :polymorphic => true
+  has_many(
+    :descriptions,
+    :class_name => 'Atrium::Description',
+    :foreign_key => 'atrium_showcase_id',
+    :dependent => :destroy
+  )
+  accepts_nested_attributes_for(
+    :descriptions,
+    :allow_destroy => true
+  )
+
+  has_many(
+    :facet_selections,
+    :class_name => 'Atrium::Showcase::FacetSelection',
+    :foreign_key => 'atrium_showcase_id',
+    :dependent => :destroy
+  )
+  accepts_nested_attributes_for :facet_selections
+
+  def get_parent_path
+    if for_exhibit?
+      facet={}
+      unless facet_selections.blank?
+        facet[facet_selections.first.solr_facet_name]=facet_selections.first.value
+      end
+      path= Rails.application.routes.url_helpers.atrium_exhibit_path(parent, :f=>facet)
+      return path
+    else
+      return parent
+    end
+  end
+
+  has_many(
+    :featured_items,
+    :class_name => 'Atrium::Showcase::Item::Featured',
+    :foreign_key => 'atrium_showcase_id',
+    :dependent => :destroy
+  )
+  accepts_nested_attributes_for(
+    :featured_items,
+    :allow_destroy => true
+  )
+
+  has_many(
+    :related_items,
+    :class_name => 'Atrium::Showcase::Item::Related',
+    :foreign_key => 'atrium_showcase_id',
+    :dependent => :destroy
+  )
+  accepts_nested_attributes_for(
+    :related_items,
+    :allow_destroy => true
+  )
+
+  belongs_to(
+    :showcases,
+    :polymorphic => true
+  )
 
   serialize :showcase_items, Hash
-
-  # TODO: remove the need to expose the showcase_id to the AtriumShowcasesController
-  attr_accessible :showcases_id, :showcases_type, :showcase_items, :solr_facet_name, :value
-
-  accepts_nested_attributes_for :descriptions,    :allow_destroy => true
-  accepts_nested_attributes_for :facet_selections
-  accepts_nested_attributes_for :featured_items,  :allow_destroy => true
-  accepts_nested_attributes_for :related_items,   :allow_destroy => true
-  attr_accessible :descriptions_attributes, :facet_selections_attributes, :featured_items_attributes, :related_items_attributes
 
   def showcase_items
     read_attribute(:showcase_items) || write_attribute(:showcase_items, {})
@@ -48,19 +104,6 @@ class Atrium::Showcase < ActiveRecord::Base
 
   def for_exhibit?
     showcases_type == "Atrium::Exhibit"
-  end
-
-  def get_parent_path
-    if for_exhibit?
-      facet={}
-      unless facet_selections.blank?
-        facet[facet_selections.first.solr_facet_name]=facet_selections.first.value
-      end
-      path= Rails.application.routes.url_helpers.atrium_exhibit_path(parent, :f=>facet)
-      return path
-    else
-      return parent
-    end
   end
 
   # This method will select showcase objects that have exactly the selected facets passed in (but no more or no less) and is tied to the given exhibit id
