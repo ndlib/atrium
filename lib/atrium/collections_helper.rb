@@ -7,7 +7,6 @@ module Atrium::CollectionsHelper
   # options consist of:
   # :suppress_link => true # do not make it a link, used for an already selected value for instance
   def get_browse_facet_path(facet_solr_field, value, browse_facets, exhibit_number, exhibit_id, opts={})
-    logger.debug("Params: #{params.inspect}")
     p = HashWithIndifferentAccess.new
     p.merge!(:f=>params[:f].dup) if params[:f]
     if params[:collection_id]
@@ -43,7 +42,6 @@ module Atrium::CollectionsHelper
   # Standard display of a SELECTED facet value, no link, special span
   # with class, and 'remove' button.
   def get_selected_browse_facet_path(facet_solr_field, value, browse_facets, exhibit_number, exhibit_id, opts={})
-    logger.debug("Options: #{opts.inspect}")
     value = [value] unless value.is_a? Array
     p = HashWithIndifferentAccess.new
     p.merge!(:f=>params[:f].dup) if params[:f]
@@ -127,13 +125,12 @@ module Atrium::CollectionsHelper
   end
 
   def get_customize_page_path
-    logger.debug("Params: #{params.inspect}")
-    if params[:controller] == "atrium_exhibits"
+    if params[:controller] == "atrium/exhibits"
       exhibit=Atrium::Exhibit.find(params[:id])
-      path = new_atrium_exhibit_atrium_showcases_path(exhibit, :facet_selection => params[:f])
-    elsif params[:controller] == "atrium_collections"
+      path = new_atrium_exhibit_showcases_path(exhibit, :facet_selection => params[:f])
+    elsif params[:controller] == "atrium/collections"
       collection=Atrium::Collection.find(params[:id])
-      path= new_atrium_collection_atrium_showcases_path(collection)
+      path= new_atrium_collection_showcases_path(collection)
     end
     return path
   end

@@ -1,15 +1,35 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Atrium::CollectionsController do
+
+  describe '#determine_collection_id' do
+    it 'should return collection id from params id' do
+      controller.params[:id] = '1'
+      collection_id=controller.send(:determine_collection_id)
+      collection_id.should == '1'
+    end
+
+    it 'should return collection id from params collection id' do
+      controller.params[:collection_id] = '1'
+      collection_id=controller.send(:determine_collection_id)
+      collection_id.should == '1'
+    end
+
+    it 'return nil if collection id not available in params' do
+      collection_id=controller.send(:determine_collection_id)
+      collection_id.should == nil
+    end
+  end
+
    before do
      @collection = mock("atrium_collection")
-     Atrium::Collection.stubs(:find).with("1").returns(@collection)
-     controller.stubs(:initialize_collection).returns(@collection)
+     Atrium::Collection.stubs(:find).with("1").returns(@collection)    
      controller.stubs(:current_layout).returns("atrium")
    end
 
   describe "Get New"   do
     it "build new collection form" do
+      controller.stubs(:initialize_collection).returns(@collection)
       get :new
       response.should redirect_to(edit_atrium_collection_path(:id=>1))
     end
@@ -17,6 +37,7 @@ describe Atrium::CollectionsController do
 
   describe "POST create" do
     it "redirects to the edit page" do
+      controller.stubs(:initialize_collection).returns(@collection)
       post :create
       response.code.should == "302"
       response.should redirect_to(edit_atrium_collection_path(:id=>1))
@@ -33,6 +54,7 @@ describe Atrium::CollectionsController do
   describe "Get Set Collection Scope" do
     before do
       session[:folder_document_ids]=[]
+      controller.stubs(:initialize_collection).returns(@collection)
     end
 
     it "set session documents to exhibit filter query params  solr documents if present" do
@@ -55,6 +77,7 @@ describe Atrium::CollectionsController do
       @exhibit = mock("atrium_exhibit")
       Atrium::Exhibit.stubs(:new).returns(@exhibit)
       @collection.expects(:update_attributes).returns(true)
+      controller.stubs(:initialize_collection).returns(@collection)
     end
 
     it "sets a flash[:notice] after removing scope of the collection" do
@@ -73,6 +96,7 @@ describe Atrium::CollectionsController do
     before do
       @exhibit = mock("atrium_exhibit")
       Atrium::Exhibit.stubs(:new).returns(@exhibit)
+      controller.stubs(:initialize_collection).returns(@collection)
     end
     it "build collection form for given collection id" do
       get :edit, { :id => "1" }
@@ -86,7 +110,7 @@ describe Atrium::CollectionsController do
       @exhibit = mock("atrium_exhibit")
       Atrium::Exhibit.stubs(:new).returns(@exhibit)
       controller.stubs(:get_exhibit_navigation_data).returns([])
-
+      controller.stubs(:initialize_collection).returns(@collection)
     end
     it "sets a flash[:notice] after successful update" do
       @collection.expects(:update_attributes).returns(true)
@@ -145,6 +169,7 @@ describe Atrium::CollectionsController do
      @exhibit = mock("atrium_exhibit")
      Atrium::Exhibit.stubs(:new).returns(@exhibit)
      @collection.expects(:destroy).returns(true)
+    controller.stubs(:initialize_collection).returns(@collection)
     end
     it "destroy exhibit successfully" do
       delete :destroy, { :id => "1" }
@@ -155,6 +180,6 @@ describe Atrium::CollectionsController do
       delete :destroy, { :id => "1" }
       response.should redirect_to(catalog_index_path)
     end
-
   end
+
 end

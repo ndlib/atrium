@@ -33,8 +33,9 @@ module Atrium
         add_routes do |options|
           namespace :atrium do
             resources :collections, :exhibits do
-              resource :showcases
+              resource :showcases, :only => [:new]
             end
+            resources :showcases, :only => [:show]
             resources :descriptions do
               resource :essays
             end
@@ -49,6 +50,7 @@ module Atrium
           match 'atrium_exhibits/:id/facet_order/update',                            :to => 'atrium/exhibit_facet_order#update',          :as => 'update_atrium_exhibit_facet_order', :via => :post
           match 'atrium_exhibits/set_scope/:id',                                     :to => 'atrium/exhibits#set_exhibit_scope',          :as => 'atrium_set_exhibit_scope'
           match 'atrium_exhibits/unset_scope/:id',                                   :to => 'atrium/exhibits#unset_exhibit_scope',        :as => 'atrium_unset_exhibit_scope'
+          match 'atrium_exhibits/:id/showcases/:showcase_id',                         :to => 'atrium/exhibits#show',                      :as => 'atrium_exhibit_showcase'
           match 'atrium_showcases/featured/:id',                                     :to => 'atrium/showcases#featured',                  :as => 'atrium_showcase_featured'
           match 'atrium_showcases/refresh/:id',                                      :to => 'atrium/showcases#refresh_showcase',          :as => 'atrium_showcase_refresh'
           match 'atrium_collections/:collection_id/catalog/:id',                     :to => 'catalog#show',                               :as => 'atrium_collection_catalog'

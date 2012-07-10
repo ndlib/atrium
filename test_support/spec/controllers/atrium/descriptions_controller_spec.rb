@@ -11,6 +11,23 @@ describe Atrium::DescriptionsController do
       controller.stubs(:get_exhibit_navigation_data).returns([])
    end
 
+  describe '#determine_collection_id' do
+    before do
+      @description = Atrium::Description.new(:atrium_showcase_id=>@collection_showcase.id)
+      @description.save
+    end
+    it 'should return collection id from params id' do
+      controller.params[:id] = @description.id
+      collection_id=controller.send(:determine_collection_id)
+      collection_id.should == @collection.id
+    end
+
+    it 'return nil if exhibit id not available in params' do
+      collection_id=controller.send(:determine_collection_id)
+      collection_id.should == nil
+    end
+  end
+
   describe "Get index" do
     it "returns list of descriptions for given showcase" do
       get :index, {:showcase_id => @collection_showcase.id}

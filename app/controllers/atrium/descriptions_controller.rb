@@ -18,8 +18,6 @@ class Atrium::DescriptionsController < Atrium::BaseController
   end
 
   def create
-
-    puts "in create params: #{params.inspect}"
     @atrium_description = Atrium::Description.new(:atrium_showcase_id=>params[:showcase_id])
     @atrium_description.save!
     if @atrium_description.update_attributes(params[:atrium_description])

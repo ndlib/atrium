@@ -7,6 +7,21 @@ describe Atrium::ExhibitsController do
      controller.stubs(:current_layout).returns("atrium")
    end
 
+  describe '#determine_collection_id' do
+    it 'should return collection id from params id' do
+      exhibit = Atrium::Exhibit.new(:atrium_collection_id=>1)
+      Atrium::Exhibit.expects(:find).with("1").returns(exhibit)
+      controller.params[:id] = '1'
+      collection_id=controller.send(:determine_collection_id)
+      collection_id.should == 1
+    end
+
+    it 'return nil if exhibit id not available in params' do
+      collection_id=controller.send(:determine_collection_id)
+      collection_id.should == nil
+    end
+  end
+
   describe "Get New"   do
     it "build new exhibit form" do
       get :new

@@ -54,22 +54,22 @@
 	            <%= render :partial => 'shared/collection_search_form' %>
                 <%= render :partial => 'atrium/collections/navigation' %>
             <% end %>
-          <% elsif params[:controller].eql?("atrium_collections") && !(params[:action].eql?("show"))%>
+          <% elsif params[:controller].eql?("atrium/collections") && !(params[:action].eql?("show"))%>
             <%= render :partial => 'atrium/collections/edit_navigation' %>
-          <% elsif params[:controller].eql?("atrium_exhibits") && !(params[:action].eql?("show"))%>
+          <% elsif params[:controller].eql?("atrium/exhibits") && !(params[:action].eql?("show"))%>
             <%= render :partial => 'atrium/collections/edit_navigation' %>
           <% elsif params[:controller].eql?("atrium_exhibits") && params[:action].eql?("show") && session[:edit_showcase]%>
-              <%= render :partial => 'atrium_showcases/showcase_navigation' %>
-          <% elsif params[:controller].eql?("atrium_collections") && params[:action].eql?("show") && session[:edit_showcase]%>
-              <%= render :partial => 'atrium_showcases/showcase_navigation' %>
-          <% elsif params[:controller].eql?("atrium_collections") && params[:action].eql?("show")%>
+              <%= render :partial => 'atrium/showcases/showcase_navigation' %>
+          <% elsif params[:controller].eql?("atrium/collections") && params[:action].eql?("show") && session[:edit_showcase]%>
+              <%= render :partial => 'atrium/showcases/showcase_navigation' %>
+          <% elsif params[:controller].eql?("atrium/collections") && params[:action].eql?("show")%>
             <%= render :partial => 'shared/collection_search_form' %>
             <%= render :partial => 'atrium/collections/navigation' %>
-          <% elsif params[:controller].eql?("atrium_descriptions") && params[:action].eql?("index")%>
+          <% elsif params[:controller].eql?("atrium/descriptions") && params[:action].eql?("index")%>
               <%= render :partial => 'shared/collection_search_form' %>
               <%= render :partial => 'atrium/collections/navigation' %>
-          <% elsif params[:controller].eql?("atrium_descriptions") && !(params[:action].eql?("index"))%>
-          <% elsif params[:controller] != "user_sessions" && !(params[:controller] == "atrium_collections" && params[:action] == "index")%>
+          <% elsif params[:controller].eql?("atrium/descriptions") && !(params[:action].eql?("index"))%>
+          <% elsif params[:controller] != "user_sessions" && !(params[:controller] == "atrium/collections" && params[:action] == "index")%>
             <%= render :partial => 'shared/collection_search_form' %>
             <%= render :partial => 'atrium/collections/navigation' %>
           <% end %>

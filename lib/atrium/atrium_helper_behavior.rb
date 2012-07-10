@@ -66,8 +66,7 @@ module Atrium::AtriumHelperBehavior
   # so we only need the +counter+ param here. We also need to know if we are viewing to document as part of search results.
   def link_to_document(doc, opts={:label=>blacklight_config.index.show_link.to_sym, :counter => nil, :results_view => true})
     logger.debug("Atrium link_to_document Label: #{opts[:label]}")
-    collection_id =  params[:controller] == "atrium_collections" ? params[:id] :  params[:collection_id]
-    params[:controller] == "atrium_showcases" ? exhibit_id = params[:id] : exhibit_id = params[:showcase_id]
+    collection_id =  params[:controller] == "atrium/collections" ? params[:id] :  params[:collection_id]
     exhibit_id = params[:controller] == "atrium_exhibits" ?  params[:id] :  params[:exhibit_id]
     label = render_document_index_label doc, opts
     args = {}
