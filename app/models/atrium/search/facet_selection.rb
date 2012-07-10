@@ -1,14 +1,17 @@
+require 'morphine'
 class Atrium::Search::FacetSelection
-  attr_accessor :field_name
+  attr_reader :field_name
 
-  def initialize(*args)
-    attrs = args.flatten.first
-    @field_name = attrs[:field_name] if attrs.has_key?(:field_name)
+  def initialize(field_name)
+    @field_name = field_name
   end
 
   def label
-    facet_hash= Hash[*CatalogController.blacklight_config.facet_fields.map { |key, facet| [key, facet.label] }.flatten]
-    @label ||= facet_hash[field_name]
+    @label ||= facet_configuration[:label]
   end
 
+  include Morphine
+  register :facet_configuration do
+    CatalogController.blacklight_config.facet_fields[field_name] || {}
+  end
 end

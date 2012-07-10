@@ -16,6 +16,20 @@ begin
 
   spec_prereq = "atrium:test:prepare"
   atrium_spec = File.expand_path("../test_support/spec",File.dirname(__FILE__))
+  directories_to_test = [
+    :controllers,
+    # :generators,
+    :helpers,
+    # :integration,
+    # :lib,
+    # :mailers,
+    :models,
+    # :requests,
+    # :routing,
+    # :unit,
+    # :utilities,
+    # :views
+  ]
 
   # Set env variable to tell our spec/spec_helper.rb where we really are,
   # so it doesn't have to guess with relative path, which will be wrong
@@ -38,9 +52,8 @@ begin
 
     # Don't understand what this does or how to make it use our remote stats_directory
     #task :stats => "spec:statsetup"
-
     namespace :spec do
-      [:controllers, :generators, :helpers, :integration, :lib, :mailers, :models, :requests, :routing, :unit, :utilities, :views].each do |sub|
+      directories_to_test.each do |sub|
         desc "Run the code examples in spec/#{sub}"
         RSpec::Core::RakeTask.new(sub => spec_prereq) do |t|
         #RSpec::Core::RakeTask.new(sub) do |t|
@@ -53,6 +66,16 @@ begin
           t.pattern = "#{atrium_spec}/#{sub}"
         end
       end
+    end
+
+    desc "Run all atrium:spec:* tasks"
+    task :spec => directories_to_test.collect{|sym| "atrium:spec:#{sym}"}
+
+    desc "Generate code coverage via rcov"
+    RSpec::Core::RakeTask.new('rcov' => spec_prereq) do |t|
+      t.rcov = true
+      t.rcov_opts = %w{--rails --exclude osx\/objc,gems\/,spec\/}
+      t.pattern = "#{atrium_spec}/**/*spec.rb"
     end
 
   end
