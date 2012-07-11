@@ -6,4 +6,5 @@ gemspec
 group :test do
   gem 'guard'
   gem 'guard-rspec'
+  gem 'ruby_gntp' if RUBY_PLATFORM =~ /darwin/
 end
