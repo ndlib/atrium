@@ -133,10 +133,6 @@ class Atrium::DescriptionsController < Atrium::BaseController
     redirect_to catalog_index_path(:add_description=>true,:collection_id=>collection_id,:exhibit_id=>exhibit_id,:search_field=>"all_fields",:f=>{"active_fedora_model_s"=>["Description"]})
   end
 
-  def blacklight_config
-    CatalogController.blacklight_config
-  end
-
   def initialize_collection
     if collection_id = determine_collection_id
       return __initialize_collection( collection_id )

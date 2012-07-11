@@ -69,10 +69,6 @@ class Atrium::ShowcasesController < Atrium::BaseController
     redirect_to path
   end
 
-  def blacklight_config
-    CatalogController.blacklight_config
-  end
-
   def initialize_collection
     if collection_id = determine_collection_id
       return __initialize_collection( collection_id )

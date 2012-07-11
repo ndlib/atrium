@@ -16,4 +16,10 @@ class Atrium::BaseController < ApplicationController
 
   self.solr_search_params_logic += [:add_exclude_fq_to_solr]
 
+  def blacklight_config
+    CatalogController.blacklight_config
+  end
+  helper_method :blacklight_config
+  protected :blacklight_config
+
 end
