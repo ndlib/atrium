@@ -25,7 +25,7 @@ begin
     # :mailers,
     :models,
     # :requests,
-    # :routing,
+    :routing,
     # :unit,
     # :utilities,
     # :views
