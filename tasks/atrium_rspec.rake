@@ -72,7 +72,7 @@ begin
     task :spec => directories_to_test.collect{|sym| "atrium:spec:#{sym}"}
 
     desc "Generate code coverage via rcov"
-    RSpec::Core::RakeTask.new('rcov' => spec_prereq) do |t|
+    RSpec::Core::RakeTask.new('rcov' => [spec_prereq, 'atrium:setup_test_app'].flatten.compact) do |t|
       t.rcov = true
       t.rcov_opts = %w{--rails --exclude osx\/objc,gems\/,spec\/}
       t.pattern = "#{atrium_spec}/**/*spec.rb"
