@@ -1,6 +1,6 @@
 <% if can? :create, Atrium::Collection %>
   <p>
-    <%= link_to "Configure Collection #{@atrium_exhbit}" , edit_atrium_collection_path(@atrium_collection.id), :class => "customize"%>
+    <%= link_to "Configure Collection #{@atrium_exhbit}" , edit_atrium_collection_path(@atrium_collection[:id]), :class => "customize"%>
   </p>
 <% end %>
 <%= link_to 'View Collection',  @atrium_collection  %>
@@ -31,7 +31,7 @@
                      :exhibit_number => exhibit.set_number,
                      :browse_levels => exhibit.browse_levels,
                      :browse_facets => exhibit.browse_facet_names,
-                     :exhibit_id => exhibit.id
+                     :exhibit_id => exhibit[:id]
         }%>
       <% end %>
     <% end %>

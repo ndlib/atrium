@@ -86,10 +86,6 @@ class Atrium::ExhibitsController < Atrium::BaseController
     redirect_to edit_atrium_collection_path(@exhibit.atrium_collection_id)
   end
 
-  def blacklight_config
-    CatalogController.blacklight_config
-  end
-
   def initialize_collection
     if collection_id = determine_collection_id
       return __initialize_collection( collection_id )

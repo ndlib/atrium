@@ -4,19 +4,19 @@
 <ul class="controls">
   <li>
     <%= link_to 'Select Featured Items',
-        atrium_showcase_featured_path(:id => @atrium_showcase.id, :collection_id => collection_id, :f => params[:f]),
+        atrium_showcase_featured_path(:id => @atrium_showcase[:id], :collection_id => collection_id, :f => params[:f]),
         :class => 'select_colorbox button',
-        :action => atrium_showcase_path(:id => @atrium_showcase.id, :no_layout=>true)
+        :action => atrium_showcase_path(:id => @atrium_showcase[:id], :no_layout=>true)
     %>
   </li>
   <li>
-    <%= link_to 'Add New Description', new_atrium_description_path(:showcase_id=>@atrium_showcase.id), :class => 'description_colorbox button', :action=> atrium_descriptions_path(:showcase_id=>@atrium_showcase.id, :no_layout=>true) %>
+    <%= link_to 'Add New Description', new_atrium_description_path(:showcase_id=>@atrium_showcase[:id]), :class => 'description_colorbox button', :action=> atrium_descriptions_path(:showcase_id=>@atrium_showcase[:id], :no_layout=>true) %>
   </li>
   <li>
-    <%= link_to 'Add Description From Solr', atrium_descriptions_add_path(:showcase_id=>@atrium_showcase.id), :class => 'description_colorbox button', :action=> atrium_descriptions_link_path(:showcase_id=>@atrium_showcase.id, :no_layout=>true) %>
+    <%= link_to 'Add Description From Solr', atrium_descriptions_add_path(:showcase_id=>@atrium_showcase[:id]), :class => 'description_colorbox button', :action=> atrium_descriptions_link_path(:showcase_id=>@atrium_showcase[:id], :no_layout=>true) %>
   </li>
   <li class="last">
-    <%= link_to "Stop Editing", stop_atrium_customization_path(@atrium_showcase.for_exhibit? ? {:type => 'exhibit', :id => @exhibit.id, :f => params[:f]} : {:type => 'collection', :id => @atrium_collection.id, :f => params[:f]}), :class => 'button close' %>
+    <%= link_to "Stop Editing", stop_atrium_customization_path(@atrium_showcase.for_exhibit? ? {:type => 'exhibit', :id => @exhibit[:id], :f => params[:f]} : {:type => 'collection', :id => @atrium_collection[:id], :f => params[:f]}), :class => 'button close' %>
   </li>
 </ul>
 
