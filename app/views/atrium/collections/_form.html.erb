@@ -57,21 +57,21 @@
         </ul>
       <%- end %>
     </fieldset>
-    <%- query_params = {:collection_id=>@atrium_collection.id,:edit_collection_filter=>true} -%>
+    <%- query_params = {:collection_id=>@atrium_collection[:id],:edit_collection_filter=>true} -%>
     <%- query_params.merge!(@atrium_collection.filter_query_params) if @atrium_collection.filter_query_params -%>
     <%- query_params.delete(:controller) %>
     <%- query_params.delete(:action) %>
     <%- query_params.delete(:solr_doc_ids) %>
     <p class="exhibit-scope-controls">
       <%= link_to("Set Collection Scope", atrium_set_collection_scope_path(query_params), :class => 'button').html_safe %>
-      <%= link_to("Remove Collection Scope", atrium_unset_collection_scope_path(@atrium_collection.id), :class => 'button').html_safe  %>
+      <%= link_to("Remove Collection Scope", atrium_unset_collection_scope_path(@atrium_collection[:id]), :class => 'button').html_safe  %>
     </p>
 
   <h3>Exhibits</h3>
 <% if @atrium_collection.exhibits.any? %>
   <ol data-resource="<%= update_atrium_collection_exhibit_order_path %>" class="exhibit-listing sortable">
     <% @atrium_collection.exhibits.each do |exhibit| %>
-      <li data-id="<%= exhibit.id %>" data-order="<%= exhibit.set_number %>" class="ui-state-default">
+      <li data-id="<%= exhibit[:id] %>" data-order="<%= exhibit.set_number %>" class="ui-state-default">
         <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
         <%= exhibit.pretty_title %>
         <span class="controls">
@@ -86,7 +86,7 @@
 
 <%= form_for(@atrium_exhibit) do |exhibit| %>
   <%- @atrium_exhibit.set_number = @atrium_collection.exhibits.size + 1 -%>
-  <%- @atrium_exhibit.atrium_collection_id = @atrium_collection.id -%>
+  <%- @atrium_exhibit.atrium_collection_id = @atrium_collection[:id] -%>
   <%= exhibit.hidden_field :set_number %>
   <%= exhibit.hidden_field :atrium_collection_id %>
   <%= exhibit.submit 'Add a Exhibit to this Collection', :class => 'button' %>

@@ -1,5 +1,5 @@
 <div id="collection-search" class="search">
-  <%- @atrium_collection ? collection_id = @atrium_collection.id : collection_id = params[:id]%>
+  <%- @atrium_collection ? collection_id = @atrium_collection[:id] : collection_id = params[:id]%>
    <%= form_tag catalog_index_path, :method => :get do %>
     <fieldset>
     <h3 class="search"><label for="q"><%= link_to("Search Complete Collection", atrium_collection_home_path(collection_id)) %></label></h3>

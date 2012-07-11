@@ -7,7 +7,7 @@
                      :exhibit_number => exhibit.set_number,
                      :browse_levels => exhibit.browse_levels,
                      :browse_facets => exhibit.browse_facet_names,
-                     :exhibit_id => exhibit.id
+                     :exhibit_id => exhibit[:id]
         }%>
       <%- end -%>
     <%- end -%>
@@ -18,6 +18,6 @@
   <%- if !@atrium_showcase -%>
     <%= link_to "Customize this page", get_customize_page_path, :class=>"customize"%>
   <%- else %>
-    <%= link_to 'View this page',  atrium_showcase_refresh_path(@atrium_showcase.id, :f=>params[:f]) %>
+    <%= link_to 'View this page',  atrium_showcase_refresh_path(@atrium_showcase[:id], :f=>params[:f]) %>
   <%- end %>
 <%- end %>
