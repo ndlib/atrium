@@ -27,7 +27,8 @@ class Atrium::BrowseLevel < ActiveRecord::Base
 
   serialize :exclude_query_params
 
-  attr_accessor :values, :selected
+  attr_accessor :selected
+  attr_writer :values
 
   def values
     @values ||= []
