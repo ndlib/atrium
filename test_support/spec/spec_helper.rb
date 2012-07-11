@@ -10,6 +10,7 @@ ENV["RAILS_ENV"] ||= 'test'
 # in a remote directory. 
 require File.expand_path("config/environment", ENV['RAILS_ROOT'] || File.expand_path("../../../tmp/test_app", __FILE__))
 require 'rspec/rails'
+require 'rspec/autorun'
 require 'rspec/given'
 require 'rspec_on_rails_matchers'
 
