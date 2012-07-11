@@ -1,6 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Atrium::BrowseLevel do
+  Given (:browse_level) { Atrium::BrowseLevel.new }
 
   it { should belong_to :exhibit }
 
@@ -17,17 +18,14 @@ describe Atrium::BrowseLevel do
   it { should respond_to :selected }
   it { should respond_to :selected= }
 
-  describe '#values' do
-    it 'should be enumerable' do
-      Atrium::BrowseLevel.new.values.should be_kind_of Enumerable
-    end
+  context '#values' do
+    Then { browse_level.values.should be_kind_of Enumerable }
   end
 
   describe '#to_s' do
-    it 'should be #solr_facet_name' do
-      string = "Hello"
-      Atrium::BrowseLevel.new(:solr_facet_name => string).to_s.should == string
-    end
+    Given(:comparison_string) { 'Hello'}
+    When { browse_level.solr_facet_name = comparison_string }
+    Then { browse_level.to_s.should == comparison_string }
   end
 
 end
