@@ -68,12 +68,12 @@ class Atrium::Collection < ActiveRecord::Base
 
   def exhibit_order
     exhibit_order = {}
-    exhibits.map{|exhibit| exhibit_order[exhibit.id] = exhibit.set_number }
+    exhibits.map{|exhibit| exhibit_order[exhibit[:id]] = exhibit.set_number }
     exhibit_order
   end
 
   def exhibit_order=(exhibit_order = {})
-    valid_ids = exhibits.select(:id).map{|exhibit| exhibit.id}
+    valid_ids = exhibits.select(:id).map{|exhibit| exhibit[:id]}
     exhibit_order.each_pair do |id, order|
       Atrium::Exhibit.find(id).update_attributes!(:set_number => order) if valid_ids.include?(id.to_i)
     end
