@@ -8,11 +8,17 @@ describe Atrium::ShowcasesController do
    end
 
   describe '#determine_collection_id' do
+    #before do
+    #  @description = Atrium::Description.new(:atrium_showcase_id=>@collection_showcase.id)
+    #  @description.save
+    #  @collection_showcase.stub(:parent).returns(@collection)
+    #end
     it 'should return collection id of collection showcase from params ' do
       collection = Atrium::Collection.new
       collection.save
       showcase = Atrium::Showcase.new(:showcases_id=> collection.id, :showcases_type=>collection.class.name)
       showcase.save
+      Atrium::Showcase.stubs(:find).with("1").returns(showcase)
       controller.params[:id] = '1'
       collection_id=controller.send(:determine_collection_id)
       collection_id.should == 1
@@ -25,6 +31,9 @@ describe Atrium::ShowcasesController do
       exhibit.save
       showcase = Atrium::Showcase.new(:showcases_id=> exhibit.id, :showcases_type=>exhibit.class.name)
       showcase.save
+      Atrium::Showcase.stubs(:find).with("1").returns(showcase)
+      showcase.stubs(:parent).returns(exhibit)
+      #showcase.should_receive(:parent).and_return(exhibit)
       controller.params[:id] = '1'
       collection_id=controller.send(:determine_collection_id)
       collection_id.should == 1

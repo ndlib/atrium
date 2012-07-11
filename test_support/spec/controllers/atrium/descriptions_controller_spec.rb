@@ -15,8 +15,11 @@ describe Atrium::DescriptionsController do
     before do
       @description = Atrium::Description.new(:atrium_showcase_id=>@collection_showcase.id)
       @description.save
+      Atrium::Description.stubs(:find).with(1).returns(@description)
     end
     it 'should return collection id from params id' do
+      Atrium::Showcase.stubs(:find).with(1).returns(@collection_showcase)
+      @collection_showcase.stubs(:parent).returns(@collection)
       controller.params[:id] = @description.id
       collection_id=controller.send(:determine_collection_id)
       collection_id.should == @collection.id
@@ -29,6 +32,12 @@ describe Atrium::DescriptionsController do
   end
 
   describe "Get index" do
+    before do
+      @description = Atrium::Description.new(:atrium_showcase_id=>@collection_showcase.id)
+      @description.save
+      Atrium::Showcase.stubs(:find).with("1").returns(@collection_showcase)
+      #@collection_showcase.expects(:descriptions).returns([@description])
+    end
     it "returns list of descriptions for given showcase" do
       get :index, {:showcase_id => @collection_showcase.id}
       response.should render_template 'layouts/atrium'

@@ -34,7 +34,7 @@ class Atrium::ShowcasesController < Atrium::BaseController
     session[:folder_document_ids] = session_folder_ids
     session[:copy_folder_document_ids]=nil
     if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
-      @response, @featured_documents = get_solr_response_for_field_values("id",@atrium_showcase.showcase_items[:solr_doc_ids].split(',') || [])
+      @featured_response, @featured_documents = get_solr_response_for_field_values("id",@atrium_showcase.showcase_items[:solr_doc_ids].split(',') || [])
     end
     if params[:no_layout]
       render :layout=>false
@@ -121,7 +121,8 @@ private
   end
 
   def parent_url(showcase)
-    path=showcase.for_exhibit? ? atrium_exhibit_path(:id=>showcase.showcases_id, :f=>params[:f]) :  atrium_collection_showcase_path(:id=>showcase.showcases_id, :showcase_id=>showcase.id) #atrium_collection_showcases_path(showcase.showcases_id)
+
+    path=showcase.for_exhibit? ? atrium_exhibit_path(:id=>showcase.showcases_id, :f=>params[:facet_selection]) :  atrium_collection_showcase_path(:id=>showcase.showcases_id, :showcase_id=>showcase.id) #atrium_collection_showcases_path(showcase.showcases_id)
     return path
   end
 

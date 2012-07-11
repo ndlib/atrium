@@ -7,7 +7,7 @@
 </div>
 
 <div id="show-selected">
-  <%- if !@documents.blank? && @documents.any? -%>
+  <%- if !@featured_documents.blank? && @featured_documents.any? -%>
     <%= render :partial=>'shared/featured_sources' %>
   <%- end -%>
 </div>

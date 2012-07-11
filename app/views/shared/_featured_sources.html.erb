@@ -10,7 +10,7 @@
         <div class="documentHeader">
           <% # main title container for doc partial view -%>
           <div class="yui-u">
-            <h3 class="index_title"><%= i + 1 + @response.params[:start].to_i%>. <%= link_to_document document, :label => document_show_link_field, :results_view => false %></h3>
+            <h3 class="index_title"><%= i + 1 + @featured_response.params[:start].to_i%>. <%= link_to_document document, :label => document_show_link_field, :results_view => false %></h3>
 	      </div>
         </div>
         <%= render_document_partial document, :index %>

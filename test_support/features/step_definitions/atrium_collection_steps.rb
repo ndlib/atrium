@@ -77,7 +77,7 @@ When /^I add record "([^"]*)" to featured to the "([^"]*)" with id "([^"]*)" and
   @atrium_collection = collection_or_exhibit.eql?("collection") ? asset : Atrium::Collection.find(asset.atrium_collection_id)
   puts @atrium_collection.inspect
   puts @atrium_showcase.inspect
-  path = collection_or_exhibit.eql?("collection") ?  atrium_collection_atrium_showcases_path(asset, :showcase_id => showcase.id) : atrium_exhibit_atrium_showcases_path(asset.id, :f => selected_facet,:showcase_id => showcase.id)
+  path = collection_or_exhibit.eql?("collection") ?  atrium_collection_showcase_path(asset, :showcase_id => showcase.id) : atrium_exhibit_path(asset.id, :f => selected_facet)
   puts path.inspect
   visit path
 end

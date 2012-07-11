@@ -88,6 +88,7 @@ class Atrium::Showcase < ActiveRecord::Base
   end
 
   def parent
+#    debugger;true
     if showcases_type && showcases_id
       begin
         showcases_type.constantize.find(showcases_id)

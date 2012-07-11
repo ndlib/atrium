@@ -1,5 +1,4 @@
-<span id="show-description">
-  <%- if @atrium_descriptions-%>
-    <%= render :partial=>'shared/list_descriptions', :locals=>{:descriptions=>@atrium_descriptions} %>
-  <%- end -%>
-</span>
+<%- if @atrium_descriptions-%>
+   <%= render :partial=>'shared/list_descriptions', :locals=>{:descriptions=>@atrium_descriptions} %>
+<%- end -%>
+

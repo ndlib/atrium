@@ -3,7 +3,7 @@
   <ul class="collection-controls">
     <li><%= link_to 'View Collection', @atrium_collection %></li>
     <li><%= link_to 'Configure Collection', edit_atrium_collection_path(@atrium_collection.id) %></li>
-    <li><%= link_to 'Customize Collection Home Page',  new_atrium_collection_atrium_showcases_path(@atrium_collection)%></li>
+    <li><%= link_to 'Customize Collection Home Page',  new_atrium_collection_showcases_path(@atrium_collection)%></li>
   </ul>
   <%- unless @exhibit_navigation_data.nil? || @exhibit_navigation_data.empty? -%>
     <%- @exhibit_navigation_data.each do |exhibit| -%>

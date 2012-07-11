@@ -63,7 +63,7 @@ class Atrium::CollectionsController < Atrium::BaseController
     end
     if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
       selected_document_ids = @atrium_showcase.showcase_items[:solr_doc_ids].split(',')
-      @response, @documents = get_solr_response_for_field_values("id",selected_document_ids || [])
+      @featured_response, @featured_documents = get_solr_response_for_field_values("id",selected_document_ids || [])
     end
     @description_hash=get_description_for_showcase(@atrium_showcase) unless @atrium_showcase.nil?
 
