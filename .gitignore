@@ -10,3 +10,4 @@ doc/*
 .idea/*
 vendor/cache/*
 .DS_Store
+*.gem

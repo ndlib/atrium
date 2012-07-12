@@ -45,4 +45,12 @@ selected facets and facet values within an exhibit. There can be multiple
 showcases in an exhibit.
 
 
- [1]: https://github.com/projectblacklight/blacklight
+## Acknowledgements
+
+Thanks to [Hiten Parmar][2] for the gem name. The [origional atirum gem][3] was
+an instant web server.
+
+
+[1]: https://github.com/projectblacklight/blacklight
+[2]: http://www.hitenparmar.com/
+[3]: https://github.com/hrp/atrium
