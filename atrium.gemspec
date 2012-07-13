@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = ["hydra-tech@googlegroups.com"]
   s.homepage    = "https://github.com/ndlib/atrium"
   s.summary     = %q{Atrium Rails Engine (requires Rails 3)}
-  s.description = %q{Atrium is ALPHA software. Atrium is a Rails Engine for for creating collections in either a Blacklight or Hydra context. The full hydra stack includes: Blacklight, Fedora, Solr, active-fedora, solrizer, and om. The first use of the atrium name for a gem was by Hiten Parmar: https://github.com/hrp/atrium}
+  s.description = %q{This is an ALPHA release -- you have been warned. It will get much better soon. Atrium is a Rails Engine for for creating collections in either a Blacklight or Hydra context. The full hydra stack includes: Blacklight, Fedora, Solr, active-fedora, solrizer, and om. The first use of the atrium name for a gem was by Hiten Parmar: https://github.com/hrp/atrium}
 
 
   s.add_dependency 'rails', '~> 3.1'
