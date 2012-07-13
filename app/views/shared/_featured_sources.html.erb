@@ -14,6 +14,9 @@
 	      </div>
         </div>
         <%= render_document_partial document, :index %>
+        <% if is_editing? && (can? :create, Atrium::Showcase)%>
+          <a class="remove_featured button" href=# action="<%= atrium_showcase_remove_featured_path(showcase_id, :solr_doc_id=>document[:id])%>" title="Remove this featured item">Remove this item</a>
+        <% end %>
       </div>
     <% end %>
   <%- end -%>

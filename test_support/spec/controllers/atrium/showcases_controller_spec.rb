@@ -137,6 +137,40 @@ describe Atrium::ShowcasesController do
     end
   end
 
+  describe "Post remove_featured"  do
+    it "should assign showcase to mocked showcase" do
+      session[:folder_document_ids]=nil
+      @showcase = mock("atrium_showcase")
+      Atrium::Showcase.stubs(:find).returns(@showcase)
+      @showcase.stubs(:showcase_items=).returns({})
+      @showcase.stubs(:showcase_items).returns({})
+      @showcase.expects(:save)
+      post :remove_featured, {:id=>1}
+      assigns[:atrium_showcase].should == @showcase
+    end
+    it "remove given featured solr doc ide from showcase item" do
+      @showcase = mock("atrium_showcase")
+      Atrium::Showcase.stubs(:find).returns(@showcase)
+      @showcase.stubs(:showcase_items=).returns({:type=>"featured", :solr_doc_ids=>"1,2,3"})
+      @showcase.stubs(:showcase_items).returns({:type=>"featured", :solr_doc_ids=>"1,2,3"})
+      @showcase.expects(:save)
+      post :remove_featured, {:id=>1, :solr_doc_id=>"1"}
+      assigns[:featured_items].should == ["2", "3"]
+    end
+
+    it "save session documents to showcase showcase_items" do
+      @showcase = Atrium::Showcase.new({:showcases_id=>1, :showcases_type=>"Atrium::Collection"})
+      @showcase.save!
+      Atrium::Showcase.stubs(:find).returns(@showcase)
+      #@showcase.expects(:save)
+      session[:folder_document_ids]=["1", "2", "3"]
+      get :show, { :id => 1, :no_layout=>true }
+      assigns[:atrium_showcase].should == @showcase
+      response.should_not render_template 'layouts/atrium'
+      response.should render_template("show")
+    end
+  end
+
   describe "Get featured" do
     before do
       session[:folder_document_ids]=nil

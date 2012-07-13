@@ -12,7 +12,7 @@
 
 <div id="show-selected">
 <%- if !@featured_documents.blank? && @featured_documents.any? -%>
-  <%= render :partial=>'shared/featured_sources' %>
+  <%= render :partial=>'shared/featured_sources', :locals=>{:showcase_id=>@atrium_showcase.id}%>
 <%- end -%>
 </div>
 

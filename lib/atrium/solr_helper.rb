@@ -119,7 +119,7 @@ module Atrium::SolrHelper
     # as :f, to solr as appropriate :fq query.
   def add_exclude_fq_to_solr(solr_parameters, user_params)
     # :fq, map from :f.
-    ##logger.debug("Solr exclude!!!: #{solr_parameters.inspect}, #{user_params.inspect}")
+    #logger.debug("Solr exclude!!!: #{solr_parameters.inspect}, #{user_params.inspect}")
     if ( user_params[:exclude])
       exclude_request_params = user_params[:exclude]
       ##logger.debug("user_params[:exclude]!!!: #{user_params[:exclude].inspect}")
@@ -143,7 +143,7 @@ module Atrium::SolrHelper
     exhibit_filter_query_params = solr_search_params(exhibit.filter_query_params) if exhibit && !exhibit.filter_query_params.nil?
     bl_filter_query_params = solr_search_params(browse_level.filter_query_params) if browse_level && !browse_level.filter_query_params.nil?
     bl_exclude_query_params = solr_search_params(browse_level.exclude_query_params) if browse_level && !browse_level.exclude_query_params.nil?
-    ##logger.debug("##### Exclude: #{bl_exclude_query_params.inspect}")
+   # logger.debug("##### Exclude: #{bl_exclude_query_params.inspect}")
     queries = []
     queries << ex_filter_query_params[:q] if (ex_filter_query_params && ex_filter_query_params[:q])
     queries << exhibit_filter_query_params[:q] if (exhibit_filter_query_params && exhibit_filter_query_params[:q])
@@ -238,7 +238,7 @@ module Atrium::SolrHelper
   #
   #   One should use the above methods to generate data for expand/collapse controls, breadcrumbs, etc.
   def get_exhibit_navigation_data
-    ##logger.debug("get_exhibit_navigation_data browse response: #{browse_response.inspect}")
+    logger.debug("get_exhibit_navigation_data browse response: #{browse_response.inspect}")
     initialize_collection if atrium_collection.nil?
     browse_data = []
     unless atrium_collection.nil? || atrium_collection.exhibits.nil?
@@ -405,7 +405,7 @@ module Atrium::SolrHelper
     params[:per_page] = 1000
     response, response_list = get_solr_response_for_field_values(relationship_field_names,modified_arr)   ##get child pages
     #response, is_member_response_list = get_solr_response_for_field_values("is_member_of_s",modified_arr)        ## get any child components
-    logger.debug("Relationship:#{relationship_field_names.inspect}, Children count:#{response_list.count}")
+    #logger.debug("Relationship:#{relationship_field_names.inspect}, Children count:#{response_list.count}")
     params.delete(:rows)
     params[:f] = p[:f]
     params[:page] = p[:page]

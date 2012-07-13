@@ -1,4 +1,5 @@
-
+require "blacklight_helper"
+require "facets_helper"
 module Atrium::AtriumHelperBehavior
   include BlacklightHelper
   include FacetsHelper
@@ -67,7 +68,7 @@ module Atrium::AtriumHelperBehavior
   def link_to_document(doc, opts={:label=>blacklight_config.index.show_link.to_sym, :counter => nil, :results_view => true})
     logger.debug("Atrium link_to_document Label: #{opts[:label]}")
     collection_id =  params[:controller] == "atrium/collections" ? params[:id] :  params[:collection_id]
-    exhibit_id = params[:controller] == "atrium_exhibits" ?  params[:id] :  params[:exhibit_id]
+    exhibit_id = params[:controller] == "atrium/exhibits" ?  params[:id] :  params[:exhibit_id]
     label = render_document_index_label doc, opts
     args = {}
     args.merge!(:f=>params[:f]) if params[:f]

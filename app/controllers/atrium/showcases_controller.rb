@@ -21,16 +21,13 @@ class Atrium::ShowcasesController < Atrium::BaseController
     @atrium_showcase = Atrium::Showcase.find(params[:id])
     #TODO move this update to model rather in controller
     unless session[:folder_document_ids].blank?
-      @atrium_showcase.showcase_items ||= Hash.new
-      selected_document_ids = session[:folder_document_ids]
-      @atrium_showcase.showcase_items[:type]="featured"
-      @atrium_showcase.showcase_items[:solr_doc_ids]=selected_document_ids.join(',')
-    else
-      @atrium_showcase.showcase_items={}
+      selected_document_ids = session[:folder_document_ids] || []
+      #logger.debug("selected items: #{selected_document_ids.inspect}, session:#{session[:folder_document_ids].inspect}")
+      @atrium_showcase.showcase_items=selected_document_ids
     end
     @atrium_showcase.save
-
-    session_folder_ids= [] || session[:copy_folder_document_ids]
+    session_folder_ids= session[:copy_folder_document_ids] || []
+    #logger.debug("Showcase after updating featured: #{@atrium_showcase.inspect}, folder_document_ids to set:#{session_folder_ids.inspect}")
     session[:folder_document_ids] = session_folder_ids
     session[:copy_folder_document_ids]=nil
     if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
@@ -39,6 +36,22 @@ class Atrium::ShowcasesController < Atrium::BaseController
     if params[:no_layout]
       render :layout=>false
     end
+  end
+
+  def remove_featured
+    @atrium_showcase = Atrium::Showcase.find(params[:id])
+    text=''
+    if params[:solr_doc_id]  && @atrium_showcase.showcase_items && @atrium_showcase.showcase_items[:solr_doc_ids]
+      @featured_items = @atrium_showcase.showcase_items[:solr_doc_ids].split(',') || []
+      @featured_items.delete_if {|x| x.eql?(params[:solr_doc_id]) }
+      @atrium_showcase.showcase_items=@featured_items
+      @atrium_showcase.save
+      text = 'Document with id '+params[:solr_doc_id] +' was remove from featured successfully.'
+    end
+    #logger.debug("Showcase after updating featured: #{@atrium_showcase.inspect}")
+
+    flash[:notice] = text
+    render :text => text
   end
 
   def featured
@@ -125,69 +138,4 @@ private
   def unset_edit_showcase_in_session
     session[:edit_showcase] = nil
   end
-
-  #def configure_showcase
-  #  unless  @atrium_showcase
-  #    @atrium_showcase=Atrium::Showcase.find(params[:id])
-  #  end
-  #  @exhibit_navigation_data = get_exhibit_navigation_data
-  #  set_edit_showcase_in_session
-  #  if @atrium_showcase.for_exhibit?
-  #    redirect_to atrium_exhibit_path(:id=>@atrium_showcase.showcases_id, :f=>params[:f])
-  #  else
-  #    @atrium_collection= Atrium::Collection.find_by_id(@atrium_showcase.showcases_id)
-  #    redirect_to atrium_collection_showcase_path(:id=>@atrium_showcase.showcases_id, :showcase_id=>params[:id])
-  #  end
-  #end
-
-  #def index
-  #  @exhibit = Atrium::Exhibit.find(params[:exhibit_id])
-  #  @exhibit_navigation_data = get_exhibit_navigation_data
-  #  set_edit_showcase_in_session
-  #  redirect_to atrium_collection_path(:id=>@exhibit.atrium_collection_id, :exhibit_number=>@exhibit.id)
-  #end
-
-  #def create
-  #  @atrium_showcase = Atrium::Showcase.new(params[:atrium_exhibit_id])
-  #  @atrium_showcase.showcase_items ||= Hash.new
-  #  logger.info("atrium_showcase = #{@atrium_showcase.inspect}")
-  #  @atrium_showcase.save
-  #  logger.info("atrium_showcase = #{@atrium_showcase.inspect}")
-  #  set_edit_showcase_in_session
-  #  if @atrium_showcase.showcases_type=="Atrium::Exhibit"
-  #    redirect_to atrium_exhibit_path(:id=>@atrium_showcase.showcases_id, :f=>params[:facet_selection])
-  #  else
-  #    redirect_to atrium_collection_showcase_path(@atrium_showcase.showcases_id, @atrium_showcase.id, :f=>params[:facet_selection])
-  #  end
-  #end
-
-  #def edit
-    #@atrium_showcase = Atrium::Showcase.find(params[:id])
-    #set_edit_showcase_in_session
-    #redirect_to  parent_url(@atrium_showcase)
-    #if @atrium_showcase.showcases_type=="atrium_exhibit"
-    #  redirect_to atrium_exhibit_path(:id=>@atrium_showcase.showcases_id, :f=>params[:facet_selection])
-    #else
-    #  redirect_to atrium_collection_showcase_path(@atrium_showcase.showcases_id, params[:id], :f=>params[:f])
-    #end
-  #end
-
-  #def update
-  #   @atrium_showcase = Atrium::Showcase.find(params[:showcase_id])
-  #  if @atrium_showcase.update_attributes(params[:atrium_showcase])
-  #    flash[:notice] = 'Browse was successfully updated.'
-  #  end
-  #  redirect_to :action => "edit", :id=>@atrium_showcase.id, :f=>params[:f]
-  #end
-
-  #def selected_featured
-  #   @atrium_showcase = Atrium::Showcase.find(params[:id])
-  #  selected_document_ids = session[:folder_document_ids]
-  #  session[:folder_document_ids] = session[:copy_folder_document_ids]
-  #  @response, @documents = get_solr_response_for_field_values("id",selected_document_ids || [])
-  #  render :layout => false, :locals=>{:selected_document_ids=>selected_document_ids}
-  #end
-
-
-
 end

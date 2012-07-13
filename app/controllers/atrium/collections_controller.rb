@@ -21,7 +21,6 @@ class Atrium::CollectionsController < Atrium::BaseController
   end
 
   def set_collection_scope
-    logger.error("into scoping")
     session[:copy_folder_document_ids] = session[:folder_document_ids]
     session[:folder_document_ids] = []
     @atrium_collection = Atrium::Collection.find(params[:id])

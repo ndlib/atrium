@@ -79,6 +79,12 @@ class Atrium::Showcase < ActiveRecord::Base
     read_attribute(:showcase_items) || write_attribute(:showcase_items, {})
   end
 
+   def showcase_items=(solr_doc_ids = [])
+    showcase_items[:type]="featured"
+    showcase_items[:solr_doc_ids]=solr_doc_ids.join(',')
+    write_attribute(:showcase_items, showcase_items)
+  end
+
   def solr_doc_ids
     showcase_items[:solr_doc_ids] unless showcase_items.blank?
   end

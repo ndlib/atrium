@@ -164,6 +164,25 @@
        });
     });
 
+    $("a.remove_featured", this).live("click", function(e) {
+       var $docNode = $(this).closest('div.document')
+       var url = $(this).attr('action');
+       $.ajax({
+         type: "POST",
+         url: url,
+         dataType: "html",
+         beforeSend: function() {
+   			$docNode.animate({'backgroundColor':'#fb6c6c'},300);
+         },
+         success: function(data) {
+           $docNode.slideUp(300,function() {
+             $docNode.remove();
+           });
+           //$("#show-selected").before('<div id="flash_notice"> data </div>'); // This could be implemented better
+         }
+       });
+    });
+
     $('.edit-text').editable(submitEditableText,{
          indicator : 'Saving...',
          tooltip   : 'Click to edit...'
