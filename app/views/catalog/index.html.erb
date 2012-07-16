@@ -1,4 +1,10 @@
-
+<% content_for :atrium_side_bar do %>
+  <% if (params[:atrium_collection_browse].blank? && params[:atrium_exhibit_browse].blank?) || params[:class] == "edit_collection" %>
+    <% if params[:collection_id] %>
+      <h3 class="collection-browse-link"><%= link_to "Browse This Collection", atrium_collection_path(params[:collection_id]) %></h3>
+    <% end %>
+  <% end %>
+<% end %>
 <% unless has_search_parameters? %>
 	<%# if there are no input/search related params, display the "home" partial -%>
 	<%= render 'home' %>

@@ -1,3 +1,6 @@
+<% content_for :atrium_side_bar do %>
+  <%= render :partial => 'atrium/collections/edit_navigation' %>
+<% end %>
 <% if @exhibit %>
   <%= form_for(@exhibit, :html => {:class => 'atrium'}) do |f| %>
     <fieldset>
@@ -35,7 +38,11 @@
       <%= link_to("Set Exhibit Scope", atrium_set_exhibit_scope_path(query_params), :class => 'button').html_safe %>
       <%= link_to("Remove Exhibit Scope", atrium_unset_exhibit_scope_path(@exhibit[:id]), :class => 'button').html_safe %>
     </p>
-
+    <% if exhibit_scoped_to_items?(@exhibit.id) %>
+      <p class="warning">
+        Please note that exhibit is scoped to few items. Hence items added through facet group below is hidden in browse view.
+      </p>
+    <% end %>
     <h3>Group Exhibit Items by Facets</h3>
     <p>
       Items present in a exhibit can be further scoped by facet selections. These facets

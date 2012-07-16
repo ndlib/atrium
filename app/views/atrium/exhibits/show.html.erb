@@ -1,3 +1,11 @@
+<% content_for :atrium_side_bar do %>
+  <% if is_editing? %>
+    <%= render :partial => 'atrium/showcases/showcase_navigation' %>
+  <% else %>
+    <%= render :partial => 'shared/collection_search_form' %>
+    <%= render :partial => 'atrium/collections/navigation' %>
+  <% end %>
+<% end %>
 <h2>
   <div class="<%= params[:edit_showcase] && (can? :create, Atrium::Exhibit) ?  "edit-text": "no-edit"%>" id="div_1" data-column-name="atrium_exhibit[label]" data-update-uri=<%=atrium_exhibit_path(@exhibit)%>>
     <%= @exhibit.pretty_title %>

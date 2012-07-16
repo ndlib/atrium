@@ -135,5 +135,15 @@ module Atrium::CollectionsHelper
     return path
   end
 
+  def can_add_view_exhibit?
+    collection= @atrium_collection?  @atrium_collection : Atrium::Collection.find(params[:id])
+    return !(collection && collection.filter_query_params && collection.filter_query_params[:solr_doc_ids])
+  end
+
+  def exhibit_scoped_to_items?(exhibit_id)
+    exhibit=Atrium::Exhibit.find(exhibit_id)
+    return exhibit && exhibit.filter_query_params && exhibit.filter_query_params[:solr_doc_ids]
+  end
+
 end
 

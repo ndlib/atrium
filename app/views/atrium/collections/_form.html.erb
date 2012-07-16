@@ -1,3 +1,7 @@
+
+<% content_for :atrium_side_bar do %>
+  <%= render :partial => 'atrium/collections/edit_navigation' %>
+<% end %>
 <%= form_for(@atrium_collection, :html => {:class => "atrium"}) do |f| %>
   <fieldset>
     <legend>Basic Configuration</legend>
@@ -83,11 +87,12 @@
 <% else %>
   <em>There are no exhibits in this collection.</em>
 <% end %>
-
-<%= form_for(@atrium_exhibit) do |exhibit| %>
-  <%- @atrium_exhibit.set_number = @atrium_collection.exhibits.size + 1 -%>
-  <%- @atrium_exhibit.atrium_collection_id = @atrium_collection[:id] -%>
-  <%= exhibit.hidden_field :set_number %>
-  <%= exhibit.hidden_field :atrium_collection_id %>
-  <%= exhibit.submit 'Add a Exhibit to this Collection', :class => 'button' %>
+<% if can_add_view_exhibit? %>
+  <%= form_for(@atrium_exhibit) do |exhibit| %>
+    <%- @atrium_exhibit.set_number = @atrium_collection.exhibits.size + 1 -%>
+    <%- @atrium_exhibit.atrium_collection_id = @atrium_collection[:id] -%>
+    <%= exhibit.hidden_field :set_number %>
+    <%= exhibit.hidden_field :atrium_collection_id %>
+    <%= exhibit.submit 'Add a Exhibit to this Collection', :class => 'button' %>
+  <% end %>
 <% end %>

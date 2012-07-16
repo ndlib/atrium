@@ -5,41 +5,46 @@
 <% end %>
 <%= link_to 'View Collection',  @atrium_collection  %>
 
+
 <div id="browse-navigation" class="facet-list">
-  <% if @exhibit_navigation_data.nil? || @exhibit_navigation_data.empty? %>
-    <ul>
-      <% @atrium_collection.exhibits.each do |exhibit| %>
-        <li>
-          <%= link_to "View #{exhibit.pretty_title}", exhibit  %>
-        </li>
-        <% if can? :edit, Atrium::Exhibit %>
+  <% if can_add_view_exhibit? %>
+    <% if @exhibit_navigation_data.nil? || @exhibit_navigation_data.empty? %>
+      <ul>
+        <% @atrium_collection.exhibits.each do |exhibit| %>
           <li>
-            <%= link_to "Customize #{exhibit.pretty_title}", new_atrium_exhibit_showcases_path(exhibit, :facet_selection => params[:f]), :class => "customize" %>
+            <%= link_to "View #{exhibit.pretty_title}", exhibit  %>
           </li>
+          <% if can? :edit, Atrium::Exhibit %>
+            <li>
+              <%= link_to "Customize #{exhibit.pretty_title}", new_atrium_exhibit_showcases_path(exhibit, :facet_selection => params[:f]), :class => "customize" %>
+            </li>
+          <% end %>
         <% end %>
-      <% end %>
-    </ul>
-  <% else %>
-    <%# Recursively render the browse sets. %>
-    <% @exhibit_navigation_data.each do |exhibit| %>
-      <h3 class="facet-heading <%= exhibit.pretty_title%>">
-        <%= link_to exhibit.pretty_title, exhibit %>
-       </h3>
-      <% unless exhibit.browse_levels.nil? || exhibit.browse_levels.empty? %>
-        <%= render :partial => 'shared/navigation_browse_levels',
+      </ul>
+    <% else %>
+      <%# Recursively render the browse sets. %>
+      <% @exhibit_navigation_data.each do |exhibit| %>
+        <h3 class="facet-heading <%= exhibit.pretty_title%>">
+          <%= link_to exhibit.pretty_title, exhibit %>
+         </h3>
+        <% unless exhibit_scoped_to_items?(exhibit.id) %>
+          <% unless exhibit.browse_levels.nil? || exhibit.browse_levels.empty? %>
+            <%= render :partial => 'shared/navigation_browse_levels',
                    :locals=>{
                      :exhibit_number => exhibit.set_number,
                      :browse_levels => exhibit.browse_levels,
                      :browse_facets => exhibit.browse_facet_names,
                      :exhibit_id => exhibit[:id]
-        }%>
+            }%>
+          <% end %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>
-
-  <% if can? :edit, Atrium::Showcase  %>
-    <% if !session[:edit_showcase] && !params[:atrium_collection_browse] && !params[:atrium_exhibit_browse] %>
-      <%= link_to "Customize this page", get_customize_page_path, :class => "customize"%>
-    <% end %>
+<% if can? :edit, Atrium::Showcase  %>
+  <% if !session[:edit_showcase] && !params[:atrium_collection_browse] && !params[:atrium_exhibit_browse] %>
+    <%= link_to "Customize this page", get_customize_page_path, :class => "customize"%>
   <% end %>
+<% end %>
 </div>
+

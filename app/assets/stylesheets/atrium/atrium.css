@@ -4,6 +4,8 @@ body {
   padding:0;
 }
 
+.warning { color: red !important;}
+
 #doc, #doc2, #doc3, #doc4 {
   border-top:5px solid #484748;
 }
