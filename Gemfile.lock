@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    atrium (0.0.1)
+    atrium (0.0.1.alpha)
       RedCloth (= 4.2.3)
       blacklight (~> 3.3)
       block_helpers
@@ -251,6 +251,7 @@ GEM
       ruby-debug-base (~> 0.10.4.0)
     ruby-debug-base (0.10.4)
       linecache (>= 0.3)
+    ruby_gntp (0.3.4)
     rubyzip (0.9.5)
     sanitize (2.0.3)
       nokogiri (>= 1.4.4, < 1.6)
@@ -317,4 +318,5 @@ DEPENDENCIES
   rspec-rails (>= 2.0.0)
   ruby-debug
   ruby-debug-base
+  ruby_gntp
   sqlite3

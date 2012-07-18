@@ -66,7 +66,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-given'
   s.add_development_dependency 'guard'
   s.add_development_dependency 'guard-rspec'
-  s.add_development_dependency 'ruby_gntp' if RUBY_PLATFORM =~ /darwin/
+  s.add_development_dependency 'ruby_gntp' if RUBY_PLATFORM =~ /[darwin|linux]/
 
 
   s.files         = `git ls-files`.split("\n")
