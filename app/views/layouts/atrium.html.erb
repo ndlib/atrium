@@ -47,9 +47,6 @@
         <div id="sidebar">
           <% if content_for? :atrium_side_bar %>
             <%= yield :atrium_side_bar %>
-          <% else %>
-            <%= render :partial => 'shared/collection_search_form' %>
-            <%= render :partial => 'atrium/collections/navigation' %>
           <% end %>
           <%= sidebar_items.join('').html_safe %>
         </div>

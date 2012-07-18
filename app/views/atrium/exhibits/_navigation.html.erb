@@ -1,0 +1,30 @@
+<%= link_to 'View Collection',  @atrium_collection  if @atrium_collection%>
+<div id="browse-navigation" class="facet-list">
+  <% if can_add_view_exhibit? %>
+    <% unless @exhibit_navigation_data.nil? || @exhibit_navigation_data.empty? && @exhibit_navigation_data.include?(@exhibit) %>
+      <% index =  @exhibit_navigation_data.index(@exhibit)%>
+      <% exhibit =  @exhibit_navigation_data[index]%>
+      <%# Recursively render the browse sets. %>
+      <h3 class="facet-heading <%= exhibit.pretty_title%>">
+        <%= link_to exhibit.pretty_title, exhibit %>
+      </h3>
+      <% unless exhibit_scoped_to_items?(exhibit.id) %>
+        <% unless exhibit.browse_levels.nil? || exhibit.browse_levels.empty? %>
+          <%= render :partial => 'shared/navigation_browse_levels',
+               :locals=>{
+                 :exhibit_number => exhibit.set_number,
+                 :browse_levels => exhibit.browse_levels,
+                 :browse_facets => exhibit.browse_facet_names,
+                 :exhibit_id => exhibit[:id]
+          }%>
+        <% end %>
+      <%end %>
+    <% end %>
+  <% end %>
+<% if can? :edit, Atrium::Showcase  %>
+  <% if !session[:edit_showcase] && !params[:atrium_collection_browse] && !params[:atrium_exhibit_browse] %>
+    <%= link_to "Customize this page", new_atrium_exhibit_showcases_path(@exhibit, :facet_selection => params[:f]), :class => "customize"%>
+  <% end %>
+<% end %>
+</div>
+

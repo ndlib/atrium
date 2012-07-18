@@ -34,21 +34,16 @@ class Atrium::ExhibitsController < Atrium::BaseController
   def show
     #get children of emission dates
     @members = get_all_children(@browse_document_list, "is_member_of_s")
-    @exhibit= Atrium::Exhibit.find(params[:id])
+    @exhibit= Atrium::Exhibit.find(params[:id]) unless @exhibit
     @exhibit_navigation_data = get_exhibit_navigation_data
     if @exhibit && @exhibit.filter_query_params && @exhibit.filter_query_params[:solr_doc_ids]
-
       items_document_ids = @exhibit.filter_query_params[:solr_doc_ids].split(',')
-
       @collection_items_response, @collection_items_documents = get_solr_response_for_field_values("id",items_document_ids || [])
     end
 
-
     @atrium_showcase=Atrium::Showcase.with_selected_facets(@exhibit.id, @exhibit.class.name, params[:f]).first
     if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
-
       selected_document_ids = @atrium_showcase.showcase_items[:solr_doc_ids].split(',')
-
       @featured_response, @featured_documents = get_solr_response_for_field_values("id",selected_document_ids || [])
     end
     @description_hash=get_description_for_showcase(@atrium_showcase) unless @atrium_showcase.nil?
@@ -99,8 +94,8 @@ private
 
 def determine_collection_id
   if params[:id]
-    exhibit = Atrium::Exhibit.find(params[:id])
-    collection_id = exhibit.atrium_collection_id if exhibit
+    @exhibit = Atrium::Exhibit.find(params[:id])
+    collection_id = @exhibit.atrium_collection_id if @exhibit
   end
   return collection_id
 end
