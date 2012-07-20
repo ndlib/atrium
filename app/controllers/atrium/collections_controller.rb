@@ -51,21 +51,12 @@ class Atrium::CollectionsController < Atrium::BaseController
       @atrium_collection= Atrium::Collection.find(params[:id])
       @atrium_showcase= Atrium::Showcase.with_selected_facets(@atrium_collection.id,@atrium_collection.class.name, params[:f]).first
     end
-
-    if @atrium_collection && @atrium_collection.filter_query_params && @atrium_collection.filter_query_params[:solr_doc_ids]
-
-      items_document_ids = @atrium_collection.filter_query_params[:solr_doc_ids].split(',')
-      @collection_items_response, @collection_items_documents = get_solr_response_for_field_values("id",items_document_ids || [])
-    end
+    @collection_items_response, @collection_items_documents=get_solr_documents_from_asset(@atrium_collection)
     if(params[:showcase_id] && @atrium_showcase.nil?)
       @atrium_showcase = Atrium::Showcase.find(params[:showcase_id])
     end
-    if @atrium_showcase && !@atrium_showcase.showcase_items[:solr_doc_ids].nil?
-      selected_document_ids = @atrium_showcase.showcase_items[:solr_doc_ids].split(',')
-      @featured_response, @featured_documents = get_solr_response_for_field_values("id",selected_document_ids || [])
-    end
+    @featured_response, @featured_documents=get_solr_documents_from_asset(@atrium_showcase) unless @atrium_showcase.nil?
     @description_hash=get_description_for_showcase(@atrium_showcase) unless @atrium_showcase.nil?
-
   end
 
   def edit

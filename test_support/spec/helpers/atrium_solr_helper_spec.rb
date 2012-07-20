@@ -2,8 +2,18 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 Blacklight::SolrHelper.stubs(:class_inheritable_accessor)
 include Blacklight::SolrHelper
+include Atrium::SolrHelper
 
 describe Atrium::SolrHelper do
+
+  def blacklight_config
+    @config = Blacklight::Configuration.new.configure do |config|
+      config.default_solr_params = {
+        :qt => 'search',
+        :rows => 10
+      }
+    end
+  end
 
   before(:each) do
     @collection = Atrium::Collection.new
@@ -272,7 +282,7 @@ describe Atrium::SolrHelper do
       facet.expects(:name).returns("other_facet").at_least_once
       #it will call this twice if response is same for without f param
       response.expects(:facets).returns([facet]).twice
-      helper.expects(:browse_response).returns(response)
+      helper.stubs(:browse_response).returns(response)
       helper.stubs(:get_search_results).returns([response,mock()])
       helper.get_exhibit_navigation_data
     end
@@ -306,7 +316,7 @@ describe Atrium::SolrHelper do
       facet2.stubs(:items).returns([item3])
       response = mock()
       response.expects(:facets).returns([facet2,facet1]).at_least_once
-      helper.expects(:browse_response).returns(response)
+      helper.stubs(:browse_response).returns(response)
       helper.expects(:facet_field_labels).returns("my_label")
       helper.expects(:get_search_results).returns([response,mock()])
       browse_data = helper.get_exhibit_navigation_data
@@ -355,7 +365,7 @@ describe Atrium::SolrHelper do
       facet3.expects(:items).returns([item5,item6]).at_least_once
       response = mock()
       response.expects(:facets).returns([facet2,facet,facet3]).at_least_once
-      helper.expects(:browse_response).returns(response)
+      helper.stubs(:browse_response).returns(response)
       helper.expects(:facet_field_labels).returns("my_label").at_least_once
       helper.expects(:get_search_results).returns([response,mock()]).at_least_once
       browse_data = helper.get_exhibit_navigation_data
@@ -389,7 +399,7 @@ describe Atrium::SolrHelper do
       facet.expects(:items).returns([item,item2]).at_least_once
       response = mock()
       response.expects(:facets).returns([facet]).at_least_once
-      helper.expects(:browse_response).returns(response)
+      helper.stubs(:browse_response).returns(response)
       helper.expects(:facet_field_labels).returns("my_label").at_least_once
       helper.expects(:get_search_results).returns([response,mock()]).at_least_once
       #second level facet not present so it should only return second level with no values even though first level has something selected
@@ -429,7 +439,7 @@ describe Atrium::SolrHelper do
       facet2.expects(:items).returns([item3,item4]).at_least_once
       response = mock()
       response.expects(:facets).returns([facet2,facet]).at_least_once
-      helper.expects(:browse_response).returns(response)
+      helper.stubs(:browse_response).returns(response)
       helper.expects(:facet_field_labels).returns("my_label").at_least_once
       helper.expects(:get_search_results).returns([response,mock()]).at_least_once
       browse_data = helper.get_exhibit_navigation_data
@@ -485,10 +495,10 @@ describe Atrium::SolrHelper do
 
 
   describe "prepare_extra_controller_params_for_collection_query" do
-
     it "should add collection query params with params to extra_controller_params" do
       @collection.filter_query_params = {:q=>"testing",:f=>{"continent"=>["North America"]}}
       helper.expects(:get_current_filter_query_params).returns({:q=>"testing", :fq=>["{!raw f=continent}North America"]})
+      helper.expects(:blacklight_config).returns(@config)
       extra_queries= prepare_extra_controller_params_for_collection_query(@collection,nil,nil,{:q=>"include params"},{})
       extra_queries[:q].should == "testing AND include params"
       extra_queries[:fq].should_not be_blank

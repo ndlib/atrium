@@ -145,5 +145,28 @@ module Atrium::CollectionsHelper
     return exhibit && exhibit.filter_query_params && exhibit.filter_query_params[:solr_doc_ids]
   end
 
+  def get_solr_documents_from_asset(asset)
+    p = params.dup
+    params.delete :f
+    params.delete :q
+    params.delete :page
+    logger.debug("Asset is: #{asset.class}")
+    if asset.is_a?(Atrium::Showcase)
+      if asset && !asset.showcase_items[:solr_doc_ids].nil?
+        selected_document_ids = @atrium_showcase.showcase_items[:solr_doc_ids].split(',')
+        response, documents = get_solr_response_for_field_values("id",selected_document_ids || [])
+      end
+    else
+      if asset && asset.filter_query_params && asset.filter_query_params[:solr_doc_ids]
+        document_ids = asset.filter_query_params[:solr_doc_ids].split(',')
+        response, documents = get_solr_response_for_field_values("id",document_ids || [])
+      end
+    end
+    params.merge!(:f=>p[:f])
+    params.merge!(:q=>p[:q])
+    params.merge!(:page=>p[:page])
+    return  [response, documents]
+  end
+
 end
 

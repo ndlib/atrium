@@ -66,7 +66,6 @@ module Atrium::AtriumHelperBehavior
   # catalog_path accepts a HashWithIndifferentAccess object. The solr query params are stored in the session,
   # so we only need the +counter+ param here. We also need to know if we are viewing to document as part of search results.
   def link_to_document(doc, opts={:label=>blacklight_config.index.show_link.to_sym, :counter => nil, :results_view => true})
-    logger.debug("Atrium link_to_document Label: #{opts[:label]}")
     collection_id =  params[:controller] == "atrium/collections" ? params[:id] :  params[:collection_id]
     exhibit_id = params[:controller] == "atrium/exhibits" ?  params[:id] :  params[:exhibit_id]
     label = render_document_index_label doc, opts
@@ -85,7 +84,6 @@ module Atrium::AtriumHelperBehavior
     if exhibit_id && collection_id
       #link_to_with_data(label, atrium_collection_exhibit_browse_path(collection_id, exhibit_id, doc.id, args), {:method => :put, :class => label.parameterize, :data => opts}).html_safe
       label = render_document_index_label doc, opts
-      logger.debug("URL: #{atrium_collection_exhibit_browse_path(collection_id, exhibit_id, doc.id, args).inspect}")
       link_to label, atrium_collection_exhibit_browse_path(collection_id, exhibit_id, doc.id, args)
     #elsif exhibit_id
     #  link_to_with_data(label, atrium_exhibit_browse_path(exhibit_id, doc.id, args), {:method => :put, :class => label.parameterize, :data => opts}).html_safe
@@ -95,7 +93,6 @@ module Atrium::AtriumHelperBehavior
       link_to label, current_path, :'data-counter' => opts[:counter]
       #link_to_with_data(label, current_path, {:method => :put, :class => label.parameterize, :data => opts}).html_safe
     else
-      logger.debug("call supper")
       super
     end
 
@@ -148,7 +145,6 @@ module Atrium::AtriumHelperBehavior
   end
 
   def set_edit_showcase_in_session
-    logger.debug("Setting edit showcase")
     session[:edit_showcase] = true
   end
 

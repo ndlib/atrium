@@ -1,31 +1,24 @@
-h1. Getting Started using atrium in your own Application
+h1. Atrium
+
+Atrium is a Ruby-on-Rails 3 gem containing the core code for a web application to build collection based of blacklight which build faceted search and discovery layer on top of solr
 
 h2. Before You Begin
 
 *!!! This is a WORK IN PROGRESS !!!*
 
-This tutorial is a work in progress.
-
-h1. Atrium
-
-Atrium is a Rails Engines plugin containing the core code for a Atrium application.  The full hydra stack includes the following:
-
-- "Blacklight":http://projectblacklight.org/  (a rails engines plugin) for the User Interface
-- "Solr":http://lucene.apache.org/solr/ (a java application, also ported to other languages) for the Search Engine
-- Atrium (a rails engines plugin) to create collection, exhibit and showcase base on the blacklight configuration
-
-
-This is a Ruby on Rails 3 gem.
-
 h2. Installation/Setup
 
-h3. Install Rails, Bundler and Devise
+h3. Installation Prerequisites
+
+
+Ruby 1.8.7 is required by Atrium release 4.0; RVM is strongly suggested.
+
+h3. Install Rails
 
 Currently Atrium is compatible with Rails 3.2
 
 <pre>
 gem install 'rails' --version '~>3.2.2'
-gem install 'bundler'
 </pre>
 
 h3. Generate a new rails application:
