@@ -23,7 +23,6 @@ PATH
       mime-types
       morphine
       multipart-post
-      nokogiri
       om (>= 1.2.3)
       rack
       rack-test
