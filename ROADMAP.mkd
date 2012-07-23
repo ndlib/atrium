@@ -1,0 +1,92 @@
+# Development Roadmap
+
+The following issues need to be addressed before it would be considered a 1.0
+release candidate:
+
+### Atrium should be a mountable Rails engine -- but isn't
+Atrium was based on an early version of [hydra-head][1] which, in turn, shared
+code with [Blacklight][5] which was a Rails 2 plugin at the time. As such the
+integration points between Atrium and the host Rails application are not
+following the present best practices. Atrium should be refactored to be an
+[isolated engine][2].
+
+### Atrium overrides and extends the Blacklight catalog a lot -- and shouldn't
+Parts of Atrium rely on the Blacklight catalog controller to return collections
+of Solr documents. This is a messy process and tightly couples Atrium to
+Blacklight in undesirable ways. Now that [Blacklight][5] provides Solr helper
+methods for both the Lucene query handler as well as the DisMax query handler we
+should be able to avoid this problem.
+
+### The routs are ugly
+The routes of an application is it's public API. They should be human-readable
+and should try to conform to be [resourceful][3] whenever possible. The routes
+in Atrium will be overhauled when the gem is converted to a modern Rails engine.
+The days of `/atrium_*` are numbered. Bonus points if collections have a
+[frendliy_id][4] style identifier. See `doc/Routing.mdown` for more.
+
+### Keeping track of the internal application state is fragile
+The application behaves as it should under normal circumstances but it lacks
+resilience. This stems from the complexity of interacting with the same data in
+Atrium in several modes of operation:
+  - Searching the entire holdings
+  - Searching a collection
+  - Browsing a collection
+  - Modifying a collection while searching
+  - Modifying a collection while browsing
+  - Selecting items within a collection in a modal window
+  - Setting a scope within the holdings for a collection
+  - Setting a scope within a collection for an exhibit
+Determining which of these states the user is presently in is accomplished with
+a combination of session storage and passing params around in the URL. The
+resulting experience doesn't inspire confidence. Params can accumulate
+unintentionally. Session variables change while interacting with the site in
+more than one browser tab. It isn't always clear why things are the way they are
+now.
+
+Some of these issues may be able to be addressed with better routes but
+preventing these kinds of problems entirely will require refactoring a lot of
+the application logic to make stateless interactions possible.
+
+### The management interface is confusing
+There is a collision of concerns when managing a collection and the exhibits and
+showcases it contains. Keeping all of the possible customizations straight and
+conveying _what they actually mean_ hasn't been done effectively. There are lots
+of little changes that could be made to the present interface that would make a
+difference but more dramatic refactoring may be required to achieve the desired
+result.
+
+### The theming and templating options are underwhelming
+In order to make significant changes in the look and feel of a collection in
+Atrium you will need to know HTML, CSS, be familiar with [how Rails renders
+views][6], understand how to configure [Blacklight][5], and have a working
+knowledge how to index things into Solr. That's a pretty high barrier to entry.
+This isn't necessarily a problem if Atrium is a toolkit for developers familiar
+with Blacklight who are creating digital exhibits. However, if Atrium would like
+to provide a turn-key solution that can be easily customized from within the
+application by someone without a firm grasp of web technologies then we have a
+long way to go.
+
+Allowing the look and feel of a collection to be significantly modified from the
+frontend itself would require a lot of work. Our best guess as to how this
+problem should be approached is by adding another templating layer in the view
+rendering stack. Development stalled on this over concerns about the feasibility
+of rendering the contents of Blacklight partials in custom Liquid tags. We
+should be able to get this approach to work for the browse views as long as
+we're relying on Blacklight to just provide collections of Solr documents. See
+`doc/Theming.mdown` for more.
+
+The [Asset Pipeline][7] is great but because assets should be pre-compiled for
+production use we would have to support an alternative solution for providing
+custom, collection-specific CSS.
+
+It boils down to choosing the audience that Atrium is trying to serve. Should we
+even be trying to compete with [Omeka][8]?
+
+[1]:  https://github.com/projecthydra/hydra-head
+[2]:  http://api.rubyonrails.org/classes/Rails/Engine.html#label-Isolated+Engine
+[3]:  https://rubygems.org/gems/friendly_id
+[4]:  http://guides.rubyonrails.org/routing.html#resources-on-the-web
+[5]:  https://github.com/projectblacklight/blacklight
+[6]:  http://guides.rubyonrails.org/layouts_and_rendering.html
+[7]:  http://guides.rubyonrails.org/asset_pipeline.html
+[8]:  http://omeka.org/
