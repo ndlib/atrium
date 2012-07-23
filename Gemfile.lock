@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    atrium (0.0.1.alpha)
+    atrium (0.0.1)
       RedCloth (= 4.2.3)
       blacklight (~> 3.3)
       block_helpers
@@ -23,6 +23,7 @@ PATH
       mime-types
       morphine
       multipart-post
+      nokogiri
       om (>= 1.2.3)
       rack
       rack-test
