@@ -1,0 +1,248 @@
+/* =============================================================================
+   Primary styles
+   Author:Dan Brubaker Horst
+   ========================================================================== */
+
+h1,
+h2,
+h3,
+h4 {font-weight:normal}
+h1 {font-size:2em}
+h2 {margin-top:2em}
+address {font-style:normal}
+
+#collection-search .submit, #startOverLink, #search .submit, .button, button.button, input.button, a.button {
+  background-color:#006;
+  border-color:#6D6DD7 #323263 #323263 #6D6DD7;
+  border-style:solid;
+  border-width:1px;
+  color:#FFF;
+  display:inline-block;
+  padding:.1em .3em;
+  text-align:center;
+  text-decoration:none;
+}
+
+#page {background-color:#FEFDF9; max-width:42em; margin:0 auto}
+#main, #sidebar, #ft {padding:.5em .75em; max-width:36em}
+#hd {border-bottom:1px dotted #670202; padding:.5em 0 0; position:relative}
+#hd hgroup,
+#hd .root {display:none}
+#hd hgroup a, #hd hgroup a:visited, #hd hgroup a:hover {color:#354F78}
+#hd hgroup a {text-decoration:none}
+#hd hgroup a:hover {border-bottom:1px dotted #354F78}
+#user_util_links ul {height:1.5em; margin:0; overflow:hidden} /* TODO: Implement some sort of menu here */
+#user_util_links li {list-style-type:none}
+
+#breadcrumbs, #jump {padding:.5em .5em 0; max-width:41em}
+.jump {text-align:right}
+.back {
+  -webkit-border-radius:.7em;
+  -moz-border-radius:.7em;
+  border-radius:.7em;
+  background:url('images/white-arrow.png') no-repeat 42% center #F00; display:inline-block; text-indent:-100%; width:1.4em;}
+#breadcrumbs {margin-bottom:.5em; padding-left:2.5em; text-indent:-2em}
+
+#main hgroup {margin-bottom:2em}
+#main hgroup h1 {font-size:1.5em; margin:0; line-height:1}
+#main hgroup h2 {font-size:1em; font-style:italic; margin-top:0; text-align:right}
+#main {background-repeat:no-repeat; background-position:right 7em}
+
+#sidebar {border-top:1px dotted #670202; clear:both}
+#sidebar h2 {margin-top:0}
+#sidebar {background-repeat:no-repeat; background-position:center 2em}
+#sidebar .sidebar-image {display:none}
+#collection-search fieldset {border:0; margin:0; padding:0}
+#collection-search #q {width:10.5em}
+#browse-navigation h3,
+#facets h3 {color:#670202; margin:0}
+#browse-navigation .browse-facets h3 {margin:0}
+#facets h3.twiddle-open, #facets li .selected, #browse-navigation .selected {color:#006; font-style:italic}
+#browse-navigation ul,
+#facets .facet_limit ul {margin:0 0 0 1em; padding-left:0}
+#browse-navigation li ul {margin:0 0 0 2em}
+#browse-navigation .browse-facets li h3 {margin-left:1em}
+#browse-navigation li,
+#facets li {position:relative}
+#browse-navigation li .remove,
+#facets li .remove {position:absolute; right:0; top:0}
+#browse-navigation li ul li .remove {top:.15em}
+#browse-navigation li .selected,
+#facets li .selected {display:inline-block; padding-left:1em; text-indent:-1em; width:11em}
+#browse-navigation li ul li .selected {width:9em}
+
+#collection-title h2 {margin-top:0}
+.blacklight-catalog-index #site-title {margin-bottom:2.4em}
+#search {margin-bottom:2em}
+#search form {margin-right:5em; position:relative}
+h2.search {margin-top:0; text-align:left}
+#search #q, #search #search_field, #search label {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
+#search #q {display:block; padding:.2em .3em; width:100%;}
+#search label {display:inline-block; text-align:center; width:18%;}
+#search_field {background-color:rgba(254, 255, 255, 0.8); padding:.3em .3em; width:80%}
+.pageEntriesInfo {position:relative; margin:1em 0 2em}
+#search .submit {bottom:3px; position:absolute; right:-5em}
+#prompt .submit {position:static}
+#appliedParams {padding-right:3em; margin-bottom:1.5em}
+#appliedParams .appliedFilter {background-color:#FEFDF9; background-color:rgba(254, 253, 249, .8); border:1px solid #670202; display:block; padding:.2em .5em; position:relative; margin-bottom:.5em}
+#appliedParams .btnRemove {background:url('remove.png') center center no-repeat;  display:inline-block; height:1.9em; overflow:hidden; position:absolute; right:-3em; text-indent:2em; top:0; width:2em}
+#appliedParams .filterName {margin-right:1.8em}
+#appliedParams .filterName:after {color:#222; content:"\003E"; left:1em; position:relative}
+#startOverLink {position:absolute; right:0; top:1.5em;}
+#sortAndPerPage {margin:0 0 1em; position:relative}
+#sortAndPerPage form {display:block}
+#sortAndPerPage .per_page {margin-bottom:1em;}
+
+.pagination {clear:both; padding:1em 0}
+.pagination h2 {display:none}
+.pagination-container {position:relative; text-align:center}
+.pagination-container .disabled {color:#DCDCDC}
+.pagination-container .current {color:#006}
+.pagination-container .prev_page, .pagination-container .next_page {position:absolute; top:0}
+.pagination-container .prev_page {left:0}
+.pagination-container .next_page {right:0}
+
+#documents {border-color:#670202; border-style:dotted; border-width:1px 0; clear:both; float:left; padding:1em 0; width:100%}
+.document {clear:both; float:left; width:100%}
+.document dl {float:left; margin:0 0 1em 2em; width:100%}
+.document dt, .document dd {float:left; margin:0}
+.document dt {color:#888; padding-right:3%; text-align:right; width:25%}
+.document dd {clear:right; width:72%}
+.document .index_title {margin-top:0}
+.documentHeader {position:relative}
+.documentHeader h3 {color:#222}
+.documentFunctions {position:absolute; right:0; top:.1em; text-align:right}
+
+ul.tools {text-align:right}
+ul.tools li {display:inline-block; list-style-type:none; padding:0 .4em; text-align:left;}
+ul.tools a {padding:.2em 0}
+
+#ft {border-top:1px dotted #670202; margin-top:2em; padding-top:2em}
+#ft address,
+#ft nav {margin-top:.5em}
+#ft nav {text-align:center}
+#ft nav a {padding:.4em .6em}
+#ft figure {display:block; padding:1em 0 0; height:4em; text-align:center}
+#ft p, #ft address {margin:0}
+
+h1, h2, h3 {color:#006}
+hgroup h2 {color:#670202}
+#sidebar li {color:#600; list-style-type:none}
+#facets a,
+#facets a:hover,
+#facets a:visited,
+#browse-navigation .browse-facets a,
+#browse-navigation .browse-facets a:hover,
+#browse-navigation .browse-facets a:visited {color:#670202; text-decoration:none}
+#facets a.remove,
+#facets a.remove:hover,
+#facets a.remove:visited,
+#browse-navigation .browse-facets a.remove,
+#browse-navigation .browse-facets a.remove:hover,
+#browse-navigation .browse-facets a.remove:visited {color:#F00; font-style:normal; margin-left:1em}
+
+#collection-search label {display:block}
+.essay-listing {margin-top:1.5em}
+.close-symbol {color:#F00; font-size:1.2em; font-weight:bold; line-height: .8}
+
+/* Minimize FOUC */
+
+#facets ul {display:none}
+#facets .twiddle+ul {display:block}
+.no-js #sortAndPerPage input[type=submit]{display:none}
+
+/* Typography */
+
+#banner strong, #collection-search .submit, #search .submit, #startOverLink, #breadcrumbs, .button, h1, h2, h3 {font-family:Georgia, Times, serif}
+#site-title h1, #site-title h2 {font-family:'IM Fell Great Primer', Georgia, serif} /* NOTE: 'IM Fell Great Primer' is loaded using the Google Web fonts API with a restricted character set */
+#collection-search .submit, #search .submit, #startOverLink {font-variant:small-caps; text-transform:capitalize}
+
+/* =============================================================================
+   Media Queries
+   Author:Dan Brubaker Horst
+   ========================================================================== */
+
+/* NOTE: media queries sized with "em" use the root font size (typically 16px) */
+
+/* Phone portrait */
+@media only screen and (max-width:20em) { /* < 320 */
+}
+
+/* Phone landscape */
+@media only screen and (min-width:20.5em) { /* > 320 */
+  #main, #sidebar, #ft {padding:1em 1.5em}
+  #hd nav a {display:inline; background:transparent; text-indent:0; width:auto}
+  #main hgroup h1 {font-size:2em}
+  #startOverLink {position:absolute; right:0; top:0;}
+  #hd nav a {margin-right:2em; position:relative}
+  #hd nav a:after {content:"\003E"; position:absolute; top:-.2em; right:-1.5em; text-decoration-color:transparent}
+}
+
+/* Tablet portrait */
+@media only screen and (min-width:30.5em) { /* > 480 */
+  html {font-size:112.5%; -webkit-text-size-adjust:112.5%; -ms-text-size-adjust:112.5%} /* move base size from 16px to 18px */
+  html {background-color:#DCDCDC; background-image:url('paper_3.png'); background-repeat:repeat;}
+  #page {background-color:rgba(254, 253, 249, .8)}
+  #main, #sidebar, #ft {padding:2em 3em}
+  #main {min-height:30em}
+  #hd hgroup {background:url('rbsc_mark_60.png') no-repeat .5em .5em transparent; border-bottom:1px dotted #670202; display:block; padding:.6em .5em 1em 6.8em}
+  #hd h2, #hd h3 {margin:0}
+  #hd h2 {font-size:1.2222em}
+  #hd h3 {font-size:1em}
+  #user_util_links {position:absolute; right:0; top:1em}
+  #main hgroup {margin-bottom:3em}
+  #main hgroup h1 {font-size:2.6667em} /* 48px */
+  #main hgroup h2 {font-size:1.1111em} /* 22px */
+  #search {margin-bottom:3em}
+  .blacklight-search-index #search {margin-bottom:2em}
+  #search #q {display:inline; width:60%}
+  #search label {width:5%}
+  #search_field {width:32%}
+  #sortAndPerPage form {display:inline-block}
+  #sort_form {position:absolute; right:0; top:0}
+  #ft {text-align:center}
+  #ft figure {display:inline-block; padding:1em}
+}
+
+/* Tablet landscape */
+@media only screen and (min-width:64em) { /* = 768 */
+  #page {padding:0 1em; position:relative}
+  #page, #hd, #breadcrumbs, #jump, #ft {max-width:56em}
+  #hd hgroup {background-image:url('rbsc_mark.png'); background-position:0 .5em; padding:2.1em 0 1em 10em}
+  #hd h2 {font-size:1.5em}
+  #hd h3 {font-size:1.2222em}
+  #breadcrumbs {padding:0; margin-top:.5em; text-indent:0}
+  #hd .root {display:inline}
+  #main hgroup {margin-bottom:3.1em}
+  #main hgroup h1 {font-size:3.5556em} /* 64px */
+  #main hgroup h2 {font-size:1.3333em} /* 24px */
+  #main {float:right; padding-right:0; width:36em}
+  #sidebar {border-top:none; clear:none; float:right; padding:2em 0; width:15em}
+  #sidebar h3 {margin-top:0.2857em} /* make sidebar and main headings share a baseline */
+  #search_field {width:33%}
+  #collection-search {position:relative}
+  #collection-search .submit {position:absolute; margin-left:0; right:0; bottom:2px; width:4em}
+  .blacklight-atrium_collections-edit #main form.atrium ol {width:36em}
+  #facets .facet {font-size:1.2222em} /* 22px */
+  #jump, #ft{clear:both}
+  #jump, #jump-top {display:none}
+  #ft {padding:2em 0; position:relative}
+  #ft section {margin:0 auto; width:26em}
+  #ft figure {padding:0; position:absolute; top:2em; width:12em}
+  .hesburgh-mark {left:0}
+  .nd-mark {right:0}
+}
+
+@media only screen and (min-width:48.5em) { /* > 768 */
+}
+
+/* Large Screen */
+@media only screen and (min-width:71em) { /* > 1024 + 6em @ 18px */
+  #page {padding:0 3em}
+  #sidebar {width:17em}
+  #collection-search #q {width:12.5em}
+  .blacklight-atrium_collections-edit #main form.atrium ol {width:37em}
+}
+
+@media only screen and (min-width:64.5em) { /* > 1024 */
+}

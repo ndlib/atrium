@@ -1,6 +1,0 @@
-<% if @atrium_collection.search_instructions %>
-  <%= @atrium_collection.search_instructions.html_safe %>
-<% else %>
-  <%= render :partial => 'default_collection_text' %>
-<% end %>
-<h3><%= link_to 'Browse This Collection', atrium_collection_path(params[:collection_id]) %></h3>

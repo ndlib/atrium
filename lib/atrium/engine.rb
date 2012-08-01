@@ -1,12 +1,8 @@
-require "atrium"
-require "rails"
 module Atrium
-  class Engine < Rails::Engine
-
-    # AtriumHelper is needed by all helpers, so we inject it
-    # into action view base here.
-    initializer 'atrium.helpers' do |app|
-      ActionView::Base.send :include, Atrium::BaseHelper
+  class Engine < ::Rails::Engine
+    isolate_namespace Atrium
+    config.generators do |g|
+      g.test_framework :rspec, :fixture => false
     end
   end
 end

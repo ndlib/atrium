@@ -1,3 +1,4 @@
+//= require jquery_ujs
 //= require chosen.jquery
 //= require ckeditor-jquery
 //= include jquery.colorbox

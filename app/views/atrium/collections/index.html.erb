@@ -1,0 +1,10 @@
+
+
+<h1>Collection</h1>
+<ul>
+  <% for collection in @collections %>
+      <li><%= collection.title %></li>
+      <%= link_to("Edit Collection", edit_collection_path(:id=>collection.id), :class => 'button').html_safe %>
+  <% end %>
+</ul>
+

@@ -1,42 +1,37 @@
-require "blacklight"
+require "atrium/engine"
+
 module Atrium
-  require 'atrium/engine' if defined?(Rails)
-  require 'application_controller'
-
-  require 'atrium/version'
-  require 'atrium/routes'
-
   require 'ckeditor-rails'
-  require 'devise'
-  require 'loggable'
-
-  include Loggable
-
-  def self.version
-    Atrium::VERSION
+  def self.config
+    return @atrium_config if @atrium_config
+    @atrium_config = OpenStruct.new
+    @atrium_config = {
+        :facet => {
+            :field_names => [
+                "collection_0_did_0_unittitle_0_imprint_0_publisher_facet",
+                "full_date_s",
+                "collection_0_did_0_unittitle_0_imprint_0_geogname_facet",
+                "collection_0_did_0_origination_0_printer_facet",
+                "collection_0_did_0_origination_0_engraver_facet",
+                "item_0_did_0_physdesc_0_dimensions_facet",
+                "item_0_acqinfo_facet",
+                "item_0_did_0_origination_0_persname_0_persname_normal_facet",
+                "active_fedora_model_s",
+                "date_s"
+            ],
+            :labels => {
+                "collection_0_did_0_unittitle_0_imprint_0_publisher_facet"=>"Publisher",
+                "full_date_s"=>"Print Date",
+                "collection_0_did_0_unittitle_0_imprint_0_geogname_facet"=>"Printing Location",
+                "collection_0_did_0_origination_0_printer_facet"=>"Printer",
+                "collection_0_did_0_origination_0_engraver_facet"=>"Engraver",
+                "item_0_did_0_origination_0_persname_0_persname_normal_facet"=>"Signers",
+                "active_fedora_model_s" => "Description",
+                "date_s"=>"Print Year"
+            },
+            :limits=> {nil=>10}
+        }
+    }
+    @atrium_config
   end
-
-  def self.root
-    @root ||= File.expand_path(File.dirname(File.dirname(__FILE__)))
-  end
-
-  # If you put this in your application's routes.rb, it will add the Atrium routes to the app.
-  # The atrium generator puts this in routes.rb for you by default.
-  # See {Atrium::Routes} for information about how to modify which routes are generated.
-  # @example
-  #   # in config/routes.rb
-  #   MyAppName::Application.routes.draw do
-  #     Blacklight.add_routes(self)
-  #     HydraHead.add_routes(self)
-  #     Atrium.add_routes(self)
-  #   end
-  def self.add_routes(router, options = {})
-    Atrium::Routes.new(router, options).draw
-  end
-
 end
-
-require 'atrium/application_helper.rb'
-require 'atrium/collections_helper.rb'
-require 'atrium/descriptions_helper.rb'
-require 'atrium/solr_helper.rb'
