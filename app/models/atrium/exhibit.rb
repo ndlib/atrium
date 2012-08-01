@@ -24,17 +24,17 @@ module Atrium
     accepts_nested_attributes_for :showcases
 
 
-    #has_many(
-    #    :browse_levels,
-    #    :class_name => 'Atrium::BrowseLevel',
-    #    :foreign_key => 'atrium_exhibit_id',
-    #    :order => 'level_number ASC'
-    #)
-    #
-    #accepts_nested_attributes_for :browse_levels, :allow_destroy => true
-    #def browse_facet_names
-    #  browse_levels.collect {|facet| facet.solr_facet_name} rescue []
-    #end
+    has_many(
+        :browse_levels,
+        :class_name => 'Atrium::BrowseLevel',
+        :foreign_key => 'atrium_exhibit_id',
+        :order => 'level_number ASC'
+    )
+
+    accepts_nested_attributes_for :browse_levels, :allow_destroy => true
+    def browse_facet_names
+      browse_levels.collect {|facet| facet.solr_facet_name} rescue []
+    end
 
     def facet_order
       facet_order = {}

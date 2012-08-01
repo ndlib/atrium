@@ -11,7 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120731140621) do
+ActiveRecord::Schema.define(:version => 20120801145241) do
+
+  create_table "atrium_browse_levels", :force => true do |t|
+    t.integer  "atrium_exhibit_id",    :null => false
+    t.integer  "level_number",         :null => false
+    t.string   "filter_query_params"
+    t.string   "solr_facet_name"
+    t.string   "label"
+    t.string   "exclude_query_params"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "atrium_browse_levels", ["atrium_exhibit_id"], :name => "index_atrium_browse_levels_on_atrium_exhibit_id"
+  add_index "atrium_browse_levels", ["id"], :name => "index_atrium_browse_levels_on_id"
 
   create_table "atrium_collections", :force => true do |t|
     t.string   "title"

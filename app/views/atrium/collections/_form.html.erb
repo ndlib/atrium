@@ -68,12 +68,6 @@
     <%= exhibit.submit 'Add a Exhibit to this Collection', :class => 'button' %>
   <% end %>
 <% end %>
-<%= form_for(@exhibit, :html => {:class => "atrium"}) do |exhibit| %>
-    <%- @exhibit.set_number = @collection.exhibits.size + 1 -%>
-    <%- @exhibit.atrium_collection_id = @collection[:id] -%>
-    <%= exhibit.hidden_field :set_number %>
-    <%= exhibit.hidden_field :atrium_collection_id %>
-    <%= exhibit.submit 'Add a Exhibit to this Collection', :class => 'button' %>
-<% end %>
+
 
 

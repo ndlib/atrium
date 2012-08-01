@@ -3,9 +3,6 @@ require_dependency "atrium/application_controller"
 module Atrium
   class ExhibitsController < ApplicationController
   
-    def show
-    end
-
     def new
       @exhibit = Atrium::Exhibit.new
       respond_to do |format|
@@ -33,6 +30,17 @@ module Atrium
         flash[:notice] = 'Exhibit was successfully updated.'
       end
       redirect_to :action => "edit"
+    end
+
+    def show
+      @exhibit = Atrium::Exhibit.find(params[:id])
+    end
+
+    def destroy
+      @exhibit = Atrium::Exhibit.find(params[:id])
+      Atrium::Exhibit.destroy(params[:id])
+      flash[:notice] = 'Exhibit '+params[:id] +' was deleted successfully.'
+      redirect_to edit_collection_path(@exhibit.atrium_collection_id)
     end
 
   end
