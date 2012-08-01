@@ -56,10 +56,10 @@
                   <% exclude_query_params = level_query_params.dup %>
                   <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
                   <td class="label"><%= level.level_number == 1 ? 'Group By:' : 'Then By:' %></td>
-                  <td><%=facet_field_labels[level.solr_facet_name]%></td>
+                  <td><%=atrium_facet_field_labels[level.solr_facet_name]%></td>
                   <td><%=level_form.text_field :label, :value=>level.label%></td>
-                  <td><%= link_to("Set Group By Filter", catalog_index_path(level_query_params.merge!(:edit_browse_level_filter=>level[:id]))).html_safe %></td>
-                  <td><%= link_to("Set Exclude Filter", catalog_index_path(exclude_query_params.merge!(:exclude_browse_level_filter=>level[:id]))).html_safe %></td>
+                  <td><%# link_to("Set Group By Filter", catalog_index_path(level_query_params.merge!(:edit_browse_level_filter=>level[:id]))).html_safe %></td>
+                  <td><%# link_to("Set Exclude Filter", catalog_index_path(exclude_query_params.merge!(:exclude_browse_level_filter=>level[:id]))).html_safe %></td>
                   <td><%=level_form.check_box :_destroy %></td>
                 <% end %>
               </tr>

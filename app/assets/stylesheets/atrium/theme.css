@@ -181,11 +181,11 @@ hgroup h2 {color:#670202}
 /* Tablet portrait */
 @media only screen and (min-width:30.5em) { /* > 480 */
   html {font-size:112.5%; -webkit-text-size-adjust:112.5%; -ms-text-size-adjust:112.5%} /* move base size from 16px to 18px */
-  html {background-color:#DCDCDC; background-image:url('paper_3.png'); background-repeat:repeat;}
+  html {background-color:#DCDCDC; background-image:url(''); background-repeat:repeat;}
   #page {background-color:rgba(254, 253, 249, .8)}
   #main, #sidebar, #ft {padding:2em 3em}
   #main {min-height:30em}
-  #hd hgroup {background:url('rbsc_mark_60.png') no-repeat .5em .5em transparent; border-bottom:1px dotted #670202; display:block; padding:.6em .5em 1em 6.8em}
+  #hd hgroup {background:url('') no-repeat .5em .5em transparent; border-bottom:1px dotted #670202; display:block; padding:.6em .5em 1em 6.8em}
   #hd h2, #hd h3 {margin:0}
   #hd h2 {font-size:1.2222em}
   #hd h3 {font-size:1em}
@@ -208,7 +208,7 @@ hgroup h2 {color:#670202}
 @media only screen and (min-width:64em) { /* = 768 */
   #page {padding:0 1em; position:relative}
   #page, #hd, #breadcrumbs, #jump, #ft {max-width:56em}
-  #hd hgroup {background-image:url('rbsc_mark.png'); background-position:0 .5em; padding:2.1em 0 1em 10em}
+  #hd hgroup {background-image:url(''); background-position:0 .5em; padding:2.1em 0 1em 10em}
   #hd h2 {font-size:1.5em}
   #hd h3 {font-size:1.2222em}
   #breadcrumbs {padding:0; margin-top:.5em; text-indent:0}

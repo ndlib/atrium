@@ -26,7 +26,7 @@ module Atrium
 
     def update
       @exhibit = Atrium::Exhibit.find(params[:id])
-      if @exhibit.update_attributes(params[:atrium_exhibit])
+      if @exhibit.update_attributes(params[:exhibit])
         flash[:notice] = 'Exhibit was successfully updated.'
       end
       redirect_to :action => "edit"
