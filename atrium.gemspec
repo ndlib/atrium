@@ -21,5 +21,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'ckeditor_rails'
   s.add_development_dependency "rspec"
   s.add_development_dependency "rspec-rails"
+  s.add_development_dependency "rspec-given"
   s.add_development_dependency "sqlite3"
 end
