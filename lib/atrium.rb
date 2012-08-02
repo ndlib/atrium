@@ -2,6 +2,17 @@ require "atrium/engine"
 
 module Atrium
   require 'ckeditor-rails'
+
+  mattr_accessor :saved_search_class_name
+
+  def self.saved_searches_for(user)
+    saved_search_class.where(user_id: user[:id])
+  end
+
+  def self.saved_search_class
+    saved_search_class_name.constantize
+  end
+
   def self.config
     return @atrium_config if @atrium_config
     @atrium_config = OpenStruct.new
