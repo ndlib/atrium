@@ -36,8 +36,8 @@
         <%= f.text_area :search_instructions, :rows=> '20', :cols => '120', :class => 'jquery-ckeditor' %>
       </li>
       <li>
-        <%# f.label :theme, 'Collection Theme:' %>
-        <%# f.collection_select :theme, Atrium::Collection.available_themes, :to_s, :titleize %>
+        <%= f.label :theme, 'Collection Scoping:' %>
+        <%= f.select(:filter_query_params, Atrium.saved_searches_for(current_user).collect{|search| [search.query_params, search.query_params.to_s]}, { :include_blank => true }) %>
       </li>
     </ol>
     <%= f.submit 'Update Collection Configuration', :class => 'button' %>
@@ -60,13 +60,7 @@
     <em>There are no exhibits in this collection.</em>
 <% end %>
 <% if can_add_view_exhibit? %>
-  <%= form_for(@exhibit, :html => {:class => "atrium"}) do |exhibit| %>
-    <%- @exhibit.set_number = @collection.exhibits.size + 1 -%>
-    <%- @exhibit.atrium_collection_id = @collection[:id] -%>
-    <%= exhibit.hidden_field :set_number %>
-    <%= exhibit.hidden_field :atrium_collection_id %>
-    <%= exhibit.submit 'Add a Exhibit to this Collection', :class => 'button' %>
-  <% end %>
+  <%= link_to 'Add a Exhibit to this Collection', new_exhibit_path(:set_number=>@collection.exhibits.size + 1, :collection_id=>@collection.id ), :class => 'button' %>
 <% end %>
 
 

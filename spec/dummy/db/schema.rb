@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120801145241) do
+ActiveRecord::Schema.define(:version => 20120803170016) do
 
   create_table "atrium_browse_levels", :force => true do |t|
     t.integer  "atrium_exhibit_id",    :null => false

@@ -1,6 +1,19 @@
 <% if @exhibit %>
   <%= form_for(@exhibit, :html => {:class => 'atrium'}) do |f| %>
-    <fieldset>
+    <% if @exhibit.errors.any? %>
+        <ul class="errors">
+          <% @exhibit.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+          <% end %>
+        </ul>
+    <% end %>
+    <% @exhibit.atrium_collection_id = params[:collection_id] if (params[:collection_id]) %>
+    <% @exhibit.set_number = params[:collection_id] if (params[:set_number]) %>
+    <%= f.hidden_field :atrium_collection_id %>
+    <%= f.hidden_field :set_number %>
+
+
+        <fieldset>
       <legend>General Configuration</legend>
       <ol>
         <li>

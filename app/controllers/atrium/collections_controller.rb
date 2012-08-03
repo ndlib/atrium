@@ -18,7 +18,6 @@ module Atrium
 
     def edit
       @collection = Collection.find(params[:id])
-      @exhibit= Atrium::Exhibit.new
     end
   
     def show
@@ -26,7 +25,6 @@ module Atrium
 
     def update
       @collection = Atrium::Collection.find(params[:id])
-      @exhibit=Atrium::Exhibit.new
       if (params[:atrium_collection])
         params[:atrium_collection][:search_facet_names] ||= []
         params[:atrium_collection][:search_facet_names].delete_if { |elem| elem.empty? }  if params[:atrium_collection][:search_facet_names].length > 0

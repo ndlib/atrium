@@ -4,7 +4,7 @@ module Atrium
   class ExhibitsController < ApplicationController
   
     def new
-      @exhibit = Atrium::Exhibit.new
+      @exhibit = Atrium::Exhibit.new(:atrium_collection_id=>params[:collection_id], :set_number=>params[:set_number])
       respond_to do |format|
         format.html
       end
@@ -14,7 +14,6 @@ module Atrium
       @exhibit = Atrium::Exhibit.new(params[:exhibit])
       if @exhibit.update_attributes(params[:exhibit])
         flash[:notice] = 'Exhibit was successfully created.'
-        redirect_to :controller=>"atrium/collections", :action => "edit", :id=>@exhibit.atrium_collection_id
       end
     end
 
