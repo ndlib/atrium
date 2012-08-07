@@ -4,6 +4,6 @@
 
 <% if @exhibit %>
   <p class="exhibit-destroy-controls">
-    <%= button_to "Delete this Exhibit", exhibit_path(@exhibit[:id]), :method=>:delete, :class=>:destroy, :confirm=>"Are you really want to delete this exhibit?", :class => 'button' %>
+    <%= button_to "Delete this Exhibit", collection_exhibit_path(@exhibit.collection, @exhibit), :method=>:delete, :class=>:destroy, :confirm=>"Are you really want to delete this exhibit?", :class => 'button' %>
   </p>
 <% end %>

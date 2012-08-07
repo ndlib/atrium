@@ -1,3 +1,6 @@
+<% content_for :atrium_side_bar do %>
+  <%= render :partial => 'shared/navigation' %>
+<% end %>
 <%= form_for(@collection, :html => {:class => "atrium"}) do |f| %>
   <fieldset>
     <legend>Basic Configuration</legend>
@@ -51,7 +54,7 @@
         <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
         <%= exhibit.pretty_title %>
         <span class="controls">
-          <%= link_to 'Configure', edit_exhibit_path(exhibit) %>
+          <%= link_to 'Configure', edit_collection_exhibit_path(exhibit.collection, exhibit) %>
       </span>
       </li>
     <% end %>
@@ -60,7 +63,7 @@
     <em>There are no exhibits in this collection.</em>
 <% end %>
 <% if can_add_view_exhibit? %>
-  <%= link_to 'Add a Exhibit to this Collection', new_exhibit_path(:set_number=>@collection.exhibits.size + 1, :collection_id=>@collection.id ), :class => 'button' %>
+  <%= link_to 'Add a Exhibit to this Collection', new_collection_exhibit_path(@collection), :class => 'button' %>
 <% end %>
 
 

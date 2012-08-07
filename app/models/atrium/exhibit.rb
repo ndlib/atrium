@@ -1,6 +1,5 @@
 module Atrium
   class Exhibit < ActiveRecord::Base
-
     attr_accessible(
         :atrium_collection_id,
         :filter_query_params,
@@ -54,6 +53,13 @@ module Atrium
 
     def pretty_title
       label.blank? ? "Exhibit #{set_number}" : label
+    end
+
+    before_create :assign_set_number
+
+    private
+    def assign_set_number
+      self.set_number= collection.exhibits.size + 1
     end
   end
 end

@@ -1,5 +1,9 @@
+<% content_for :atrium_side_bar do %>
+    <%= render :partial => 'shared/navigation' %>
+<% end %>
+
 <% if @exhibit %>
-  <%= form_for(@exhibit, :html => {:class => 'atrium'}) do |f| %>
+  <%= form_for([@collection, @exhibit], :html => {:class => 'atrium'}) do |f| %>
     <% if @exhibit.errors.any? %>
         <ul class="errors">
           <% @exhibit.errors.full_messages.each do |msg| %>
@@ -7,13 +11,7 @@
           <% end %>
         </ul>
     <% end %>
-    <% @exhibit.atrium_collection_id = params[:collection_id] if (params[:collection_id]) %>
-    <% @exhibit.set_number = params[:collection_id] if (params[:set_number]) %>
-    <%= f.hidden_field :atrium_collection_id %>
-    <%= f.hidden_field :set_number %>
-
-
-        <fieldset>
+    <fieldset>
       <legend>General Configuration</legend>
       <ol>
         <li>
@@ -30,6 +28,7 @@
     </p>
     <fieldset>
       <legend>Current Scope</legend>
+      <b>TODO</b>
       <%if @exhibit.filter_query_params %>
         <ul>
           <% @exhibit.filter_query_params.each do |key,value| %>
@@ -46,6 +45,7 @@
     </p>
     <fieldset>
       <legend>Current Facets</legend>
+      <b>TODO</b>
       <% if @exhibit.browse_levels.any? %>
         <table>
           <thead>
@@ -86,7 +86,7 @@
     </p>
   <% end %>
 
-  <%= form_for(@exhibit) do |f| %>
+  <%= form_for([@collection, @exhibit]) do |f| %>
     <% @level = Atrium::BrowseLevel.new%>
     <%= f.fields_for :browse_levels, @level do |level_fields| %>
       <% if @exhibit.browse_levels.empty? %>

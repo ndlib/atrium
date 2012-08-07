@@ -2,6 +2,7 @@ require_dependency "atrium/application_controller"
 
 module Atrium
   class CollectionsController < ApplicationController
+    before_filter :initialize_collection
     def index
       @collections = Collection.all
     end
@@ -17,14 +18,14 @@ module Atrium
     end
 
     def edit
-      @collection = Collection.find(params[:id])
+      @collection = Collection.find(params[:id])  unless @collection
     end
   
     def show
     end
 
     def update
-      @collection = Atrium::Collection.find(params[:id])
+      @collection = Atrium::Collection.find(params[:id]) unless @collection
       if (params[:atrium_collection])
         params[:atrium_collection][:search_facet_names] ||= []
         params[:atrium_collection][:search_facet_names].delete_if { |elem| elem.empty? }  if params[:atrium_collection][:search_facet_names].length > 0
@@ -42,13 +43,14 @@ module Atrium
 
     def initialize_collection
       if collection_id = determine_collection_id
-        return __initialize_collection( collection_id )
+        @collection = Atrium::Collection.find(collection_id)
+        #return __initialize_collection( collection_id )
       else
         return false
       end
     end
 
-#protected :initialize_collection
+    protected :initialize_collection
 
     private
 

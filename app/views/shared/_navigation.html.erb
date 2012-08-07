@@ -1,0 +1,18 @@
+<div class="facet-list">
+  <h2 class="collection-title"><%= @collection.pretty_title %></h2>
+  <ul class="collection-controls">
+    <li><%= link_to 'View Collection', @collection %></li>
+    <li><%= link_to 'Configure Collection', edit_collection_path(@collection.id) %></li>
+    <li><%= link_to 'Customize Collection Home Page',  new_collection_showcases_path(@collection)%></li>
+  </ul>
+  <%- @collection.exhibits.each do |exhibit| -%>
+      <h3 class="exhibit-title"><%= exhibit.pretty_title%></h3>
+      <ul class="exhibit-controls">
+        <li><%= link_to 'Configure Exhibit', edit_collection_exhibit_path(exhibit.collection, exhibit) %></li>
+        <li><%= link_to 'Customize Exhibit Home Page',  new_exhibit_showcases_path(exhibit)%></li>
+      </ul>
+  <%- end -%>
+</div>
+
+<hr />
+<%= link_to "Delete this Collection", collection_path(@collection[:id]), :method => :delete, :remote => true, :confirm => "Are you really sure?" %>

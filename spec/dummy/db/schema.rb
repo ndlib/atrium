@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120803170016) do
+ActiveRecord::Schema.define(:version => 20120801145241) do
 
   create_table "atrium_browse_levels", :force => true do |t|
     t.integer  "atrium_exhibit_id",    :null => false
@@ -108,10 +108,5 @@ ActiveRecord::Schema.define(:version => 20120803170016) do
   end
 
   add_index "atrium_showcases", ["id"], :name => "index_atrium_showcases_on_id"
-
-  create_table "collections", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
 end

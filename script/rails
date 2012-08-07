@@ -6,3 +6,5 @@ ENGINE_PATH = File.expand_path('../../lib/atrium/engine', __FILE__)
 
 require 'rails/all'
 require 'rails/engine/commands'
+
+load File.expand_path('../../spec/dummy/script/rails', __FILE__)
