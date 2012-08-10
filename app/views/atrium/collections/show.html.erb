@@ -1,2 +1,13 @@
-<h1>Collections#show</h1>
-<p>Find me in app/views/atrium/collections/show.html.erb</p>
+<%= render :partial => 'atrium/collections/head', :locals => { :collection => @collection } %>
+
+
+
+<% if @exhibits.empty? %>
+    <tr><td colspan='5' align='center'><%= t('Collection.exhibit.none') %></td></tr>
+<% end %>
+
+ <%= render @exhibits %>
+
+
+
+

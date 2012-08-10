@@ -1,7 +1,36 @@
 <h1>Configure Exhibit</h1>
 
 <%= render :partial => "form" %>
+<fieldset>
+  <legend>Add Browse Levels</legend>
+  <%= form_for([@collection, @exhibit]) do |f| %>
+      <%= f.fields_for :browse_levels, @exhibit.browse_levels.build do |level_form| %>
+          <%= level_form.label :solr_facet_name, 'Solr Facet:' %>
+          <%= level_form.select(:solr_facet_name, @exhibit.get_available_facets.collect {|solr_fname| [atrium_facet_field_labels[solr_fname],solr_fname]}, { :include_blank => true })%>
+          <%= f.submit 'Add Facet', :class => 'button' %>
+      <% end %>
+  <% end %>
+</fieldset>
 
+<h3>Showcases</h3>
+  <% if @exhibit.showcases.any? %>
+    <ol class="showcase-listing">
+      <% @exhibit.showcases.each do |showcase| %>
+          <li data-id="<%= showcase[:id] %>" data-order="<%= exhibit.set_number %>" class="ui-state-default">
+            <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+            <%= showcase.pretty_title %>
+            <span class="controls">
+          <%= link_to 'Configure', edit_exhibit_showcase_path(@exhibit, showcase) %>
+      </span>
+          </li>
+      <% end %>
+    </ol>
+  <% else %>
+    <em>There are no showcases in this collection.</em>
+  <% end %>
+<% if can_add_view_exhibit? %>
+  <%= link_to 'Add showcase to this exhibit', new_exhibit_showcase_path(@exhibit), :class => 'button' %>
+<% end %>
 <% if @exhibit %>
   <p class="exhibit-destroy-controls">
     <%= button_to "Delete this Exhibit", collection_exhibit_path(@exhibit.collection, @exhibit), :method=>:delete, :class=>:destroy, :confirm=>"Are you really want to delete this exhibit?", :class => 'button' %>

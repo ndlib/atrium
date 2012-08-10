@@ -11,7 +11,6 @@ module Atrium
 
     validates_presence_of(
         :atrium_exhibit_id,
-        :level_number,
         :solr_facet_name
     )
 
@@ -35,6 +34,12 @@ module Atrium
 
     def to_s
       "#{solr_facet_name}"
+    end
+    before_create :assign_level_number
+
+    private
+    def assign_level_number
+      self.level_number= exhibit.browse_levels.size + 1
     end
   end
 end

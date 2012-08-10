@@ -2,13 +2,13 @@ require_dependency "atrium/application_controller"
 
 module Atrium
   class ExhibitsController < ApplicationController
-    before_filter :initialize_collection
+    before_filter :find_collection
+    before_filter :find_exhibit, :only => [:edit, :update, :destroy]
     def new
       @exhibit = Atrium::Exhibit.new
     end
 
     def create
-      #@collection = Atrium::Collection.find(params[:collection_id]) unless @collection
       @exhibit = @collection.exhibits.build(params[:exhibit])
       if @exhibit.save!
         flash[:notice] = 'Exhibit was successfully created.'
@@ -19,12 +19,10 @@ module Atrium
     end
 
     def edit
-      @exhibit = Atrium::Exhibit.find(params[:id])
-      #@exhibit_navigation_data = get_exhibit_navigation_data
+
     end
 
     def update
-      @exhibit = Atrium::Exhibit.find(params[:id])
       if @exhibit.update_attributes(params[:exhibit])
         flash[:notice] = 'Exhibit was successfully updated.'
       end
@@ -32,26 +30,34 @@ module Atrium
     end
 
     def show
-      @exhibit = Atrium::Exhibit.find(params[:id])
+      @showcases = @exhibit.showcases
     end
 
     def destroy
-      @exhibit = Atrium::Exhibit.find(params[:id])
-      Atrium::Exhibit.destroy(params[:id])
+      @exhibit.destroy
       flash[:notice] = 'Exhibit '+params[:id] +' was deleted successfully.'
-      redirect_to edit_collection_path(@exhibit.atrium_collection_id)
+      redirect_to edit_collection_path(@collection)
     end
 
-    def initialize_collection
-      if params[:collection_id]
-        @collection = Atrium::Collection.find(params[:collection_id])
-        #return __initialize_collection( collection_id )
-      else
-        raise "Could not find collection_id"
+    private
+      def find_exhibit
+        @exhibit = Atrium::Exhibit.find(params[:id])
       end
-    end
 
-    protected :initialize_collection
-
+      def find_collection
+        begin
+          if params[:collection_id]
+            @collection = Atrium::Collection.find(params[:collection_id])
+          elsif params[:exhibit_id]
+            @exhibit = Atrium::Exhibit.find(params[:exhibit_id])
+            @collection = @exhibit.collection
+          else
+            raise "Could not find collection_id"
+          end
+        rescue ActiveRecord::RecordNotFound
+          flash.alert = t("Atrium.collection.or.exhibit.not_found")
+          redirect_to redirect_target and return
+        end
+      end
   end
 end

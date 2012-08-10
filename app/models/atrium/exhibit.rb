@@ -55,6 +55,10 @@ module Atrium
       label.blank? ? "Exhibit #{set_number}" : label
     end
 
+    def get_available_facets
+      collection.search_facet_names - browse_facet_names
+    end
+
     before_create :assign_set_number
 
     private
