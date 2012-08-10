@@ -42,14 +42,14 @@ module Atrium
 
     def add_collection_of_facets_by_name(collection_of_facet_names)
       collection_of_facet_names.each do |name|
-        search_facets << Atrium::Search::Facet.find_or_create_by_name_and_collection_id(name, id)
+        search_facets << Atrium::Search::Facet.find_or_create_by_name_and_atrium_collection_id(name, id)
       end
     end
     private :add_collection_of_facets_by_name
 
     def remove_collection_of_facets_by_name(collection_of_facet_names)
       collection_of_facet_names.each do |name|
-        search_facets.delete(Atrium::Search::Facet.find_by_name_and_collection_id(name, id))
+        search_facets.delete(Atrium::Search::Facet.find_by_name_and_atrium_collection_id(name, id))
       end
     end
     private :remove_collection_of_facets_by_name

@@ -2,7 +2,7 @@ require_dependency "atrium/application_controller"
 
 module Atrium
   class CollectionsController < ApplicationController
-    before_filter :initialize_collection
+    before_filter :find_collection, :only => [:edit, :update, :destroy]
     def index
       @collections = Collection.all
     end
@@ -12,60 +12,50 @@ module Atrium
     end
 
     def create
-      @collection = Collection.new
-      @collection.save
-      redirect_to :action => "edit", :id=>@collection.id
+      @collection = Atrium::Collection.new
+      if @collection.save
+        flash[:notice] = "Collection created successfully"
+        redirect_to edit_collection_path(:id=>@collection.id)
+      else
+        flash.now.alert = "Collection not created successfully"
+        render :action => "new"
+      end
     end
 
     def edit
-      @collection = Collection.find(params[:id])  unless @collection
+
     end
-  
+
     def show
+      @collection = Atrium::Collection.find(params[:id])
+      @exhibits = @collection.exhibits
+      respond_to do |format|
+        format.html
+        format.atom { render :layout => false }
+      end
     end
 
     def update
-      @collection = Atrium::Collection.find(params[:id]) unless @collection
-      if (params[:atrium_collection])
-        params[:atrium_collection][:search_facet_names] ||= []
-        params[:atrium_collection][:search_facet_names].delete_if { |elem| elem.empty? }  if params[:atrium_collection][:search_facet_names].length > 0
+      if (params[:collection])
+        params[:collection][:search_facet_names] ||= []
+        params[:collection][:search_facet_names].delete_if { |elem| elem.empty? }  if params[:collection][:search_facet_names].length > 0
       end
-      respond_to do |format|
-        if @collection.update_attributes(params[:collection])
-          refresh_collection
-          flash[:notice] = 'Collection was successfully updated.'
-          format.html  { render :action => "edit" }
-        else
-          format.html { render :action => "edit" }
-        end
+      if @collection.update_attributes(params[:collection])
+        flash[:notice] = 'Collection was successfully updated.'
+      else
+        flash.now.alert = "Collection Not updated"
       end
+      render :action => "edit"
     end
 
-    def initialize_collection
-      if collection_id = determine_collection_id
-        @collection = Atrium::Collection.find(collection_id)
-        #return __initialize_collection( collection_id )
+    def find_collection
+      if params.has_key? :id
+        @collection = Atrium::Collection.find(params[:id])
       else
         return false
       end
     end
 
-    protected :initialize_collection
-
-    private
-
-    def determine_collection_id
-      if params.has_key? :collection_id
-        return params[:collection_id]
-      elsif params.has_key? :id
-        return params[:id]
-      elsif params.has_key? :collection_number
-        return params[:collection_number]
-      end
-    end
-
-    def refresh_collection
-      #@exhibit_navigation_data = get_exhibit_navigation_data
-    end
+    protected :find_collection
   end
 end
