@@ -6,7 +6,11 @@ module Atrium
   mattr_accessor :saved_search_class
   class << self
     def saved_searches_for(user)
-      saved_search_class.where(user_id: user[:id])
+      if user
+        saved_search_class.where(user_id: user[:id])
+      else
+        []
+      end
     end
 
     def saved_search_class
