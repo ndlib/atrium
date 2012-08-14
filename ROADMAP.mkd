@@ -3,6 +3,32 @@
 The following issues need to be addressed before it would be considered a 1.0
 release candidate:
 
+## Milestone 0.1.0
+
+* Saved Search Integration with Collection and Exhibit creation
+* Write a two sentence explanation of each of the models
+* Collection presentation (i.e. an exhibit is displayed in the left navigation
+as item #2 in the display)
+* Update GETTING_STARTED
+* Atrium in-development app put up on Github
+
+* Get the in-development app running for Dan and Jeremy
+  * Banu walks Dan and Jeremy through the current "temp" app
+  * Tour of the admin
+
+* Steps to create the collection/showcase/etc.
+  * Add ability to create a Showcase in the admin
+  * Tweak existing admin pages
+  * Extract display helpers from Blacklight
+
+* Steps to render the collection/showcase/etc.
+  * Do the work in the atrium_temp_app
+  * Extract the views/helpers into generators
+  * Consider Liquid templating for views
+  * End-to-end specs for the in-development app (i.e. how does Blacklight tie-in
+  to the Atrium application)
+
+
 ### Atrium should be a mountable Rails engine -- but isn't
 Atrium was based on an early version of [hydra-head][1] which, in turn, shared
 code with [Blacklight][5] which was a Rails 2 plugin at the time. As such the
@@ -17,12 +43,22 @@ Blacklight in undesirable ways. Now that [Blacklight][5] provides Solr helper
 methods for both the Lucene query handler as well as the DisMax query handler we
 should be able to avoid this problem.
 
-### The routs are ugly
+### The routes are ugly
 The routes of an application is it's public API. They should be human-readable
 and should try to conform to be [resourceful][3] whenever possible. The routes
 in Atrium will be overhauled when the gem is converted to a modern Rails engine.
 The days of `/atrium_*` are numbered. Bonus points if collections have a
 [frendliy_id][4] style identifier. See `doc/Routing.mdown` for more.
+
+### The management interface is confusing
+There is a collision of concerns when managing a collection and the exhibits and
+showcases it contains. Keeping all of the possible customizations straight and
+conveying _what they actually mean_ hasn't been done effectively. There are lots
+of little changes that could be made to the present interface that would make a
+difference but more dramatic refactoring may be required to achieve the desired
+result.
+
+## Milestone 0.2.0
 
 ### Keeping track of the internal application state is fragile
 The application behaves as it should under normal circumstances but it lacks
@@ -46,14 +82,6 @@ now.
 Some of these issues may be able to be addressed with better routes but
 preventing these kinds of problems entirely will require refactoring a lot of
 the application logic to make stateless interactions possible.
-
-### The management interface is confusing
-There is a collision of concerns when managing a collection and the exhibits and
-showcases it contains. Keeping all of the possible customizations straight and
-conveying _what they actually mean_ hasn't been done effectively. There are lots
-of little changes that could be made to the present interface that would make a
-difference but more dramatic refactoring may be required to achieve the desired
-result.
 
 ### The theming and templating options are underwhelming
 In order to make significant changes in the look and feel of a collection in
