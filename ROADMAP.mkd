@@ -17,6 +17,8 @@ as item #2 in the display)
   * Tour of the admin
 
 * Steps to create the collection/showcase/etc.
+  * Review routes, with an eye on what needs to be there. Reference
+  Routing.mdown
   * Add ability to create a Showcase in the admin
   * Tweak existing admin pages
   * Extract display helpers from Blacklight
