@@ -5,22 +5,16 @@ describe Atrium::CollectionsController do
   before(:each) { @routes = Atrium::Engine.routes }
 
 
-  describe '#determine_collection_id' do
-    it 'should return collection id from params id' do
+  describe '#find_collection' do
+    it 'should return collection object from params id' do
       controller.params[:id] = '1'
-      collection_id=controller.send(:determine_collection_id)
-      collection_id.should == '1'
-    end
-
-    it 'should return collection id from params collection id' do
-      controller.params[:collection_id] = '1'
-      collection_id=controller.send(:determine_collection_id)
-      collection_id.should == '1'
+      collection=controller.send(:find_collection)
+      collection.id.should == '1'
     end
 
     it 'return nil if collection id not available in params' do
-      collection_id=controller.send(:determine_collection_id)
-      collection_id.should == nil
+      collection=controller.send(:find_collection)
+      collection.should == nil
     end
   end
 

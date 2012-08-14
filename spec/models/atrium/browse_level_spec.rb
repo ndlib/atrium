@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe BrowseLevel do
+describe Atrium::BrowseLevel do
   pending "add some examples to (or delete) #{__FILE__}"
 end

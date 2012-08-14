@@ -39,7 +39,9 @@ module Atrium
 
     private
     def assign_level_number
-      self.level_number= exhibit.browse_levels.size + 1
+      if self.level_number.blank?
+        self.level_number= exhibit.browse_levels.size + 1
+      end
     end
   end
 end

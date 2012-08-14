@@ -2,7 +2,7 @@ require_dependency "atrium/application_controller"
 
 module Atrium
   class ShowcasesController < ApplicationController
-    before_filter find_parent
+    before_filter :find_parent
     def new
       if @parent
         @showcase=@parent.showcases.build
