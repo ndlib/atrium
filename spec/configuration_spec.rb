@@ -1,13 +1,26 @@
 require 'spec_helper'
 
 describe Atrium do
-  describe 'Configuration exists or not' do
-  it "saved_search_class must be set" do
-    config = lambda {Atrium.saved_search_class}
-    error = "Please define Atrium::Engine.saved_search_class in config/initializer/atrium.rb"
-    config.should raise_error(Atrium::ConfiguarationNotSet, error)
-    Atrium.saved_search_class = "SavedSearch"
-    config.should_not raise_error(Atrium::ConfiguarationNotSet)
+
+  context "Search Class exists or not" do
+    Given(:config) {  lambda {Atrium.saved_search_class} }
+    context 'saved_search_class not set in application' do
+      Then { config.should raise_error(Atrium::ConfigurationNotSet) }
+    end
+    context 'saved_search_class set in application' do
+      When {Atrium.saved_search_class = "SavedSearch"}
+      Then { config.should_not raise_error(Atrium::ConfigurationNotSet)}
+    end
   end
-end
+
+  context "atrium config settings" do
+    context 'default value' do
+      Then { Atrium.config.should eq(Atrium.facet_config) }
+    end
+    context 'set value' do
+      When { Atrium.config = "this is overridden facet config" }
+      Then { Atrium.config == "this is overridden facet config" }
+    end
+  end
+
 end
