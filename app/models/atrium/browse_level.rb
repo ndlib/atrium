@@ -1,4 +1,7 @@
 module Atrium
+  # Maps to a facet, when rendered it renders a collection of solr documents.
+  # Each solr document rendered this way, may have a unique showcase associated
+  # with it.
   class BrowseLevel < ActiveRecord::Base
     attr_accessible(
         :atrium_exhibit_id,
