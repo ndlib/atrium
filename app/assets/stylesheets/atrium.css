@@ -1,3 +1,22 @@
+/*
+ * This is a manifest file that'll be compiled into atrium.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ *= require 'atrium/reset'
+ *= require_self
+ *= require 'atrium/theme'
+ *
+ *= require 'atrium/collections'
+ *= require 'atrium/descriptions'
+ *= require 'atrium/exhibits'
+ *= require 'atrium/showcases'
+ *
+ *= require 'chosen'
+ */
+
 /* Global */
 
 body {
@@ -5,10 +24,6 @@ body {
 }
 
 .warning { color: red !important;}
-
-#doc, #doc2, #doc3, #doc4 {
-  border-top:5px solid #484748;
-}
 
 .button {
   background-color:#CCC;
@@ -19,6 +34,34 @@ body {
   line-height:1.2em;
   padding:.3em .5em;
 }
+
+/** yui **/
+
+#doc, #doc2, #doc3, #doc4 {
+  border-top:5px solid #484748;
+}
+
+/** Sidebar  **/
+.blacklight-atrium_collections-edit .sidebar h2,
+.blacklight-atrium_exhibits-edit .sidebar h2 {
+  margin-bottom:.3em;
+}
+
+.collection-controls,
+.exhibit-controls {
+  margin-top:0;
+}
+
+.collection-controls li,
+.exhibit-controls li {
+  list-style-type:none;
+}
+
+.facet-list .collection-title,
+.facet-list .exhibit-title {
+  margin-bottom:0;
+}
+
 
 /** Banner **/
 
@@ -56,6 +99,14 @@ body {
   line-height:1.2em;
   padding:.3em .5em;
   border-radius:3px;
+}
+
+#prompt {
+  position:fixed;
+  top:3px;
+  left:3px;
+  text-align:center;
+  padding:1em .3em;
 }
 
 /** Navigation menu **/
@@ -99,36 +150,6 @@ select {
   background-color:#FFFFFF;
   border:1px solid #cccccc;
   font-size:.9em;
-}
-
-/** Sidebar  **/
-.blacklight-atrium_collections-edit .sidebar h2,
-.blacklight-atrium_exhibits-edit .sidebar h2 {
-  margin-bottom:.3em;
-}
-
-.collection-controls,
-.exhibit-controls {
-  margin-top:0;
-}
-
-.collection-controls li,
-.exhibit-controls li {
-  list-style-type:none;
-}
-
-.facet-list .collection-title,
-.facet-list .exhibit-title {
-  margin-bottom:0;
-}
-
-/** Banner **/
-#prompt {
-  position:fixed;
-  top:3px;
-  left:3px;
-  text-align:center;
-  padding:1em .3em;
 }
 
 /** Pages **/
