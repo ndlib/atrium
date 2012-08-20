@@ -52,7 +52,7 @@ module Atrium
       if params.has_key? :id
         @collection = Atrium::Collection.find(params[:id])
       else
-        return false
+        raise(RuntimeError, "Collection id not found.")
       end
     end
 

@@ -9,18 +9,19 @@ describe Atrium::CollectionsController do
     it 'should return collection object from params id' do
       controller.params[:id] = '1'
       collection=controller.send(:find_collection)
-      collection.id.should == '1'
+      collection.id.should == 1
     end
 
-    it 'return nil if collection id not available in params' do
+    it 'raise error if collection id not available in params' do
       collection=controller.send(:find_collection)
-      collection.should == nil
+      collection.should_be nil
     end
   end
 
   before do
     @collection = mock("atrium_collection")
     Atrium::Collection.stub(:find).with("1").and_return(@collection)
+    @collection.stub(:id).and_return(1)
     controller.stub(:current_layout).and_return("atrium")
   end
 

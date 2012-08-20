@@ -16,7 +16,7 @@
   <% if @exhibit.showcases.any? %>
     <ol class="showcase-listing">
       <% @exhibit.showcases.each do |showcase| %>
-          <li data-id="<%= showcase[:id] %>" data-order="<%= exhibit.set_number %>" class="ui-state-default">
+          <li data-id="<%= showcase.id%>" data-order="<%= showcase.sequence %>" class="ui-state-default">
             <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
             <%= showcase.pretty_title %>
             <span class="controls">

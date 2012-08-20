@@ -103,6 +103,8 @@ ActiveRecord::Schema.define(:version => 20120801145241) do
     t.text     "showcase_items"
     t.integer  "showcases_id"
     t.string   "showcases_type"
+    t.string   "tag"
+    t.integer  "sequence"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end

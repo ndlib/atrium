@@ -48,8 +48,8 @@ module Atrium
         begin
           if params[:collection_id]
             @collection = Atrium::Collection.find(params[:collection_id])
-          elsif params[:exhibit_id]
-            @exhibit = Atrium::Exhibit.find(params[:exhibit_id])
+          elsif params[:id]
+            @exhibit = Atrium::Exhibit.find(params[:id])
             @collection = @exhibit.collection
           else
             raise "Could not find collection_id"

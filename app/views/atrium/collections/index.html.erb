@@ -4,6 +4,7 @@
 <ul>
   <% for collection in @collections %>
       <li><%= collection.title %></li>
+      <%= link_to collection.title, main_app.collection_path(collection.id) %>
       <%= link_to("Edit Collection", edit_collection_path(:id=>collection.id), :class => 'button').html_safe %>
   <% end %>
 </ul>

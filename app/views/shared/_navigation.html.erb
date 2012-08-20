@@ -1,7 +1,7 @@
 <div class="facet-list">
   <h2 class="collection-title"><%= @collection.pretty_title %></h2>
   <ul class="collection-controls">
-    <li><%= link_to 'View Collection', @collection %></li>
+    <li><%= link_to 'View Collection', main_app.collection_path(@collection) %></li>
     <li><%= link_to 'Configure Collection', edit_collection_path(@collection.id) %></li>
     <li><%= link_to 'Customize Collection Home Page',  new_collection_showcase_path(@collection)%></li>
   </ul>

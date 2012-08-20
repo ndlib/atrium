@@ -34,6 +34,7 @@ module Atrium
       search_facets.map{|facet| facet.name }
     end
 
+
     def search_facet_names=(collection_of_facet_names)
       existing_facet_names = search_facets.map{|facet| facet.name }
       add_collection_of_facets_by_name( collection_of_facet_names - existing_facet_names )

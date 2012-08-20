@@ -40,7 +40,7 @@
       </li>
       <li>
         <%= f.label :theme, 'Collection Scoping:' %>
-        <%= f.select(:filter_query_params, Atrium.saved_searches_for(atrium_user).collect{|search| [search.query_params, search.query_params.to_s]}, { :include_blank => true }) %>
+        <%= f.select(:filter_query_params, get_saved_search.collect{|s| [s, s.to_s]}, { :include_blank => true }) %>
       </li>
     </ol>
     <%= f.submit 'Update Collection Configuration', :class => 'button' %>
@@ -70,7 +70,7 @@
 <% if @collection.showcases.any? %>
     <ol class="showcase-listing">
       <% @collection.showcases.each do |showcase| %>
-          <li data-id="<%= showcase[:id] %>" data-order="<%= exhibit.set_number %>" class="ui-state-default">
+          <li data-id="<%= showcase[:id] %>" data-order="<%# exhibit.set_number %>" class="ui-state-default">
             <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
             <%= showcase.pretty_title %>
             <span class="controls">
