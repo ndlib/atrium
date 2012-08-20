@@ -1,0 +1,30 @@
+<% content_for :atrium_side_bar do %>
+    <%= render :partial => 'shared/navigation' %>
+<% end %>
+
+<% if @showcase %>
+  <%= form_for([@parent, @showcase], :html => {:class => 'atrium'}) do |f| %>
+    <% if @showcase.errors.any? %>
+        <ul class="errors">
+          <% @showcase.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+          <% end %>
+        </ul>
+    <% end %>
+
+        <li>
+          <%= f.label :label, 'Tag:' %>
+          <%= f.text_field :tag %>
+        </li>
+        <li>
+          <%= f.label :sequence, 'Sequence:' %>
+          <%= f.text_field :sequence %>
+        </li>
+      </ol>
+    </fieldset>
+
+    <p class="exhibit-facet-controls">
+      <%= f.submit 'Update showcase', :class => 'button' %>
+    </p>
+  <% end %>
+<% end %>

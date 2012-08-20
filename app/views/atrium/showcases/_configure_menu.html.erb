@@ -1,0 +1,19 @@
+<strong>Showcase configuration</strong>
+<%- params[:controller] == "atrium_collections" ? collection_id = params[:id] : collection_id = params[:collection_id] -%>
+
+<ul class="controls">
+  <li>
+    <%= link_to 'Select Featured Items',
+                add_featured_path(:id => @showcase.id),
+                :class => 'select_colorbox button',
+                :action => showcase_path(:id => @showcase.id, :no_layout=>true)
+    %>
+  </li>
+  <li>
+    <%= link_to 'Add New Description', new_showcase_description_path(@showcase), :class => 'description_colorbox button', :action=> showcase_path(@showcase.id) %>
+  </li>
+
+    <%# link_to 'Add Description From Solr', new_description_path(:showcase_id=>@atrium_showcase[:id]), :class => 'description_colorbox button', :action=> atrium_descriptions_link_path(:showcase_id=>@atrium_showcase[:id], :no_layout=>true) %>
+
+</ul>
+

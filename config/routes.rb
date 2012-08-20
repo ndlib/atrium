@@ -13,9 +13,15 @@ Atrium::Engine.routes.draw do
   end
 
   resources :showcases, :only => [:show]
+  resources :showcases do
     resources :descriptions do
       resources :essays
+    end
   end
   root :to => "collections#index"
+  match 'showcases/add_featured/:id',     :to => 'showcases#add_featured',                  :as => 'add_featured'
+  match 'showcases/remove_featured/:id',  :to => 'showcases#remove_featured',           :as => 'remove_featured', :via => :post
+  match 'showcases/parent/:id',           :to => 'showcases#parent',           :as => 'showcase_parent'
 
 end
+

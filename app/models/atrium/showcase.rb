@@ -4,6 +4,8 @@ module Atrium
         :showcases_id,
         :showcases_type,
         :showcase_items,
+        :tag,
+        :sequence,
         :solr_facet_name,
         :value,
         :descriptions_attributes,
@@ -67,6 +69,19 @@ module Atrium
 
     def type
       showcase_items[:type] unless showcase_items.blank?
+    end
+
+    after_create :assign_sequence
+
+    def assign_sequence
+      unless for_exhibit?
+        sequence= parent.showcases.size
+        self.update_attributes(:sequence => sequence)
+      end
+    end
+
+    def pretty_title
+      id.blank? ? 'Unnamed Showcase' : "Showcase #{id}"
     end
 
     def parent

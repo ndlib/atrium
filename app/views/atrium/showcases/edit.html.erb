@@ -1,2 +1,10 @@
-<h1>Showcases#edit</h1>
-<p>Find me in app/views/atrium/showcases/edit.html.erb</p>
+<%= render 'form' %>
+<%= render 'configure_menu' %>
+
+
+<% if @showcase %>
+    <p class="exhibit-destroy-controls">
+      <%= button_to "Delete this showcase", showcase_path(@showcase), :method=>:delete, :class=>:destroy, :confirm=>"Are you really want to delete this showcase?", :class => 'button' %>
+    </p>
+<% end %>
+
