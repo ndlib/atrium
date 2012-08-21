@@ -27,7 +27,10 @@ module Atrium
     end
 
     def update
-
+      if (params[:showcase])
+        params[:showcase][:showcase_items] ||= []
+        params[:showcase][:showcase_items].delete_if { |elem| elem.empty? }  if params[:showcase][:showcase_items].length > 0
+      end
       if @showcase.update_attributes(params[:showcase])
         flash[:notice] = 'Showcase was successfully updated.'
       else

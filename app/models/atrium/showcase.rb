@@ -9,9 +9,7 @@ module Atrium
         :solr_facet_name,
         :value,
         :descriptions_attributes,
-        :facet_selections_attributes,
-        :featured_items_attributes,
-        :related_items_attributes
+        :facet_selections_attributes
     )
 
     has_many(
@@ -54,13 +52,26 @@ module Atrium
     serialize :showcase_items, Hash
 
     def showcase_items
-      read_attribute(:showcase_items) || write_attribute(:showcase_items, {})
+      items=read_attribute(:showcase_items) || write_attribute(:showcase_items, {})
+      if items && items[:solr_doc_ids]
+        items[:solr_doc_ids].split(",")
+      else
+        []
+      end
+
     end
 
     def showcase_items=(solr_doc_ids = [])
-      showcase_items[:type]="featured"
-      showcase_items[:solr_doc_ids]=solr_doc_ids.join(',')
-      write_attribute(:showcase_items, showcase_items)
+      logger.debug(solr_doc_ids.inspect)
+      unless solr_doc_ids.blank?
+        items={}
+        items[:type]="featured"
+        items[:solr_doc_ids]=solr_doc_ids.join(',')
+        write_attribute(:showcase_items, items)
+      else
+        write_attribute(:showcase_items, {})
+      end
+
     end
 
     def solr_doc_ids

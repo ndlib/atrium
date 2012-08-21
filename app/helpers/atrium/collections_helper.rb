@@ -22,5 +22,19 @@ module Atrium
       logger.debug(query_params.inspect)
       query_params
     end
+
+    def get_saved_items
+      saved_items=Atrium.saved_items_for(atrium_user)
+      items=[]
+      saved_items.each { |item|
+        temp={}
+        temp[:id]=item.document_id
+        temp[:title]=item.title
+        #temp[item.document_id]=item.title
+        items<<temp
+      }
+      logger.debug(saved_items.inspect)
+      items
+    end
   end
 end

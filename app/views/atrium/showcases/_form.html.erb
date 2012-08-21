@@ -11,19 +11,17 @@
           <% end %>
         </ul>
     <% end %>
-
-        <li>
-          <%= f.label :label, 'Tag:' %>
-          <%= f.text_field :tag %>
-        </li>
-        <li>
-          <%= f.label :sequence, 'Sequence:' %>
-          <%= f.text_field :sequence %>
-        </li>
-      </ol>
-    </fieldset>
-
-    <p class="exhibit-facet-controls">
+    <ol>
+      <li>
+        <%= f.label :label, 'Tag:' %>
+        <%= f.text_field :tag %>
+      </li>
+      <li>
+        <%= f.label :sequence, 'Sequence:' %>
+        <%= f.text_field :sequence %>
+      </li>
+    </ol>
+    <p class="showcase-controls">
       <%= f.submit 'Update showcase', :class => 'button' %>
     </p>
   <% end %>

@@ -1,19 +1,32 @@
 <strong>Showcase configuration</strong>
-<%- params[:controller] == "atrium_collections" ? collection_id = params[:id] : collection_id = params[:collection_id] -%>
+<fieldset>
+  <legend>Add Featured Items</legend>
+  <%= form_for([@parent, @showcase]) do |f| %>
+      <%= f.label :showcase_items, 'Featured Items:' %>
+      <%= f.collection_select :showcase_items, get_saved_items.map{|item| Atrium::Showcase::FeaturedSelection.new(item)},:solr_id, :title, {},
+                              :multiple => true, :class => 'chosen', :'data-placeholder' => 'Select desired items from the list' %>
+      <%= f.submit 'Add Items to featured list', :class => 'button' %>
+  <% end %>
+</fieldset>
+<fieldset>
+  <legend>Description</legend>
+  <% if @showcase.descriptions.any? %>
+    <ol data-resource="<%# update_atrium_collection_exhibit_order_path %>" class="exhibit-listing sortable">
+      <% @showcase.descriptions.each do |desc| %>
+        <li data-id="<%= desc.id %>" data-order="<%#sequence %>" class="ui-state-default">
+          <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+          <%= desc.pretty_title %>
+          <span class="controls">
+            <%= link_to 'Configure', edit_showcase_description_path(@showcase, desc) %>
+            <%= link_to 'Delete', showcase_description_path(@showcase, desc), :method=>:delete, :class=>:destroy, :confirm=>"Are you really want to delete this description?" %>
+          </span>
+        </li>
+        <% end %>
+      </ol>
+  <% else %>
+    <em>There are no description attached to this showcase.</em>
+  <% end %>
+</fieldset>
+<%= link_to 'Add New Description', new_showcase_description_path(@showcase), :class => 'button' %>
 
-<ul class="controls">
-  <li>
-    <%= link_to 'Select Featured Items',
-                add_featured_path(:id => @showcase.id),
-                :class => 'select_colorbox button',
-                :action => showcase_path(:id => @showcase.id, :no_layout=>true)
-    %>
-  </li>
-  <li>
-    <%= link_to 'Add New Description', new_showcase_description_path(@showcase), :class => 'description_colorbox button', :action=> showcase_path(@showcase.id) %>
-  </li>
-
-    <%# link_to 'Add Description From Solr', new_description_path(:showcase_id=>@atrium_showcase[:id]), :class => 'description_colorbox button', :action=> atrium_descriptions_link_path(:showcase_id=>@atrium_showcase[:id], :no_layout=>true) %>
-
-</ul>
 
