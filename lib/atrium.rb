@@ -3,7 +3,7 @@ require 'atrium/engine'
 module Atrium
   require 'ckeditor-rails'
 
-  mattr_accessor :saved_search_class, :facet_config, :config
+  mattr_accessor :saved_search_class, :facet_config, :config, :saved_items_class
   class << self
     def saved_searches_for(user)
       if user
@@ -11,6 +11,11 @@ module Atrium
       else
         []
       end
+    end
+
+    def saved_items_class
+      #TODO as saved_search_class
+      "SelectedItem".constantize
     end
 
     def saved_search_class
@@ -24,6 +29,14 @@ module Atrium
 
     def config
       @@config || self.facet_config
+    end
+
+    def saved_items_for(user)
+      if user
+        saved_items_class.where(user_id: user[:id])
+      else
+        []
+      end
     end
 
     def facet_config

@@ -39,7 +39,7 @@
         <%= f.text_area :search_instructions, :rows=> '20', :cols => '120', :class => 'jquery-ckeditor' %>
       </li>
       <li>
-        <%= f.label :theme, 'Collection Scoping:' %>
+        <%= f.label :filter_query_params, 'Collection Scoping:' %>
         <%= f.select(:filter_query_params, get_saved_search.collect{|s| [s, s.to_s]}, { :include_blank => true }) %>
       </li>
     </ol>

@@ -15,6 +15,7 @@ module Atrium
         :inverse_of => :description
     )
     accepts_nested_attributes_for :summary, :allow_destroy => true
+
     def get_summary
       essay.blank? ? "" : summary.content
     end
@@ -46,7 +47,6 @@ module Atrium
 
     def self.get_description_from_solr_id(solr_id)
       atrium_description=Atrium::Description.find_by_description_solr_id(solr_id.to_s)
-
       if atrium_description
         atrium_showcase=Atrium::Showcase.find(atrium_description.atrium_showcase_id)
         return atrium_description , atrium_showcase

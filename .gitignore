@@ -17,6 +17,5 @@ db/*.sqlite3
 *.log
 tmp/
 .sass-cache
-spec/dummy/*
-spec/*
+
 

@@ -7,7 +7,7 @@ module Atrium
         :inverse_of => :essay
     )
 
-    validates_presence_of :atrium_description_id
+    validates_presence_of :description
 
     attr_accessible(
         :content_type,

@@ -5,9 +5,9 @@
   <legend>Add Browse Levels</legend>
   <%= form_for([@collection, @exhibit]) do |f| %>
       <%= f.fields_for :browse_levels, @exhibit.browse_levels.build do |level_form| %>
-          <%= level_form.label :solr_facet_name, 'Solr Facet:' %>
-          <%= level_form.select(:solr_facet_name, @exhibit.get_available_facets.collect {|solr_fname| [atrium_facet_field_labels[solr_fname],solr_fname]}, { :include_blank => true })%>
-          <%= f.submit 'Add Facet', :class => 'button' %>
+        <%= level_form.label :solr_facet_name, 'Solr Facet:' %>
+        <%= level_form.select(:solr_facet_name, @exhibit.get_available_facets.collect {|solr_fname| [atrium_facet_field_labels[solr_fname],solr_fname]}, { :include_blank => true })%>
+        <%= f.submit 'Add Facet', :class => 'button' %>
       <% end %>
   <% end %>
 </fieldset>

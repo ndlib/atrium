@@ -1,0 +1,64 @@
+<% content_for :atrium_side_bar do %>
+  <%= link_to 'Back to Showcase', edit_showcase_path(@showcase.id) %>
+<% end %>
+<h1>Author a Description</h1>
+<p>
+  Descriptions are blocks of text present at the top of the page when viewing
+  a showcase. They can be added from within Atrium or they can be ingested
+  into Solr through any process you like.
+</p>
+<p>
+  To associate a description that is already present in the Solr index with
+  this showcase find the item you are interested in and click the
+  &#8220;Select&#8221; checkbox. You can limit the items listed by keyword
+  search and or facet selection.
+</p>
+<p>
+  To save your work use the &#8220;Save&#8221; button below. If you wish to
+  close <strong>without</strong> saving close the modal window.
+</p>
+<%if @description %>
+  <%= form_for([@showcase, @description], :html => { :class => 'atrium' }) do |f| %>
+    <fieldset>
+      <legend>Description</legend>
+      <% if @description.errors.any? %>
+          <ul class="errors">
+            <% @description.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+      <% end %>
+      <ol>
+        <li>
+          <%= f.label :title, 'Title:' %>
+          <%= f.text_field :title %>
+        </li>
+        <li class="inline">
+          <%= f.radio_button :page_display, 'samepage', :checked => true %>
+          <%= label :page_display_samepage, 'Include the full text of the description on the showcase page' %>
+        </li>
+        <li class="inline">
+          <%= f.radio_button :page_display, 'newpage' %>
+          <%= label :page_display_newpage, 'Include the summary on the showcase page and open the full text in a new page' %>
+        </li>
+        <%= f.fields_for :essay, @description.essay do |essay_fields| %>
+            <% @description.essay.content_type = "essay" %>
+            <li>
+              <%= essay_fields.label :content, 'Full Text:' %>
+              <%= essay_fields.text_area :content, :rows=> '20', :cols => '120', :class =>'jquery-ckeditor' %>
+              <%= essay_fields.hidden_field :content_type %>
+            </li>
+        <% end %>
+        <%= f.fields_for :summary, @description.summary do |summary_fields| %>
+            <% @description.summary.content_type = "summary" %>
+            <li>
+              <%= summary_fields.label :content, 'Summary:' %>
+              <%= summary_fields.text_area :content, :rows=> '20', :cols => '120', :class =>'jquery-ckeditor' %>
+              <%= summary_fields.hidden_field :content_type %>
+            </li>
+        <% end %>
+      </ol>
+      <%= f.submit 'Save', :class => 'button' %>
+    </fieldset>
+  <% end %>
+<% end %>
