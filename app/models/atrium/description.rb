@@ -11,7 +11,8 @@ module Atrium
         :class_name => 'Atrium::Essay',
         :conditions => "\"atrium_essays\".content_type = \"summary\"",
         :foreign_key => 'atrium_description_id',
-        :dependent => :destroy
+        :dependent => :destroy,
+        :inverse_of => :description
     )
     accepts_nested_attributes_for :summary, :allow_destroy => true
     def get_summary
@@ -23,7 +24,8 @@ module Atrium
         :class_name => 'Atrium::Essay',
         :conditions => "\"atrium_essays\".content_type = \"essay\"",
         :foreign_key => 'atrium_description_id',
-        :dependent => :destroy
+        :dependent => :destroy,
+        :inverse_of => :description
     )
     accepts_nested_attributes_for :essay,   :allow_destroy => true
     def get_essay
