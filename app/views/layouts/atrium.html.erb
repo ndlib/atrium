@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <!-- TODO: Move this into the 'atrium' gem -->
+    <!-- TODO: Review how this relates to the latest blacklight view -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><%= h(@page_title || application_name) %></title>
+    <link href="<%= opensearch_catalog_path(:format => 'xml', :only_path => false) %>" title="<%= application_name%>" type="application/opensearchdescription+xml" rel="search"/>
+    <%= favicon_link_tag asset_path('favicon.ico') %>
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+    <%= yield :theme_styles %>
+  </head>
+  <body class="<%= render_body_class.html_safe %>">
+    <div id="page">
+      <div id="hd">
+        <div id="logo">
+          <% if content_for? :main_header %>
+            <%= yield :main_header %>
+          <% else %>
+            <h1 class="site_title">
+              <%= link_to application_name, "/" %>
+            </h1>
+          <% end %>
+        </div>
+        <div id="user_util_links">
+          <% if content_for? :user_util_links %>
+            <%= yield :user_util_links %>
+          <% else %>
+            <%= render :partial=>'/user_util_links' %>
+          <%- end -%>
+        </div>
+      </div>
+      <div id="bd">
+        <div id="main">
+          <div id="main_container">
+            <% if content_for? :flash_msg %>
+              <%= yield :flash_msg %>
+            <% else %>
+              <%= render :partial=>'/flash_msg' %>
+            <% end %>
+            <%= yield %>
+          </div>
+        </div>
+        <div id="sidebar">
+          <%= yield :atrium_side_bar %>
+        </div>
+      </div>
+      <div id="ft">
+        <%= yield :footer %>
+      </div>
+    </div>
+  </body>
+</html>
