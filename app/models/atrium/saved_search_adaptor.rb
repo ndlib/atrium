@@ -1,2 +1,0 @@
-class Atrium::SavedSearchAdaptor
-end
