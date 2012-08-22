@@ -1,0 +1,14 @@
+<%#
+Look in ATRIUM_ENGINE_ROOT/app/views/layouts/atrium for available
+content_for regions as well as how they are used.
+-%>
+
+<% content_for :footer do %>
+  <p>Powered by <a href="https://github.com/ndlib/atrium">Atrium</a></p>
+<% end %>
+
+<%#
+If you aren't satisfied with the baked in layout, override this
+or remove it.
+%>
+<%= render :template => 'layouts/atrium' %>
