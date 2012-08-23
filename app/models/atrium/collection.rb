@@ -1,5 +1,10 @@
+require 'friendly_id'
 module Atrium
   class Collection < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :title, use: :slugged, slug_column: :url_slug
+
+    validate :title, presence: true, uniqueness: true
     attr_accessible(
         :collection_items,
         :filter_query_params,

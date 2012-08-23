@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120801145241) do
+ActiveRecord::Schema.define(:version => 20120823135716) do
 
   create_table "atrium_browse_levels", :force => true do |t|
     t.integer  "atrium_exhibit_id",    :null => false
@@ -41,7 +41,8 @@ ActiveRecord::Schema.define(:version => 20120801145241) do
   end
 
   add_index "atrium_collections", ["id"], :name => "index_atrium_collections_on_id"
-  add_index "atrium_collections", ["url_slug"], :name => "index_atrium_collections_on_url_slug"
+  add_index "atrium_collections", ["title"], :name => "index_atrium_collections_on_title", :unique => true
+  add_index "atrium_collections", ["url_slug"], :name => "index_atrium_collections_on_url_slug", :unique => true
 
   create_table "atrium_descriptions", :force => true do |t|
     t.integer  "atrium_showcase_id",  :null => false
