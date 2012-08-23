@@ -1,7 +1,6 @@
 //= require jquery_ujs
 //= require chosen.jquery
 //= require ckeditor-jquery
-//= include jquery.colorbox
 //= require jquery.jeditable
 //= require ckeditor/jquery.generateId
 //= require ckeditor/jquery.jeditable.ckeditor
@@ -66,74 +65,6 @@
       }
     });
 
-    $('.select_colorbox').colorbox({
-      width:'880px',
-      height:'80%',
-      iframe:true,
-      onClosed:function(){
-        var url = $(this).attr('action');
-        $.ajax({
-          type: 'GET',
-          url: url,
-          dataType: 'html',
-          cache: true,
-          beforeSend: function() {
-            $('#cboxLoadedContent').empty();
-            $('#cboxLoadingGraphic').show();
-          },
-          complete: function() {
-            $('#cboxLoadingGraphic').hide();
-          },
-          success: function(data) {
-            $('#show-selected').html(data);
-            $('#catalog-form').show();
-          }
-        });
-      }
-    });
-
-    $('.description_colorbox').colorbox({
-      width:'880px',
-      height:'80%',
-      iframe:true,
-      onClosed:function(){
-        var url = $(this).attr('action');
-        $.ajax({
-          type: 'GET',
-          url: url,
-          cache: true,
-          beforeSend: function() {
-            $('#cboxLoadedContent').empty();
-            $('#cboxLoadingGraphic').show();
-          },
-          complete: function() {
-            $('#cboxLoadingGraphic').hide();
-          },
-          success: function(data) {
-            var html= loadMore(data);
-            $('#show-description').html(html);
-            $('#catalog-form').show();
-
-
-          }
-        });
-      }
-    });
-
-    function getParams() {
-        var $html = $(response);
-        $html.find('a.description_colorbox').colorbox({ width: '960px', height: '90%', iframe: true });
-        return $html;
-    }
-
-    function loadMore(response) {
-        var $html = $(response);
-        $html.find('a.description_colorbox').colorbox({ width: '960px', height: '90%', iframe: true });
-        return $html;
-    }
-
-
-    //$('.description').hide();
     $('.add_description').click(function(){
         var $this = $(this);
         $this.parent()

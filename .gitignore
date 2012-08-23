@@ -1,5 +1,5 @@
 .bundle/*
-jetty/*
+jetty
 tmp/*
 coverage/*
 doc/*
