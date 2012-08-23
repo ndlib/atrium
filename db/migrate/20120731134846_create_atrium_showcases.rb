@@ -7,7 +7,6 @@ class CreateAtriumShowcases < ActiveRecord::Migration
       t.integer :sequence
       t.timestamps
     end
-    add_index :atrium_showcases, :id
   end
 
   def self.down

@@ -6,7 +6,6 @@ class CreateAtriumEssays < ActiveRecord::Migration
       t.text :content
       t.timestamps
     end
-    add_index :atrium_essays, :id
     add_index :atrium_essays, :atrium_description_id
   end
 

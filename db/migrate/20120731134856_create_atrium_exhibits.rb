@@ -7,7 +7,6 @@ class CreateAtriumExhibits < ActiveRecord::Migration
       t.string :filter_query_params
       t.timestamps
     end
-    add_index :atrium_exhibits, :id
     add_index :atrium_exhibits, :atrium_collection_id
   end
 
