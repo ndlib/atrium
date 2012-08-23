@@ -21,8 +21,8 @@ Gem::Specification.new do |s|
   s.description = "TODO: Description of Atrium."
 
   s.files         = `git ls-files`.split($\)
-  s.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
-  s.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  s.executables   = s.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  s.test_files    = s.files.grep(%r{^(test|spec|features)/})
 
   s.add_dependency "rails", "~> 3.2.8"
   s.add_dependency "jquery-rails"
