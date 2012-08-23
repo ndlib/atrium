@@ -188,6 +188,10 @@ ol.sortable li span {
 }
 
 /** Forms **/
+form input {
+  border:1px solid #CCC;
+}
+
 form.atrium ol {
   margin-left:0;
 }
