@@ -2,35 +2,46 @@ require 'friendly_id'
 module Atrium
   class Collection < ActiveRecord::Base
     extend FriendlyId
-    friendly_id :title, use: :slugged, slug_column: :url_slug
+    friendly_id :url_slug, use: :slugged, slug_column: :url_slug
 
-    validate :title, presence: true, uniqueness: true
+    validate(
+      :title,
+      presence: true,
+      uniqueness: true,
+      length: { maximum: 255, minimum: 3 }
+    )
+    validate(
+      :url_slug,
+      presence: true,
+      uniqueness: true,
+      length: { maximum: 255, minimum: 3 }
+    )
     attr_accessible(
-        :collection_items,
-        :filter_query_params,
-        :theme,
-        :title,
-        :title_markup,
-        :collection_description,
-        :search_instructions,
-        :search_facet_names,
-        :url_slug,
-        :exhibits_attributes,
-        :search_facets_attributes
+      :collection_items,
+      :filter_query_params,
+      :theme,
+      :title,
+      :title_markup,
+      :collection_description,
+      :search_instructions,
+      :search_facet_names,
+      :url_slug,
+      :exhibits_attributes,
+      :search_facets_attributes
     )
 
     has_many(
-        :showcases,
-        :class_name => 'Atrium::Showcase',
-        :as => :showcases,
-        :dependent => :destroy
+      :showcases,
+      :class_name => 'Atrium::Showcase',
+      :as => :showcases,
+      :dependent => :destroy
     )
 
     has_many(
-        :search_facets,
-        :class_name => 'Atrium::Search::Facet',
-        :foreign_key => 'atrium_collection_id',
-        :dependent => :destroy
+      :search_facets,
+      :class_name => 'Atrium::Search::Facet',
+      :foreign_key => 'atrium_collection_id',
+      :dependent => :destroy
     )
 
     accepts_nested_attributes_for :search_facets, :allow_destroy => true
@@ -62,11 +73,11 @@ module Atrium
 
 
     has_many(
-        :exhibits,
-        :class_name => 'Atrium::Exhibit',
-        :foreign_key => 'atrium_collection_id',
-        :order => 'set_number ASC',
-        :dependent => :destroy
+      :exhibits,
+      :class_name => 'Atrium::Exhibit',
+      :foreign_key => 'atrium_collection_id',
+      :order => 'set_number ASC',
+      :dependent => :destroy
     )
 
     accepts_nested_attributes_for :exhibits, :allow_destroy => true

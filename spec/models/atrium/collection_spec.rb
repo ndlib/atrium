@@ -8,9 +8,11 @@ describe Atrium::Collection do
   it { should have_many :exhibits }
 
   context "#url_slug" do
-    Given(:collection_attributes) { { title: 'Hello World' } }
-    When { collection.save }
-    Then { collection.url_slug.should == 'hello-world' }
+    context 'calculated from title' do
+      Given(:collection_attributes) { { url_slug: 'Hello World' } }
+      When { collection.save }
+      Then { collection.url_slug.should == 'hello-world' }
+    end
   end
   context "#theme_path" do
     context 'default value' do
