@@ -15,7 +15,7 @@ module Atrium
       @collection = Atrium::Collection.new
       if @collection.save
         flash[:notice] = "Collection created successfully"
-        redirect_to edit_collection_path(:id=>@collection.id)
+        redirect_to edit_collection_path(@collection)
       else
         flash.now.alert = "Collection not created successfully"
         render :action => "new"
