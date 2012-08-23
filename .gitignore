@@ -17,5 +17,5 @@ pkg/
 *.log
 tmp/
 .sass-cache
-
+.tags*
 
