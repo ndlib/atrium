@@ -7,14 +7,22 @@ require "atrium/version"
 Gem::Specification.new do |s|
   s.name        = "atrium"
   s.version     = Atrium::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
+  s.authors     = [
+    "Richard Johnson",
+    "Jeremy Friesen",
+    "Banu Lakshminarayanan",
+    "Dan Brubaker-Horst"
+  ]
+  s.email       = [
+    "jeremy.n.friesen"
+  ]
+  s.homepage    = "http://github.com/ndlib/atrium"
   s.summary     = "TODO: Summary of Atrium."
   s.description = "TODO: Description of Atrium."
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.test_files = Dir["test/**/*"]
+  s.files         = `git ls-files`.split($\)
+  s.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  s.test_files    = gem.files.grep(%r{^(test|spec|features)/})
 
   s.add_dependency "rails", "~> 3.2.8"
   s.add_dependency "jquery-rails"
