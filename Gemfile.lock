@@ -4,7 +4,7 @@ PATH
     atrium (0.0.1)
       ckeditor_rails
       jquery-rails
-      rails (~> 3.2.6)
+      rails (~> 3.2.8)
 
 GEM
   remote: http://rubygems.org/
