@@ -45,16 +45,6 @@ module Atrium
         :summary_attributes
     )
 
-    def self.get_description_from_solr_id(solr_id)
-      atrium_description=Atrium::Description.find_by_description_solr_id(solr_id.to_s)
-      if atrium_description
-        atrium_showcase=Atrium::Showcase.find(atrium_description.atrium_showcase_id)
-        return atrium_description , atrium_showcase
-      else
-        return []
-      end
-    end
-
     def generate_solr_id
       "atrium_description_#{id}"
     end
@@ -69,18 +59,13 @@ module Atrium
     end
     private :essay_text
 
-    def get_atrium_showcase_id
-      "atrium_showcase_#{id}"
-    end
-    private :get_atrium_showcase_id
-
 
     def pretty_title
       title.blank? ? "Description #{id}" : title
     end
 
     def show_on_this_page?
-      page_display.nil? || page_display == "newpage"
+      page_display.nil? || page_display == "samepage"
     end
 
     def blank?
