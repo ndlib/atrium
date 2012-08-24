@@ -1,7 +1,6 @@
-require 'spec_helper'
+require '../../spec_helper'
 
 describe Atrium::Exhibit do
-
 
   it { should belong_to :collection }
 
@@ -17,17 +16,17 @@ describe Atrium::Exhibit do
     end
   end
 
-  context '#pretty_title' do
+  context '#checking attributes' do
     Given(:exhibit) { Atrium::Exhibit.new }
     Given(:set_number) { 1234 }
     When { exhibit.set_number = set_number }
     When { exhibit.label = label }
-    context 'default' do
+    context 'pretty_title default' do
       Given(:label) { '' }
       Then { exhibit.pretty_title.should == "Exhibit #{set_number}" }
     end
 
-    context 'overwritten' do
+    context 'pretty_title overwritten' do
       Given(:label) { 'Hello World'}
       Then { exhibit.pretty_title.should == label }
     end
