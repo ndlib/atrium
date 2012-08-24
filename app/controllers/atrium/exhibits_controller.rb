@@ -2,17 +2,16 @@ require_dependency "atrium/application_controller"
 
 module Atrium
   class ExhibitsController < ApplicationController
-    before_filter :find_collection
-    before_filter :find_exhibit, :only => [:edit, :update, :destroy]
+    before_filter :find_exhibit, :only => [:edit, :update, :destroy, :show]
     def new
-      @exhibit = Atrium::Exhibit.new
+      @exhibit = collection.exhibits.build(params[:exhibit])
     end
 
     def create
-      @exhibit = @collection.exhibits.build(params[:exhibit])
+      @exhibit = collection.exhibits.build(params[:exhibit])
       if @exhibit.save!
         flash[:notice] = 'Exhibit was successfully created.'
-        redirect_to :action => "edit", :id=>@exhibit.id
+        redirect_to edit_collection_exhibit_path(:id=>@exhibit.id, :collection_id=>@collection)
       else
         render :action => "new"
       end
@@ -26,7 +25,7 @@ module Atrium
       if @exhibit.update_attributes(params[:exhibit])
         flash[:notice] = 'Exhibit was successfully updated.'
       end
-      redirect_to :action => "edit"
+      render :action => "edit"
     end
 
     def show
@@ -34,18 +33,26 @@ module Atrium
     end
 
     def destroy
+      puts @collection.inspect
       @exhibit.destroy
       flash[:notice] = 'Exhibit '+params[:id] +' was deleted successfully.'
       redirect_to edit_collection_path(@collection)
     end
 
-    private
+
       def find_exhibit
-        @exhibit = Atrium::Exhibit.find(params[:id])
+        @exhibit = collection.exhibits.find(params[:id])
+      end
+
+      def collection
+        @collection ||= find_collection
+
+
       end
 
       def find_collection
         begin
+          logger.debug("Finding collection")
           if params[:collection_id]
             @collection = Atrium::Collection.find(params[:collection_id])
           elsif params[:id]
@@ -58,6 +65,7 @@ module Atrium
           flash.alert = t("Atrium.collection.or.exhibit.not_found")
           redirect_to redirect_target and return
         end
+        @collection
       end
   end
 end

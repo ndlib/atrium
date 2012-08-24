@@ -1,4 +1,5 @@
-require 'spec_helper'
+
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Atrium do
 
@@ -18,7 +19,8 @@ describe Atrium do
       Then { Atrium.config.should eq(Atrium.facet_config) }
     end
     context 'set value' do
-      When { Atrium.config = "this is overridden facet config" }
+      Given(:value) { 'this is overridden facet config' }
+      When { Atrium.config = value }
       Then { Atrium.config == "this is overridden facet config" }
     end
   end

@@ -8,11 +8,15 @@ module Atrium
     end
 
     def new
-      create
+      @collection = Atrium::Collection.new(params[:collection])
     end
 
     def create
-      @collection = Atrium::Collection.new
+      if (params[:collection])
+        params[:collection][:search_facet_names] ||= []
+        params[:collection][:search_facet_names].delete_if { |elem| elem.empty? }  if params[:collection][:search_facet_names].length > 0
+      end
+      @collection = Atrium::Collection.new(params[:collection])
       if @collection.save
         flash[:notice] = "Collection created successfully"
         redirect_to edit_collection_path(@collection)
@@ -48,12 +52,14 @@ module Atrium
       render :action => "edit"
     end
 
+    def destroy
+      @collection.destroy
+      flash[:notice] = 'Collection '+ @collection.pretty_title+' was deleted successfully.'
+      redirect_to collections_path
+    end
+
     def find_collection
-      if params.has_key? :id
-        @collection = Atrium::Collection.find(params[:id])
-      else
-        raise(RuntimeError, "Collection id not found.")
-      end
+      @collection = Atrium::Collection.find(params[:id])
     end
 
     protected :find_collection

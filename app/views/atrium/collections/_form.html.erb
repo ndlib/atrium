@@ -1,6 +1,3 @@
-<% content_for :atrium_side_bar do %>
-  <%= render :partial => 'shared/navigation' %>
-<% end %>
 <%= form_for(@collection, :html => {:class => "atrium"}) do |f| %>
   <fieldset>
     <legend>Basic Configuration</legend>
@@ -50,44 +47,48 @@
     <%= f.submit 'Update Collection Configuration', :class => 'button' %>
   </fieldset>
 <% end %>
-<h3>Exhibits</h3>
-<% if @collection.exhibits.any? %>
-  <ol data-resource="<%# update_atrium_collection_exhibit_order_path %>" class="exhibit-listing sortable">
-    <% @collection.exhibits.each do |exhibit| %>
-      <li data-id="<%= exhibit[:id] %>" data-order="<%= exhibit.set_number %>" class="ui-state-default">
-        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-        <%= exhibit.pretty_title %>
-        <span class="controls">
-          <%= link_to 'Configure', edit_collection_exhibit_path(exhibit.collection, exhibit) %>
-      </span>
-      </li>
-    <% end %>
-  </ol>
-<% else %>
-    <em>There are no exhibits in this collection.</em>
-<% end %>
-<% if can_add_view_exhibit? %>
-  <%= link_to 'Add a Exhibit to this Collection', new_collection_exhibit_path(@collection), :class => 'button' %>
-<% end %>
-
-<h3>Showcases</h3>
-<% if @collection.showcases.any? %>
-    <ol class="showcase-listing">
-      <% @collection.showcases.each do |showcase| %>
-          <li data-id="<%= showcase[:id] %>" data-order="<%# exhibit.set_number %>" class="ui-state-default">
+<% unless @collection.new_record?  %>
+  <h3>Exhibits</h3>
+    <% if @collection.exhibits.any? %>
+      <ol data-resource="<%# update_atrium_collection_exhibit_order_path %>" class="exhibit-listing sortable">
+        <% @collection.exhibits.each do |exhibit| %>
+          <li data-id="<%= exhibit[:id] %>" data-order="<%= exhibit.set_number %>" class="ui-state-default">
             <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-            <%= showcase.pretty_title %>
+            <%= exhibit.pretty_title %>
             <span class="controls">
-          <%= link_to 'Configure', edit_collection_showcase_path(@collection, showcase) %>
-      </span>
+              <%= link_to 'Configure', edit_collection_exhibit_path(exhibit.collection, exhibit) %>
+          </span>
           </li>
-      <% end %>
-    </ol>
-<% else %>
-    <em>There are no showcases in this collection.</em>
-<% end %>
-<% if can_add_view_exhibit? %>
-    <%= link_to 'Add showcase to this Collection', new_collection_showcase_path(@collection), :class => 'button' %>
+        <% end %>
+      </ol>
+    <% else %>
+        <em>There are no exhibits in this collection.</em>
+    <% end %>
+    <% if can_add_view_exhibit? %>
+      <%= link_to 'Add a Exhibit to this Collection', new_collection_exhibit_path(@collection), :class => 'button' %>
+    <% end %>
+
+  <h3>Showcases</h3>
+    <% if @collection.showcases.any? %>
+        <ol class="showcase-listing">
+          <% @collection.showcases.each do |showcase| %>
+              <li data-id="<%= showcase[:id] %>" data-order="<%# exhibit.set_number %>" class="ui-state-default">
+                <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                <%= showcase.pretty_title %>
+                <span class="controls">
+              <%= link_to 'Configure', edit_collection_showcase_path(@collection, showcase) %>
+          </span>
+              </li>
+          <% end %>
+        </ol>
+    <% else %>
+        <em>There are no showcases in this collection.</em>
+    <% end %>
+  <%= link_to 'Add showcase to this Collection', new_collection_showcase_path(@collection), :class => 'button' %>
+
+  <% content_for :atrium_side_bar do %>
+    <%= render :partial => 'shared/navigation' %>
+  <% end %>
 <% end %>
 
 

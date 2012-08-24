@@ -2,19 +2,14 @@ require_dependency "atrium/application_controller"
 
 module Atrium
   class ShowcasesController < ApplicationController
-    before_filter :find_showcase, :only => [:edit, :update, :destroy]
-    before_filter :find_collection
+    before_filter :find_showcase, :only => [:edit, :update, :destroy, :show]
 
     def new
-      if @parent
-        @showcase=@parent.showcases.build
-      end
+      @showcase=find_parent.showcases.build(params[:showcase])
     end
 
     def create
-      if @parent
-        @showcase=@parent.showcases.build(params[:showcase])
-      end
+      @showcase=find_parent.showcases.build(params[:showcase])
       if @showcase.save!
         flash[:notice] = 'Showcase was successfully created.'
         redirect_to :action => "edit", :id=>@showcase.id
@@ -66,15 +61,21 @@ module Atrium
     private
 
     def find_showcase
-      @showcase=Atrium::Showcase.find(params[:id])
+      @showcase=find_parent.showcases.find(params[:id])
       logger.debug(@showcase.inspect)
     end
 
     def find_parent
       case
-        when @showcase then @parent=@showcase.parent
-        when params[:exhibit_id] then    @parent= Atrium::Exhibit.find_by_id(params[:exhibit_id])
-        when params[:collection_id] then @parent = Atrium::Collection.find_by_id(params[:collection_id])
+        when @showcase then
+          @parent=@showcase.parent
+          @collection = @showcase.for_exhibit? ? @parent.collection :  @parent
+        when params[:exhibit_id] then
+          @parent= Atrium::Exhibit.find_by_id(params[:exhibit_id])
+          @collection =  @parent.collection
+        when params[:collection_id] then
+          @parent = Atrium::Collection.find_by_id(params[:collection_id])
+          @collection =  @parent
       end
     end
 
@@ -83,14 +84,18 @@ module Atrium
       return path
     end
 
-    def find_collection
-      if find_parent
-        if @parent.is_a?(Atrium::Collection)
-          @collection = @parent
-        elsif @parent.is_a?(Atrium::Exhibit)
-          @collection = @parent.collection
-        end
-      end
+    def collection
+      @collection ||= find_parent
     end
+
+    #def find_collection
+    #  if find_parent
+    #    if @parent.is_a?(Atrium::Collection)
+    #      @collection = @parent
+    #    elsif @parent.is_a?(Atrium::Exhibit)
+    #      @collection = @parent.collection
+    #    end
+    #  end
+    #end
   end
 end

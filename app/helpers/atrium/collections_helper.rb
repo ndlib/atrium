@@ -6,7 +6,6 @@ module Atrium
 
     def get_saved_search
       saved_search=Atrium.saved_searches_for(atrium_user)
-      logger.debug(saved_search.inspect)
       query_params=[]
       saved_search.each { |search|
         search.query_params.delete :action
@@ -19,7 +18,7 @@ module Atrium
         search.query_params.delete :exclude_browse_level_filter
         query_params << search.query_params
       }
-      logger.debug(query_params.inspect)
+      #logger.debug(query_params.inspect)
       query_params
     end
 
@@ -33,7 +32,7 @@ module Atrium
         #temp[item.document_id]=item.title
         items<<temp
       }
-      logger.debug(saved_items.inspect)
+      #logger.debug(saved_items.inspect)
       items
     end
   end
