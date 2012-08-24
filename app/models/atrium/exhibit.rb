@@ -35,13 +35,13 @@ module Atrium
       browse_levels.collect {|facet| facet.solr_facet_name} rescue []
     end
 
-    def facet_order
+    def browse_level_order
       facet_order = {}
       browse_levels.map{|facet| facet_order[facet[:id]] = facet.level_number }
       facet_order
     end
 
-    def facet_order=(facet_order = {})
+    def browse_level_order=(facet_order = {})
       valid_ids = browse_levels.select(:id).map{|facet| facet[:id]}
       facet_order.each_pair do |id, order|
         Atrium::BrowseLevel.find(id).update_attributes!(:level_number => order) if valid_ids.include?(id.to_i)
@@ -63,7 +63,9 @@ module Atrium
 
     private
     def assign_set_number
-      self.set_number= collection.exhibits.size + 1
+      if collection
+        self.set_number= collection.exhibits.size + 1
+      end
     end
   end
 end
