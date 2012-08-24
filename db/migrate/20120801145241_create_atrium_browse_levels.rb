@@ -9,7 +9,6 @@ class CreateAtriumBrowseLevels < ActiveRecord::Migration
       t.string :exclude_query_params
       t.timestamps
     end
-    add_index :atrium_browse_levels, :id
     add_index :atrium_browse_levels, :atrium_exhibit_id
   end
 

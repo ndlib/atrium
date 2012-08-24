@@ -6,7 +6,6 @@ class CreateAtriumShowcaseFacetSelections < ActiveRecord::Migration
       t.string :value
       t.timestamps
     end
-    add_index :atrium_showcase_facet_selections, :id
     add_index :atrium_showcase_facet_selections, :atrium_showcase_id, :name =>'atrium_facet_showcase_index'
   end
 

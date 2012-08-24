@@ -40,7 +40,7 @@ address {font-style:normal}
   -webkit-border-radius:.7em;
   -moz-border-radius:.7em;
   border-radius:.7em;
-  background:url('images/white-arrow.png') no-repeat 42% center #F00; display:inline-block; text-indent:-100%; width:1.4em;}
+  background:url('/assets/atrium/white-arrow.png') no-repeat 42% center #F00; display:inline-block; text-indent:-100%; width:1.4em;}
 #breadcrumbs {margin-bottom:.5em; padding-left:2.5em; text-indent:-2em}
 
 #main hgroup {margin-bottom:2em}
@@ -85,7 +85,7 @@ h2.search {margin-top:0; text-align:left}
 #prompt .submit {position:static}
 #appliedParams {padding-right:3em; margin-bottom:1.5em}
 #appliedParams .appliedFilter {background-color:#FEFDF9; background-color:rgba(254, 253, 249, .8); border:1px solid #670202; display:block; padding:.2em .5em; position:relative; margin-bottom:.5em}
-#appliedParams .btnRemove {background:url('remove.png') center center no-repeat;  display:inline-block; height:1.9em; overflow:hidden; position:absolute; right:-3em; text-indent:2em; top:0; width:2em}
+#appliedParams .btnRemove {background:url('/assets/atrium/remove.png') center center no-repeat;  display:inline-block; height:1.9em; overflow:hidden; position:absolute; right:-3em; text-indent:2em; top:0; width:2em}
 #appliedParams .filterName {margin-right:1.8em}
 #appliedParams .filterName:after {color:#222; content:"\003E"; left:1em; position:relative}
 #startOverLink {position:absolute; right:0; top:1.5em;}

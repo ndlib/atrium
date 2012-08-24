@@ -11,7 +11,6 @@ class CreateAtriumCollections < ActiveRecord::Migration
       t.text :collection_items
       t.timestamps
     end
-    add_index :atrium_collections, :id
     add_index :atrium_collections, :url_slug
   end
 

@@ -1,5 +1,5 @@
 .bundle/*
-jetty/*
+jetty
 tmp/*
 coverage/*
 doc/*
@@ -17,5 +17,5 @@ pkg/
 *.log
 tmp/
 .sass-cache
-
+.tags*
 

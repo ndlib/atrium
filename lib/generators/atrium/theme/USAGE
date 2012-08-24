@@ -1,0 +1,8 @@
+Description:
+    Generate the barebones for a new atrium theme.
+
+Example:
+    rails generate atrium:theme HotSauce
+
+    This will create:
+        app/views/layouts/atrium_themes/hot_sauce.html.erb

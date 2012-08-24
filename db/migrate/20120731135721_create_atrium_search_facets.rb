@@ -5,7 +5,6 @@ class CreateAtriumSearchFacets < ActiveRecord::Migration
       t.string :name
       t.timestamps
     end
-    add_index :atrium_search_facets, :id
     add_index :atrium_search_facets, :atrium_collection_id
   end
 

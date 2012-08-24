@@ -7,7 +7,6 @@ class CreateAtriumDescriptions < ActiveRecord::Migration
       t.string :description_solr_id
       t.timestamps
     end
-    add_index :atrium_descriptions, :id
     add_index :atrium_descriptions, :atrium_showcase_id
   end
 
