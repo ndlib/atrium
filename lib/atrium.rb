@@ -3,7 +3,7 @@ require 'atrium/engine'
 module Atrium
   require 'ckeditor-rails'
 
-  mattr_accessor :saved_search_class, :facet_config, :config, :saved_items_class
+  mattr_accessor :application_name, :saved_search_class, :facet_config, :config, :saved_items_class
   class << self
     def saved_searches_for(user)
       if user
@@ -28,7 +28,7 @@ module Atrium
     end
 
     def config
-      @@config || self.facet_config
+      @@config || self.default_config
     end
 
     def saved_items_for(user)
@@ -39,7 +39,7 @@ module Atrium
       end
     end
 
-    def facet_config
+    def default_config
       return @default_config if @default_config
 
       @default_config = OpenStruct.new
@@ -59,7 +59,8 @@ module Atrium
                   "pub_date" => "Publication Year",
                   "subject_topic_facet" => "Topic"
               }
-          }
+          },
+          :application_name => 'Atrium Application'
       }
       @default_config
     end
