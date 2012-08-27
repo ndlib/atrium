@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(:version => 20120823143315) do
 
   add_index "atrium_descriptions", ["atrium_showcase_id", "description_solr_id"], :name => "index_atrium_descriptions_showcase_and_solr_id"
   add_index "atrium_descriptions", ["atrium_showcase_id"], :name => "index_atrium_descriptions_on_atrium_showcase_id"
+  add_index "atrium_descriptions", ["description_solr_id"], :name => "index_atrium_descriptions_on_description_solr_id"
 
   create_table "atrium_essays", :force => true do |t|
     t.integer  "atrium_description_id", :null => false
@@ -105,5 +106,7 @@ ActiveRecord::Schema.define(:version => 20120823143315) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end
+
+  add_index "atrium_showcases", ["showcases_type", "showcases_id"], :name => "index_atrium_showcases_on_showcases_type_and_showcases_id"
 
 end
