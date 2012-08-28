@@ -3,7 +3,7 @@ require 'atrium/engine'
 module Atrium
   require 'ckeditor-rails'
 
-  mattr_accessor :application_name, :saved_search_class, :facet_config, :config, :saved_items_class
+  mattr_accessor :saved_search_class, :config
   class << self
     def saved_searches_for(user)
       if user
@@ -20,7 +20,7 @@ module Atrium
 
     def saved_search_class
       error = "Please define Atrium.saved_search_class in config/initializer/atrium.rb"
-      if @@saved_search_class.is_a?(String)
+      if @@saved_search_class.respond_to?(:constantize)
         @@saved_search_class.constantize
       else
         raise(Atrium::ConfigurationNotSet, error)
@@ -28,7 +28,11 @@ module Atrium
     end
 
     def config
-      @@config || self.default_config
+      @@config || default_config
+    end
+
+    def application_name
+      config[:application_name]
     end
 
     def saved_items_for(user)
@@ -40,36 +44,30 @@ module Atrium
     end
 
     def default_config
-      return @default_config if @default_config
-
-      @default_config = OpenStruct.new
-      @default_config = {
-          :facet => {
-              :field_names => [
-                  "active_fedora_model_s",
-                  "date_s",
-                  "format" ,
-                  "pub_date" ,
-                  "subject_topic_facet"
-              ],
-              :labels => {
-                  "active_fedora_model_s" => "Description",
-                  "date_s"=>"Print Year",
-                  "format" => "Format",
-                  "pub_date" => "Publication Year",
-                  "subject_topic_facet" => "Topic"
-              }
-          },
-          :application_name => 'Atrium Application'
+      {
+        :facet => {
+          :field_names => [
+            'active_fedora_model_s',
+            'date_s',
+            'format' ,
+            'pub_date' ,
+            'subject_topic_facet'
+          ],
+            :labels => {
+            'active_fedora_model_s' => 'Description',
+            'date_s'=>'Print Year',
+            'format' => 'Format',
+            'pub_date' => 'Publication Year',
+            'subject_topic_facet' => 'Topic'
+          }
+        },
+        :application_name => 'Atrium Application'
       }
-      @default_config
     end
 
   end
 
   class ConfigurationNotSet < StandardError
-
   end
-
 
 end
