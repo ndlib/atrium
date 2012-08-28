@@ -1,10 +1,17 @@
 guard 'rspec', :cli => '--color --format nested' do
   notification :libnotify if RUBY_PLATFORM =~ /linux/
-  watch('spec/spec_helper.rb')                        { "spec" }
-  watch('config/routes.rb')                           { "spec/routing" }
-  watch('app/controllers/application_controller.rb')  { "spec/controllers" }
+  watch('spec/spec_helper.rb') {
+    'spec'
+  }
+  watch('config/routes.rb') {
+    'spec/routing'
+  }
+  watch('app/controllers/atrium/application_controller.rb')  {
+    'spec/controllers'
+  }
+
   watch(%r{^spec/.+_spec\.rb$})
-  watch(%r{^spec/models/.+_spec\.rb$})
+  watch(%r{^spec/\w*/atrium/.+_spec\.rb$})
 
   watch(%r{^app/(.+)\.rb$}) { |m|
     "spec/#{m[1]}_spec.rb"
