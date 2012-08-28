@@ -2,7 +2,7 @@ module Atrium
   module ApplicationHelper
 
     def application_name
-      'Atrium Application'
+      Atrium.config[:application_name].html_safe rescue nil
     end
 
     def atrium_facet_field_names

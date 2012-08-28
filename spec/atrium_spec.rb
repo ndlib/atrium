@@ -1,4 +1,3 @@
-
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Atrium do
@@ -14,14 +13,14 @@ describe Atrium do
     end
   end
 
-  context "atrium config settings" do
-    context 'default value' do
-      Then { Atrium.config.should eq(Atrium.facet_config) }
+  context 'Configuration settings' do
+    context 'should have a default value' do
+      Then { Atrium.config.should == Atrium.default_config }
     end
-    context 'set value' do
-      Given(:value) { 'this is overridden facet config' }
-      When { Atrium.config = value }
-      Then { Atrium.config == "this is overridden facet config" }
+    context 'should be able to override the default value' do
+      Given(:custom_configuration) { { application_name: 'My Custom Atrium Application' } }
+      When { Atrium.config = custom_configuration }
+      Then { Atrium.config == { application_name: 'My Custom Atrium Application' } }
     end
   end
 
