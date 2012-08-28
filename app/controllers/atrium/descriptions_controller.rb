@@ -2,24 +2,23 @@ require_dependency "atrium/application_controller"
 
 module Atrium
   class DescriptionsController < ApplicationController
-    before_filter :find_description, :only => [:edit, :update, :destroy]
-    before_filter :find_collection
+    before_filter :find_description, :only => [:edit, :update, :destroy, :show]
 
     def index
-      @descriptions = @showcase.descriptions
+      @descriptions = showcase.descriptions(params[:description])
     end
 
     def new
-      @description = @showcase.descriptions.build
+      @description = showcase.descriptions.build(params[:description])
       @description.build_essay(:content_type=>"essay")
       @description.build_summary(:content_type=>"summary")
     end
 
     def create
-      @description = @showcase.descriptions.build(params[:description])
+      @description = showcase.descriptions.build(params[:description])
       if @description.save!
         flash[:notice] = 'Description was successfully created.'
-        redirect_to :action => "edit", :id=>@description.id
+        render :action => "edit"
       else
         render :action => "new"
       end
@@ -47,19 +46,24 @@ module Atrium
 
     private
 
+    def showcase
+      @showcase ||=find_showcase
+    end
+
     def find_description
-      @description=Atrium::Description.find(params[:id])
+      @description=showcase.descriptions.find(params[:id])
     end
 
     def find_showcase
-      @showcase=Atrium::Showcase.find(params[:showcase_id])
-    end
-
-    def find_collection
-      find_showcase
-      if @showcase && @showcase.parent
+      if(params[:showcase_id])
+        @showcase=Atrium::Showcase.find(params[:showcase_id])
         @collection=@showcase.for_exhibit? ? @showcase.parent.collection :  @showcase.parent
+        @showcase
+      else
+        flash.alert = t("Atrium.showcase.not_found")
+        redirect_to redirect_target and return
       end
+
     end
   end
 end

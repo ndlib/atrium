@@ -5,14 +5,14 @@ module Atrium
     before_filter :find_showcase, :only => [:edit, :update, :destroy, :show]
 
     def new
-      @showcase=find_parent.showcases.build(params[:showcase])
+      @showcase=parent.showcases.build(params[:showcase])
     end
 
     def create
-      @showcase=find_parent.showcases.build(params[:showcase])
+      @showcase=parent.showcases.build(params[:showcase])
       if @showcase.save!
         flash[:notice] = 'Showcase was successfully created.'
-        redirect_to :action => "edit", :id=>@showcase.id
+        render :action => "edit"
       else
         render :action => "new"
       end
@@ -29,7 +29,7 @@ module Atrium
       if @showcase.update_attributes(params[:showcase])
         flash[:notice] = 'Showcase was successfully updated.'
       else
-        flash.now.alert = "Showcase Not updated"
+        flash.now.alert = 'Showcase Not updated'
       end
       render :action => "edit"
     end
@@ -41,61 +41,55 @@ module Atrium
     end
 
     def destroy
+      redirect_url=parent_url
       @showcase.destroy
       flash[:notice] = 'Showcase '+params[:id] +' was deleted successfully.'
-      redirect_to parent_url(@showcase)
-    end
-
-    def add_featured
-
-    end
-
-    def remove_featured
-
-    end
-
-    def parent
-      redirect_to parent_url(find_showcase)
+      redirect_to redirect_url
     end
 
     private
 
     def find_showcase
-      @showcase=find_parent.showcases.find(params[:id])
-      logger.debug(@showcase.inspect)
+      @showcase=parent.showcases.find(params[:id])
+    end
+
+    def parent
+      @parent ||=find_parent
+      find_collection(@parent)
+      @parent
     end
 
     def find_parent
       case
-        when @showcase then
-          @parent=@showcase.parent
-          @collection = @showcase.for_exhibit? ? @parent.collection :  @parent
         when params[:exhibit_id] then
           @parent= Atrium::Exhibit.find_by_id(params[:exhibit_id])
-          @collection =  @parent.collection
         when params[:collection_id] then
           @parent = Atrium::Collection.find_by_id(params[:collection_id])
-          @collection =  @parent
+        else
+          flash.alert = t("Atrium.showcase.parent.not_found")
+          redirect_to redirect_target and return
       end
     end
 
-    def parent_url(showcase)
-      path=showcase.for_exhibit? ? edit_collection_exhibit_path(:id=>@parent.id, :collection_id=>@collection.id) :  edit_collection_path(@parent)
-      return path
+    def parent_url
+      puts "Parent: #{parent.inspect}"
+      if parent.is_a?(Atrium::Collection)
+        edit_collection_path(parent)
+      elsif parent.is_a?(Atrium::Exhibit)
+        edit_collection_exhibit_path(:id=>parent.id, :collection_id=>parent.collection.id)
+      end
     end
 
     def collection
       @collection ||= find_parent
     end
 
-    #def find_collection
-    #  if find_parent
-    #    if @parent.is_a?(Atrium::Collection)
-    #      @collection = @parent
-    #    elsif @parent.is_a?(Atrium::Exhibit)
-    #      @collection = @parent.collection
-    #    end
-    #  end
-    #end
+    def find_collection(parent)
+      if parent.is_a?(Atrium::Collection)
+        @collection = parent
+      elsif parent.is_a?(Atrium::Exhibit)
+        @collection = parent.collection
+      end
+    end
   end
 end

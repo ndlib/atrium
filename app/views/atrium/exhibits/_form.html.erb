@@ -1,17 +1,18 @@
 <% content_for :atrium_side_bar do %>
-    <%= render :partial => 'shared/navigation' %>
+  <%= render :partial => 'shared/navigation' %>
 <% end %>
 
 <% if @exhibit %>
   <%= form_for([@collection, @exhibit], :html => {:class => 'atrium'}) do |f| %>
     <% if @exhibit.errors.any? %>
-        <ul class="errors">
-          <% @exhibit.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-          <% end %>
-        </ul>
+      <ul class="errors">
+        <% @exhibit.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
     <% end %>
-
+    <fieldset>
+      <ol>
         <li>
           <%= f.label :label, 'Title:' %>
           <%= f.text_field :label %>
@@ -85,32 +86,31 @@
     <legend>Add Browse Levels</legend>
     <%= form_for([@collection, @exhibit]) do |f| %>
       <%= f.fields_for :browse_levels, @exhibit.browse_levels.build do |level_form| %>
-          <%= level_form.label :solr_facet_name, 'Solr Facet:' %>
-          <%= level_form.select(:solr_facet_name, @exhibit.get_available_facets.collect {|solr_fname| [atrium_facet_field_labels[solr_fname],solr_fname]}, { :include_blank => true })%>
-          <%= f.submit 'Add Facet', :class => 'button' %>
+        <%= level_form.label :solr_facet_name, 'Solr Facet:' %>
+        <%= level_form.select(:solr_facet_name, @exhibit.get_available_facets.collect {|solr_fname| [atrium_facet_field_labels[solr_fname],solr_fname]}, { :include_blank => true })%>
+        <%= f.submit 'Add Facet', :class => 'button' %>
       <% end %>
     <% end %>
   </fieldset>
 
-<h3>Showcases</h3>
+  <h3>Showcases</h3>
   <% if @exhibit.showcases.any? %>
     <ol class="showcase-listing">
       <% @exhibit.showcases.each do |showcase| %>
-          <li data-id="<%= showcase.id%>" data-order="<%= showcase.sequence %>" class="ui-state-default">
-            <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-            <%= showcase.pretty_title %>
-            <span class="controls">
-          <%= link_to 'Configure', edit_exhibit_showcase_path(@exhibit, showcase) %>
-      </span>
-          </li>
+        <li data-id="<%= showcase.id%>" data-order="<%= showcase.sequence %>" class="ui-state-default">
+          <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+          <%= showcase.pretty_title %>
+          <span class="controls">
+            <%= link_to 'Configure', edit_exhibit_showcase_path(@exhibit, showcase) %>
+            <%= link_to "Delete", exhibit_showcase_path(@exhibit, showcase), :method=>:delete, :class=>:destroy, :confirm=>"Do you really want to delete this showcase?"%>
+          </span>
+        </li>
       <% end %>
     </ol>
   <% else %>
     <em>There are no showcases in this collection.</em>
   <% end %>
-  <% if can_add_view_exhibit? %>
-    <%= link_to 'Add showcase to this exhibit', new_exhibit_showcase_path(@exhibit), :class => 'button' %>
-  <% end %>
+  <%= link_to 'Add showcase to this exhibit', new_exhibit_showcase_path(@exhibit), :class => 'button' %>
   <p class="exhibit-destroy-controls">
     <%= button_to "Delete this Exhibit", collection_exhibit_path(@exhibit.collection, @exhibit), :method=>:delete, :class=>:destroy, :confirm=>"Do you really want to delete this exhibit?", :class => 'button' %>
   </p>

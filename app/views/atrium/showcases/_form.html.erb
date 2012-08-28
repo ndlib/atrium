@@ -5,11 +5,11 @@
 <% if @showcase %>
   <%= form_for([@parent, @showcase], :html => {:class => 'atrium'}) do |f| %>
     <% if @showcase.errors.any? %>
-        <ul class="errors">
-          <% @showcase.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-          <% end %>
-        </ul>
+      <ul class="errors">
+        <% @showcase.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
     <% end %>
     <ol>
       <li>
@@ -25,4 +25,10 @@
       <%= f.submit 'Update showcase', :class => 'button' %>
     </p>
   <% end %>
+<% end %>
+<% unless @showcase.new_record?  %>
+  <%= render 'configure_menu' %>
+  <p class="destroy-controls">
+    <%= button_to "Delete this showcase", showcase_path(@showcase), :method=>:delete, :class=>:destroy, :confirm=>"Are you really want to delete this showcase?", :class => 'button' %>
+  </p>
 <% end %>

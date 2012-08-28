@@ -47,12 +47,6 @@ describe Atrium::ExhibitsController do
     before(:each) do
       @exhibit.should_receive(:save!).and_return(true)
     end
-
-    it "should be redirect" do
-      do_create
-      response.should be_redirect
-    end
-
     it "should assign exhibit" do
       do_create
       assigns(:exhibit).should == @exhibit

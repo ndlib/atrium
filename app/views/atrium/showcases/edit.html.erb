@@ -1,10 +1,2 @@
 <%= render 'form' %>
-<%= render 'configure_menu' %>
-
-
-<% if @showcase %>
-    <p class="destroy-controls">
-      <%= button_to "Delete this showcase", showcase_path(@showcase), :method=>:delete, :class=>:destroy, :confirm=>"Are you really want to delete this showcase?", :class => 'button' %>
-    </p>
-<% end %>
 
