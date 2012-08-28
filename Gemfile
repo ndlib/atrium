@@ -14,7 +14,7 @@ gem 'shoulda-matchers'
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
-# Dependencies not strictly needed to for the test to pass.
+# Dependencies not strictly needed to for the tests to pass.
 gem 'debugger'
 gem 'guard'
 gem 'guard-rspec'
