@@ -15,6 +15,7 @@
  *= require 'atrium/showcases'
  *
  *= require 'chosen'
+ *= require 'ui-lightness/jquery-ui-1.8.23.custom'
  */
 
 /* Global */
