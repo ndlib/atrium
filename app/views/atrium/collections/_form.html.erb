@@ -40,8 +40,9 @@
         <%= f.text_area :search_instructions, :rows=> '20', :cols => '120', :class => 'jquery-ckeditor' %>
       </li>
       <li>
-        <%= f.label :filter_query_params, 'Collection Scoping:' %>
-        <%= f.select(:filter_query_params, get_saved_search.collect{|s| [s, s.to_s]}, { :include_blank => true }) %>
+        <%= f.label :saved_search_id, 'Update Collection Scope:' %>
+        <%= f.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
+        <div>Current Scope: <%= @collection.filter_query_params.inspect %></div>
       </li>
     </ol>
     <%= f.submit 'Update Collection Configuration', :class => 'button' %>

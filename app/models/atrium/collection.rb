@@ -17,7 +17,6 @@ class Atrium::Collection < ActiveRecord::Base
   )
   attr_accessible(
     :collection_items,
-    :filter_query_params,
     :theme,
     :title,
     :title_markup,
@@ -26,7 +25,8 @@ class Atrium::Collection < ActiveRecord::Base
     :search_facet_names,
     :url_slug,
     :exhibits_attributes,
-    :search_facets_attributes
+    :search_facets_attributes,
+    :saved_search_id
   )
 
   has_many(
@@ -107,8 +107,31 @@ class Atrium::Collection < ActiveRecord::Base
     theme.blank? ? 'atrium_themes/default' : "atrium_themes/#{theme}"
   end
 
-
-  serialize :filter_query_params
+  attr_reader :saved_search_id
+  def saved_search_id=(value)
+    saved_search = nil
+    @saved_search_id = value
+    begin
+      saved_search = Atrium.saved_search_class.find(value)
+    rescue ActiveRecord::RecordNotFound
+      @saved_search_id = nil
+    end
+    formatted_query_params = {}
+    if saved_search
+      if saved_search.query_params.has_key?(:f)
+        formatted_query_params[:f] = saved_search.query_params[:f]
+      end
+      if saved_search.query_params.has_key?(:q)
+        formatted_query_params[:q] = saved_search.query_params[:q]
+      end
+    end
+    # Using write_attribute, as there are exceptions being thrown when the
+    # serialization changes from String to Hash – the serialization strategy
+    # changed as a result of protecting the method and instead setting the
+    # calculated version.
+    write_attribute(:filter_query_params, formatted_query_params)
+  end
+  serialize :filter_query_params, Hash
 
   serialize :collection_items, Hash
   def collection_items

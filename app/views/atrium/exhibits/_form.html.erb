@@ -24,7 +24,7 @@
       <ol>
         <li>
           <%= f.label :filter_query_params, 'Exhibit Scoping:' %>
-          <%= f.select(:filter_query_params, get_saved_search.collect{|search| [search, search.to_s]}, { :include_blank => true }) %>
+          <%= f.select(:filter_query_params, saved_searches_for_select, { :include_blank => true }) %>
         </li>
         <p>
           An exhibit is a subset of a collection. The scope of the exhibit can be
@@ -62,10 +62,10 @@
                   <td><%=atrium_facet_field_labels[level.solr_facet_name]%></td>
                   <td><%=level_form.text_field :label, :value=>level.label%></td>
                   <td>
-                      <%= level_form.select(:filter_query_params, get_saved_search.collect{|search| [search, search.to_s]}, { :include_blank => true }) %>
+                      <%= level_form.select(:filter_query_params, saved_searches_for_select, { :include_blank => true }) %>
                   </td>
                   <td>
-                    <%= level_form.select(:exclude_query_params, get_saved_search.collect{|search| [search, search.to_s]}, { :include_blank => true }) %>
+                    <%= level_form.select(:exclude_query_params, saved_searches_for_select, { :include_blank => true }) %>
                   </td>
                   <td><%=level_form.check_box :_destroy %></td>
                 <% end %>
