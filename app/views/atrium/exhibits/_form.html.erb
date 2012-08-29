@@ -11,35 +11,40 @@
         <% end %>
       </ul>
     <% end %>
+
     <fieldset>
+      <legend>Exhibit Name</legend>
       <ol>
         <li>
-          <%= f.label :label, 'Title:' %>
+          <%= f.label :label, 'Title Text:' %>
           <%= f.text_field :label %>
         </li>
       </ol>
     </fieldset>
     <fieldset>
-      <legend>Scoping</legend>
+      <legend>Exhibit Configuration</legend>
+      <p>
+        The scope of the exhibit can be set to any query made in the search
+        interface. Technically, an exhibit does not have to be a subset of the
+        collection.
+      </p>
       <ol>
         <li>
-          <%= f.label :filter_query_params, 'Exhibit Scoping:' %>
+          <%= f.label :filter_query_params, 'Filter query:' %>
           <%= f.select(:filter_query_params, get_saved_search.collect{|search| [search, search.to_s]}, { :include_blank => true }) %>
+          <small>Choose from one of your saved searches.</small>
         </li>
-        <p>
-          An exhibit is a subset of a collection. The scope of the exhibit can be
-          set to any query made in the search interface. Currently this does not restricted within collection.
-        </p>
       </ol>
     </fieldset>
 
-    <h3>Group Exhibit Items by Facets</h3>
+    <h3>Exhibit Navigation</h3>
     <p>
-      Items present in a exhibit can be further scoped by facet selections. These facets
-      are arranged in a single-level tree with each facet nested beneath its parent.
+      Items in an exhibit can be further scoped by filters. Filters are
+      basically nested facets with optional include or exclude rules. Exhibit
+      filters are rendered as a hierarchal navigation control.
     </p>
     <fieldset>
-      <legend>Current Facets</legend>
+      <legend>Current Navigation Levels</legend>
       <% if @exhibit.browse_levels.any? %>
         <table>
           <thead>
@@ -62,10 +67,18 @@
                   <td><%=atrium_facet_field_labels[level.solr_facet_name]%></td>
                   <td><%=level_form.text_field :label, :value=>level.label%></td>
                   <td>
-                      <%= level_form.select(:filter_query_params, get_saved_search.collect{|search| [search, search.to_s]}, { :include_blank => true }) %>
+                    <%= level_form.select(
+                      :filter_query_params,
+                      get_saved_search.collect{|search| [search, search.to_s]},
+                      { :include_blank => true }
+                    )%>
                   </td>
                   <td>
-                    <%= level_form.select(:exclude_query_params, get_saved_search.collect{|search| [search, search.to_s]}, { :include_blank => true }) %>
+                    <%= level_form.select(
+                      :exclude_query_params,
+                      get_saved_search.collect{|search| [search, search.to_s]},
+                      { :include_blank => true }
+                    )%>
                   </td>
                   <td><%=level_form.check_box :_destroy %></td>
                 <% end %>
@@ -76,22 +89,30 @@
       <% end %>
     </fieldset>
     <p class="exhibit-facet-controls">
-      <%= f.submit 'Update Exhibit and Facets', :class => 'button' %>
+      <%= f.submit 'Update Exhibit and Navigation', :class => 'button' %>
     </p>
   <% end %>
 <% end %>
 
 <% unless @exhibit.new_record?  %>
-  <fieldset>
-    <legend>Add Browse Levels</legend>
-    <%= form_for([@collection, @exhibit]) do |f| %>
+  <%= form_for([@collection, @exhibit], :html => {:class => 'atrium'}) do |f| %>
+    <fieldset>
+      <legend>Add Navigation Levels</legend>
       <%= f.fields_for :browse_levels, @exhibit.browse_levels.build do |level_form| %>
-        <%= level_form.label :solr_facet_name, 'Solr Facet:' %>
-        <%= level_form.select(:solr_facet_name, @exhibit.get_available_facets.collect {|solr_fname| [atrium_facet_field_labels[solr_fname],solr_fname]}, { :include_blank => true })%>
-        <%= f.submit 'Add Facet', :class => 'button' %>
-      <% end %>
-    <% end %>
-  </fieldset>
+        <ol>
+          <li>
+          <%= level_form.label :solr_facet_name, 'Solr Facet:' %>
+          <%= level_form.select(
+            :solr_facet_name,
+            @exhibit.get_available_facets.collect {|solr_fname| [atrium_facet_field_labels[solr_fname],solr_fname]},
+            { :include_blank => true }
+          )%>
+        </li>
+      </ol>
+    </fieldset>
+    <p><%= f.submit 'Add Navigation Level', :class => 'button' %></p>
+  <% end %>
+<% end %>
 
   <h3>Showcases</h3>
   <% if @exhibit.showcases.any? %>
@@ -102,17 +123,31 @@
           <%= showcase.pretty_title %>
           <span class="controls">
             <%= link_to 'Configure', edit_exhibit_showcase_path(@exhibit, showcase) %>
-            <%= link_to "Delete", exhibit_showcase_path(@exhibit, showcase), :method=>:delete, :class=>:destroy, :confirm=>"Do you really want to delete this showcase?"%>
+            <%= link_to(
+              'Delete',
+              exhibit_showcase_path(@exhibit, showcase),
+              :method => :delete,
+              :class => :destroy,
+              :confirm => 'Do you really want to delete this showcase?'
+            )%>
           </span>
         </li>
       <% end %>
     </ol>
   <% else %>
-    <em>There are no showcases in this collection.</em>
+    <p><em>There are no showcases in this exhibit.</em></p>
   <% end %>
-  <%= link_to 'Add showcase to this exhibit', new_exhibit_showcase_path(@exhibit), :class => 'button' %>
-  <p class="exhibit-destroy-controls">
-    <%= button_to "Delete this Exhibit", collection_exhibit_path(@exhibit.collection, @exhibit), :method=>:delete, :class=>:destroy, :confirm=>"Do you really want to delete this exhibit?", :class => 'button' %>
-  </p>
-<% end %>
 
+  <%= link_to 'Add a Showcase to this Exhibit', new_exhibit_showcase_path(@exhibit), :class => 'button' %>
+
+  <hr />
+
+  <%= button_to(
+    "Delete this Exhibit",
+    collection_exhibit_path(@exhibit.collection, @exhibit),
+    :method => :delete,
+    :form_class => "exhibit-destroy-controls hazardous-action",
+    :confirm => "Do you really want to delete this exhibit?",
+    :class => 'button'
+  )%>
+<% end %>
