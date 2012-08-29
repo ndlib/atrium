@@ -18,5 +18,5 @@ gem 'shoulda-matchers'
 gem 'debugger'
 gem 'guard'
 gem 'guard-rspec'
-gem 'libnotify'
+gem 'libnotify' if /linux/ =~ RUBY_PLATFORM
 gem 'ruby_gntp'
