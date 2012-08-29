@@ -143,11 +143,11 @@
   <hr />
 
   <%= button_to(
-    "Delete this Exhibit",
+    'Delete this Exhibit',
     collection_exhibit_path(@exhibit.collection, @exhibit),
     :method => :delete,
-    :form_class => "exhibit-destroy-controls hazardous-action",
-    :confirm => "Do you really want to delete this exhibit?",
+    :form_class => 'exhibit-destroy-controls hazardous-action',
+    :confirm => 'Do you really want to delete this exhibit?',
     :class => 'button'
   )%>
 <% end %>
