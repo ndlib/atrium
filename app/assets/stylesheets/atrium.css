@@ -192,12 +192,24 @@ form input {
   border:1px solid #CCC;
 }
 
+form.atrium fieldset {
+  margin-bottom:2em;
+}
+
+form.atrium fieldset.last {
+  margin-bottom:0;
+}
+
 form.atrium ol {
-  margin-left:0;
+  margin:0;
 }
 
 form.atrium ol li {
   list-style-type:none;
+}
+
+form.atrium li:first-child label {
+  margin-top:0;
 }
 
 form.atrium label {
@@ -214,13 +226,35 @@ form.atrium .inline label {
   margin-top:0;
 }
 
+form.atrium input[type=text] {
+  line-height:1;
+  padding:.3em .3em .1em;
+}
+
 form.atrium input[type=text],
 form.atrium select {
   width:72%;
 }
 
+form.atrium small {
+  display:block;
+  opacity:.8;
+  margin-top:.5em;
+  margin-left:.5em;
+}
+
+form.atrium textarea {
+  width:98%;
+}
+
 form.atrium th {
   text-align:left;
+}
+
+form.hazardous-action .button {
+  background-color:#F00;
+  border-color:#FF5D5D #A80000 #A80000 #FF5D5D;
+  font-weight:bold;
 }
 
 .chzn-container-multi .chzn-choices .search-choice .search-choice-close {
