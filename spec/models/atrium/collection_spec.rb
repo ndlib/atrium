@@ -17,6 +17,16 @@ describe Atrium::Collection do
     Given(:saved_search_id) { 1 }
     Given(:filter_query_params) { {f: [1,2,3], q: ['a','b'] }}
     Given(:saved_search) { mock(query_params: filter_query_params) }
+
+    context 'save_search_id is not present' do
+      Given(:saved_search_id) { nil }
+      When { collection.filter_query_params = filter_query_params }
+      Then {
+        lambda {
+          collection.saved_search_id = nil
+        }.should_not change(collection, :filter_query_params)
+      }
+    end
     context 'saved search is found' do
       When {
         Atrium.saved_search_class.

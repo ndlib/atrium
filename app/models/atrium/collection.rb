@@ -109,8 +109,9 @@ class Atrium::Collection < ActiveRecord::Base
 
   attr_reader :saved_search_id
   def saved_search_id=(value)
-    saved_search = nil
     @saved_search_id = value
+    return @saved_search_id unless @saved_search_id.present?
+    saved_search = nil
     begin
       saved_search = Atrium.saved_search_class.find(value)
     rescue ActiveRecord::RecordNotFound
