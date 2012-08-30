@@ -1,6 +1,4 @@
-<% content_for :atrium_side_bar do %>
-  <%= render :partial => 'shared/navigation' %>
-<% end %>
+
 
 <% if @exhibit %>
   <%= form_for([@collection, @exhibit], :html => {:class => 'atrium'}) do |f| %>
@@ -113,41 +111,21 @@
     <p><%= f.submit 'Add Navigation Level', :class => 'button' %></p>
   <% end %>
 <% end %>
-
-  <h3>Showcases</h3>
-  <% if @exhibit.showcases.any? %>
-    <ol class="showcase-listing">
-      <% @exhibit.showcases.each do |showcase| %>
-        <li data-id="<%= showcase.id%>" data-order="<%= showcase.sequence %>" class="ui-state-default">
-          <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-          <%= showcase.pretty_title %>
-          <span class="controls">
-            <%= link_to 'Configure', edit_exhibit_showcase_path(@exhibit, showcase) %>
-            <%= link_to(
-              'Delete',
-              exhibit_showcase_path(@exhibit, showcase),
-              :method => :delete,
-              :class => :destroy,
-              :confirm => 'Do you really want to delete this showcase?'
-            )%>
-          </span>
-        </li>
-      <% end %>
-    </ol>
-  <% else %>
-    <p><em>There are no showcases in this exhibit.</em></p>
-  <% end %>
-
   <%= link_to 'Add a Showcase to this Exhibit', new_exhibit_showcase_path(@exhibit), :class => 'button' %>
 
   <hr />
 
   <%= button_to(
-    'Delete this Exhibit',
-    collection_exhibit_path(@exhibit.collection, @exhibit),
-    :method => :delete,
-    :form_class => 'exhibit-destroy-controls hazardous-action',
-    :confirm => 'Do you really want to delete this exhibit?',
-    :class => 'button'
-  )%>
+            'Delete this Exhibit',
+            collection_exhibit_path(@exhibit.collection, @exhibit),
+            :method => :delete,
+            :form_class => 'exhibit-destroy-controls hazardous-action',
+            :confirm => 'Do you really want to delete this exhibit?',
+            :class => 'button'
+    )%>
+<% end %>
+
+<% content_for :atrium_side_bar do %>
+  <%= render :partial => 'shared/navigation' %>
+  <%= link_to "Show related showcases",  exhibit_showcases_path(@exhibit) if @exhibit.showcases.any?  %>
 <% end %>

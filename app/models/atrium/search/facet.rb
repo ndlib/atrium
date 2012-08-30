@@ -5,16 +5,16 @@ module Atrium
     belongs_to(
       :collection,
       :class_name => 'Atrium::Collection',
-      :foreign_key => 'atrium_collection_id'
+      :foreign_key => 'atrium_collection_id',
+      :inverse_of => :search_facets
     )
 
     validates_presence_of(
-      :atrium_collection_id,
+      :collection,
       :name
     )
 
     attr_accessible(
-      :atrium_collection_id,
       :name
     )
   end

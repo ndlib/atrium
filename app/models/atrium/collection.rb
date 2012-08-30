@@ -40,7 +40,8 @@ class Atrium::Collection < ActiveRecord::Base
     :search_facets,
     :class_name => 'Atrium::Search::Facet',
     :foreign_key => 'atrium_collection_id',
-    :dependent => :destroy
+    :dependent => :destroy,
+    :inverse_of => :collection
   )
 
   accepts_nested_attributes_for :search_facets, :allow_destroy => true
