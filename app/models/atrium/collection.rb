@@ -25,8 +25,7 @@ class Atrium::Collection < ActiveRecord::Base
     :search_facet_names,
     :url_slug,
     :exhibits_attributes,
-    :search_facets_attributes,
-    :saved_search_id
+    :search_facets_attributes
   )
 
   has_many(
@@ -107,32 +106,7 @@ class Atrium::Collection < ActiveRecord::Base
     theme.blank? ? 'atrium_themes/default' : "atrium_themes/#{theme}"
   end
 
-  attr_reader :saved_search_id
-  def saved_search_id=(value)
-    @saved_search_id = value
-    return @saved_search_id unless @saved_search_id.present?
-    saved_search = nil
-    begin
-      saved_search = Atrium.saved_search_class.find(value)
-    rescue ActiveRecord::RecordNotFound
-      @saved_search_id = nil
-    end
-    formatted_query_params = {}
-    if saved_search
-      if saved_search.query_params.has_key?(:f)
-        formatted_query_params[:f] = saved_search.query_params[:f]
-      end
-      if saved_search.query_params.has_key?(:q)
-        formatted_query_params[:q] = saved_search.query_params[:q]
-      end
-    end
-    # Using write_attribute, as there are exceptions being thrown when the
-    # serialization changes from String to Hash – the serialization strategy
-    # changed as a result of protecting the method and instead setting the
-    # calculated version.
-    write_attribute(:filter_query_params, formatted_query_params)
-  end
-  serialize :filter_query_params, Hash
+  include Atrium::QueryParamMixin
 
   serialize :collection_items, Hash
   def collection_items

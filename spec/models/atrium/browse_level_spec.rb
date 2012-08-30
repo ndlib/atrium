@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe Atrium::BrowseLevel do
-  Given (:browse_level) { Atrium::BrowseLevel.new }
+  subject { Atrium::BrowseLevel.new }
+
+  it_behaves_like "query_param_mixin"
 
   it { should belong_to :exhibit }
-
-  it { should be_accessible :filter_query_params }
 
   it { should be_accessible :label }
 
@@ -20,13 +20,13 @@ describe Atrium::BrowseLevel do
   it { should respond_to :selected= }
 
   context '#values' do
-    Then { browse_level.values.should be_kind_of Enumerable }
+    Then { subject.values.should be_kind_of Enumerable }
   end
 
   describe '#to_s' do
     Given(:comparison_string) { 'Hello'}
-    When { browse_level.solr_facet_name = comparison_string }
-    Then { browse_level.to_s.should == comparison_string }
+    When { subject.solr_facet_name = comparison_string }
+    Then { subject.to_s.should == comparison_string }
   end
 
 end

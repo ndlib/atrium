@@ -2,7 +2,6 @@ module Atrium
   class Exhibit < ActiveRecord::Base
     attr_accessible(
         :atrium_collection_id,
-        :filter_query_params,
         :label,
         :set_number,
         :browse_levels_attributes,
@@ -49,7 +48,7 @@ module Atrium
     end
 
 
-    serialize :filter_query_params
+    include Atrium::QueryParamMixin
 
     def pretty_title
       label.blank? ? "Exhibit #{set_number}" : label

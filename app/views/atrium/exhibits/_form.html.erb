@@ -23,8 +23,9 @@
       <legend>Scoping</legend>
       <ol>
         <li>
-          <%= f.label :filter_query_params, 'Exhibit Scoping:' %>
-          <%= f.select(:filter_query_params, saved_searches_for_select, { :include_blank => true }) %>
+          <%= f.label :saved_search_id, 'Update Exhibit Scope:' %>
+          <%= f.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
+          <div>Current Scope: <%= @exhibit.filter_query_params.inspect %></div>
         </li>
         <p>
           An exhibit is a subset of a collection. The scope of the exhibit can be
@@ -49,7 +50,6 @@
               <th>Facet</th>
               <th>Label</th>
               <th>Include Filter</th>
-              <th>Exclude Filter</th>
               <th>Remove</th>
             </tr>
           </thead>
@@ -62,10 +62,8 @@
                   <td><%=atrium_facet_field_labels[level.solr_facet_name]%></td>
                   <td><%=level_form.text_field :label, :value=>level.label%></td>
                   <td>
-                      <%= level_form.select(:filter_query_params, saved_searches_for_select, { :include_blank => true }) %>
-                  </td>
-                  <td>
-                    <%= level_form.select(:exclude_query_params, saved_searches_for_select, { :include_blank => true }) %>
+                      <%= level_form.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
+                        <div>Current Scope: <%= @exhibit.filter_query_params.inspect %></div>
                   </td>
                   <td><%=level_form.check_box :_destroy %></td>
                 <% end %>

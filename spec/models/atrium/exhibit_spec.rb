@@ -8,6 +8,9 @@ describe Atrium::Exhibit do
 
   it { should have_many :browse_levels }
 
+  subject { Atrium::Exhibit.new }
+  it_behaves_like "query_param_mixin"
+
   context '#accessible attributes' do
     it "should not allow access to exhibit fields" do
       expect do
@@ -17,7 +20,7 @@ describe Atrium::Exhibit do
   end
 
   context '#checking attributes' do
-    Given(:exhibit) { Atrium::Exhibit.new }
+    Given(:exhibit) { subject }
     Given(:set_number) { 1234 }
     When { exhibit.set_number = set_number }
     When { exhibit.label = label }

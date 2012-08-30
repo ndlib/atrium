@@ -5,8 +5,6 @@ module Atrium
   class BrowseLevel < ActiveRecord::Base
     attr_accessible(
         :atrium_exhibit_id,
-        :exclude_query_params,
-        :filter_query_params,
         :level_number,
         :solr_facet_name,
         :label
@@ -23,8 +21,7 @@ module Atrium
         :foreign_key => 'atrium_exhibit_id'
     )
 
-
-    serialize :filter_query_params
+    include Atrium::QueryParamMixin
 
     serialize :exclude_query_params
 
