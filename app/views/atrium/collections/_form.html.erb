@@ -1,36 +1,69 @@
 <%= form_for(@collection, :html => {:class => "atrium"}) do |f| %>
-  <fieldset>
-    <legend>Basic Configuration</legend>
-    <% if @collection.errors.any? %>
-      <ul class="errors">
-        <% @collection.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    <% end %>
+  <% if @collection.errors.any? %>
+    <ul class="errors">
+      <% @collection.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
 
+  <fieldset>
+    <legend>Collection Name</legend>
     <ol>
       <li>
-        <%= f.label :title, 'Title:' %>
+        <%= f.label :title, 'Title Text:' %>
         <%= f.text_field :title %>
-      </li>
-      <li>
-        <%= f.label :title_markup, 'Title Markup:' %>
-        <%= f.text_area :title_markup, :class => 'jquery-ckeditor'  %>
       </li>
       <li>
         <%= f.label :url_slug, 'URL slug:' %>
         <%= f.text_field :url_slug %>
+        <small>
+          Enter the way you'd like the URL for this collection to look.<br />
+          If you don't provide one we'll base it off of the collection name.
+        </small>
       </li>
+      <li>
+        <%= f.label :title_markup, 'HTML Title (optional):' %>
+        <%= f.text_area :title_markup, :class => 'jquery-ckeditor'  %>
+        <small>
+          You can create an HTML title for use throughout this collection.<br />
+          For more dramatic customization create a theme instead.
+        </small>
+      </li>
+    </ol>
+  </fieldset>
+
+  <fieldset>
+    <legend>Collection Configuration</legend>
+    <ol>
       <li>
         <%= f.label :theme, 'Theme:' %>
         <%= f.select :theme, @collection.class.available_themes %>
       </li>
-
+      <li>
+        <%= f.label :filter_query_params, 'Collection Scope:' %>
+        <%= f.select(:filter_query_params, get_saved_search.collect{|s| [s, s.to_s]}, { :include_blank => true }) %>
+        <small>Choose from one of your saved searches.</small>
+      </li>
       <li>
         <%= f.label :search_facet_names, 'Collection Search Facets:' %>
-        <%= f.collection_select :search_facet_names, atrium_facet_field_labels.map {|key, facet| Atrium::Search::FacetSelection.new(:field_name => key)}, :field_name, :label, {}, :multiple => true, :class => 'chosen', :'data-placeholder' => 'Select desired facets from the Collection' %>
-      <li/>
+        <%= f.collection_select(
+          :search_facet_names,
+          atrium_facet_field_labels.map {|key, facet| Atrium::Search::FacetSelection.new(:field_name => key)},
+          :field_name,
+          :label,
+          {},
+          :multiple => true,
+          :class => 'chosen',
+          :'data-placeholder' => 'Select desired facets from the Collection'
+        )%>
+      </li>
+    </ol>
+  </fieldset>
+
+  <fieldset class="last">
+    <legend>Collection Description</legend>
+    <ol>
       <li>
         <%= f.label :collection_description, 'Collection Browse Page About Text:' %>
         <%= f.text_area :collection_description, :rows=> '20', :cols => '120', :class => 'jquery-ckeditor' %>
@@ -39,15 +72,18 @@
         <%= f.label :search_instructions, 'Collection Search Page About Text:' %>
         <%= f.text_area :search_instructions, :rows=> '20', :cols => '120', :class => 'jquery-ckeditor' %>
       </li>
-      <li>
-        <%= f.label :filter_query_params, 'Collection Scoping:' %>
-        <%= f.select(:filter_query_params, get_saved_search.collect{|s| [s, s.to_s]}, { :include_blank => true }) %>
+    </ol>
       </li>
     </ol>
-    <%= f.submit 'Update Collection Configuration', :class => 'button' %>
   </fieldset>
+  <p>
+    <%= f.submit 'Update Collection', :class => 'button' %>
+  </p>
 <% end %>
 <% unless @collection.new_record?  %>
+
+  <hr />
+
   <h3>Exhibits</h3>
     <% if @collection.exhibits.any? %>
       <ol data-resource="<%# update_atrium_collection_exhibit_order_path %>" class="exhibit-listing sortable">
@@ -57,39 +93,50 @@
             <%= exhibit.pretty_title %>
             <span class="controls">
               <%= link_to 'Configure', edit_collection_exhibit_path(exhibit.collection, exhibit) %>
-              <%= link_to "Delete", collection_exhibit_path(exhibit.collection, exhibit), :method=>:delete, :class=>:destroy, :confirm=>"Do you really want to delete this exhibit?"%>
+              <%= link_to(
+                'Delete',
+                collection_exhibit_path(exhibit.collection, exhibit),
+                :method => :delete,
+                :class => :destroy,
+                :confirm => 'Do you really want to delete this exhibit?'
+              )%>
           </span>
           </li>
         <% end %>
       </ol>
     <% else %>
-        <em>There are no exhibits in this collection.</em>
+        <p><em>There are no exhibits in this collection.</em></p>
     <% end %>
     <%= link_to 'Add a Exhibit to this Collection', new_collection_exhibit_path(@collection), :class => 'button' %>
 
+    <hr />
+
   <h3>Showcases</h3>
-    <% if @collection.showcases.any? %>
-        <ol class="showcase-listing">
-          <% @collection.showcases.each do |showcase| %>
-              <li data-id="<%= showcase[:id] %>" data-order="<%# exhibit.set_number %>" class="ui-state-default">
-                <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-                <%= showcase.pretty_title %>
-                <span class="controls">
-                  <%= link_to 'Configure', edit_collection_showcase_path(@collection, showcase) %>
-                  <%= link_to "Delete", collection_showcase_path(@collection, showcase), :method=>:delete, :class=>:destroy, :confirm=>"Do you really want to delete this showcase?"%>
-                </span>
-              </li>
-          <% end %>
-        </ol>
-    <% else %>
-        <em>There are no showcases in this collection.</em>
-    <% end %>
+  <% if @collection.showcases.any? %>
+    <ol class="showcase-listing">
+      <% @collection.showcases.each do |showcase| %>
+        <li data-id="<%= showcase[:id] %>" data-order="<%# exhibit.set_number %>" class="ui-state-default">
+        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+        <%= showcase.pretty_title %>
+        <span class="controls">
+          <%= link_to 'Configure', edit_collection_showcase_path(@collection, showcase) %>
+          <%= link_to(
+            'Delete',
+            collection_showcase_path(@collection, showcase),
+            :method => :delete,
+            :class => :destroy,
+            :confirm => 'Do you really want to delete this showcase?'
+          )%>
+        </span>
+        </li>
+      <% end %>
+    </ol>
+  <% else %>
+    <p><em>There are no showcases in this collection.</em></p>
+  <% end %>
   <%= link_to 'Add showcase to this Collection', new_collection_showcase_path(@collection), :class => 'button' %>
 
   <% content_for :atrium_side_bar do %>
     <%= render :partial => 'shared/navigation' %>
   <% end %>
 <% end %>
-
-
-

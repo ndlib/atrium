@@ -1,7 +1,9 @@
+//= require jquery
 //= require jquery_ujs
+//= require jquery-ui-1.8.23.custom.min
 //= require chosen.jquery
-//= require ckeditor-jquery
 //= require jquery.jeditable
+//= require ckeditor-jquery
 //= require ckeditor/jquery.generateId
 //= require ckeditor/jquery.jeditable.ckeditor
 
