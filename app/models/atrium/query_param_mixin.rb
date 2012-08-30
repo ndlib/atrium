@@ -27,6 +27,14 @@ module Atrium::QueryParamMixin
     end
     serialize :filter_query_params, Hash
 
+    def filter_query_params
+      begin
+        super
+      rescue ActiveRecord::SerializationTypeMismatch
+        {}
+      end
+    end
+
     # This is a hopefully temporary work around that can be removed once all
     # atrium instances have a clean set of data.
     def read_attribute(attr_name)
