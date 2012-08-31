@@ -28,4 +28,6 @@
 <% content_for :atrium_side_bar do %>
   <%= render :partial => 'shared/navigation' %>
   <%= link_to "Delete this showcase", showcase_path(@showcase), :method=>:delete, :class=>:destroy, :confirm=>"Are you really want to delete this showcase?"  unless @showcase.new_record?%>
+  <hr>
+  <%= link_to "View this showcase within #{@showcase.parent_title}", get_parent_path(@showcase) %>
 <% end %>

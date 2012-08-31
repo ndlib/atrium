@@ -9,6 +9,7 @@
       <h3 class="exhibit-title"><%= exhibit.pretty_title%></h3>
       <ul class="exhibit-controls">
         <li><%= link_to 'Configure Exhibit', edit_collection_exhibit_path(@collection, exhibit) %></li>
+        <li><%= link_to 'View Exhibit', main_app.exhibit_path(exhibit) %></li>
       </ul>
     <%end%>
   <%end%>
