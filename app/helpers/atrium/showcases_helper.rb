@@ -2,15 +2,16 @@ module Atrium
   module ShowcasesHelper
     def get_parent_path(showcase)
       facet={}
-      unless facet_selections.blank?
-        facet[facet_selections.first.solr_facet_name]=facet_selections.first.value
+      unless showcase.facet_selections.blank?
+        showcase.facet_selections.each do  |x|
+          facet[x.solr_facet_name]=x.value
+        end
       end
       path=""
-      #TODO how to get application url to view path of parent
-      #path=for_exhibit? ? Rails.application.routes.url_helpers.collection_exhibit_path(:id=>parent.id, :collection_id=>parent.collection.id, :f=>facet) : Rails.application.routes.url_helpers.collection_path(parent)
+      path=showcase.for_exhibit? ? main_app.exhibit_path(:id=>showcase.parent.id, :f=>facet) : main_app.collection_path(showcase.parent)
       return path
     end
-
+    
     def get_showcase_parent_edit_path(showcase)
       path=showcase.for_exhibit? ? edit_exhibit_showcase_path(:id=>showcase.id, :exhibit_id=>showcase.parent.id) : edit_collection_showcase_path(:id=>showcase.id, :collection_id=>showcase.parent.id)
       return path
