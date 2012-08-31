@@ -86,7 +86,7 @@
 
   <h3>Exhibits</h3>
     <% if @collection.exhibits.any? %>
-      <ol data-resource="<%# update_atrium_collection_exhibit_order_path %>" class="exhibit-listing sortable">
+      <ol data-resource="<%# edit_collection_exhibit_path %>" class="exhibit-listing sortable">
         <% @collection.exhibits.each do |exhibit| %>
           <li data-id="<%= exhibit[:id] %>" data-order="<%= exhibit.set_number %>" class="ui-state-default">
             <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
@@ -107,36 +107,20 @@
     <% else %>
         <p><em>There are no exhibits in this collection.</em></p>
     <% end %>
-    <%= link_to 'Add a Exhibit to this Collection', new_collection_exhibit_path(@collection), :class => 'button' %>
-
-    <hr />
-
-  <h3>Showcases</h3>
-  <% if @collection.showcases.any? %>
-    <ol class="showcase-listing">
-      <% @collection.showcases.each do |showcase| %>
-        <li data-id="<%= showcase[:id] %>" data-order="<%# exhibit.set_number %>" class="ui-state-default">
-        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-        <%= showcase.pretty_title %>
-        <span class="controls">
-          <%= link_to 'Configure', edit_collection_showcase_path(@collection, showcase) %>
-          <%= link_to(
-            'Delete',
-            collection_showcase_path(@collection, showcase),
-            :method => :delete,
-            :class => :destroy,
-            :confirm => 'Do you really want to delete this showcase?'
-          )%>
-        </span>
-        </li>
-      <% end %>
-    </ol>
-  <% else %>
-    <p><em>There are no showcases in this collection.</em></p>
-  <% end %>
+  <%= link_to 'Add a Exhibit to this Collection', new_collection_exhibit_path(@collection), :class => 'button' %>
   <%= link_to 'Add showcase to this Collection', new_collection_showcase_path(@collection), :class => 'button' %>
+  <hr />
+  <%= button_to(
+                'Delete this Collection',
+                collection_path(@collection),
+                :method => :delete,
+                :form_class => 'collection-destroy-controls hazardous-action',
+                :confirm => 'Do you really want to delete this collection?',
+                :class => 'button'
+        )%>
 
   <% content_for :atrium_side_bar do %>
     <%= render :partial => 'shared/navigation' %>
+    <%= link_to "Show related showcases",  collection_showcases_path(@collection.id) if @collection.showcases.any?  %>
   <% end %>
 <% end %>

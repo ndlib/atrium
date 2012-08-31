@@ -19,5 +19,7 @@ Atrium::Engine.routes.draw do
     end
   end
   root :to => "collections#index"
+
+  match "showcase/browse_level_showcase/exhibit_id",    :to => "showcases#add_or_update",    :as => "get_browse_level_showcase"
 end
 

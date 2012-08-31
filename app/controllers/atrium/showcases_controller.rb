@@ -19,6 +19,7 @@ module Atrium
     end
   
     def index
+      @showcases=parent.showcases
     end
 
     def update
@@ -47,6 +48,22 @@ module Atrium
       redirect_to redirect_url
     end
 
+    def add_or_update
+      @parent=parent
+      #TODO move it model
+      @showcase= Atrium::Showcase.with_selected_facets(@parent.id, @parent.class.name, params[:facet_selection]).first
+      logger.debug("Showcase: #{@showcase.inspect}")
+      unless  @showcase
+        @showcase = @parent.showcases.build({:showcases_id=>@parent.id, :showcases_type=>@parent.class.name})
+        @showcase.save!
+        if(params[:facet_selection])
+          params[:facet_selection].collect {|key,value| facet_selection = @showcase.facet_selections.create({:solr_facet_name=>key,:value=>value.first}) }
+          @showcase.save!
+        end
+      end
+      render :action => "edit"
+    end
+
     private
 
     def find_showcase
@@ -64,11 +81,15 @@ module Atrium
         when params[:exhibit_id] then
           @parent= Atrium::Exhibit.find_by_id(params[:exhibit_id])
         when params[:collection_id] then
-          @parent = Atrium::Collection.find_by_id(params[:collection_id])
+          @parent = Atrium::Collection.find(params[:collection_id])
         else
           flash.alert = t("Atrium.showcase.parent.not_found")
-          redirect_to redirect_target and return
+          redirect_to (:back)
       end
+    end
+
+    def show_parent_url
+      parent.is_a?(Atrium::Exhibit) ? main_app.exhibit_path(:id=>parent.id, :f=>params[:facet_selection], :class=>"browse_facet_select") : raise("parent is not exhibit")
     end
 
     def parent_url

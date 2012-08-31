@@ -1,7 +1,3 @@
-<% content_for :atrium_side_bar do %>
-    <%= render :partial => 'shared/navigation' %>
-<% end %>
-
 <% if @showcase %>
   <%= form_for([@parent, @showcase], :html => {:class => 'atrium'}) do |f| %>
     <% if @showcase.errors.any? %>
@@ -26,9 +22,10 @@
     </p>
   <% end %>
 <% end %>
-<% unless @showcase.new_record?  %>
-  <%= render 'configure_menu' %>
-  <p class="destroy-controls">
-    <%= button_to "Delete this showcase", showcase_path(@showcase), :method=>:delete, :class=>:destroy, :confirm=>"Are you really want to delete this showcase?", :class => 'button' %>
-  </p>
+
+<%= render 'configure_menu' %>
+
+<% content_for :atrium_side_bar do %>
+  <%= render :partial => 'shared/navigation' %>
+  <%= link_to "Delete this showcase", showcase_path(@showcase), :method=>:delete, :class=>:destroy, :confirm=>"Are you really want to delete this showcase?"  unless @showcase.new_record?%>
 <% end %>

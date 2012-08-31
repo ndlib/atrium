@@ -1,3 +1,4 @@
+<% unless @showcase.new_record?  %>
 <strong>Showcase configuration</strong>
 <fieldset>
   <legend>Add Featured Items</legend>
@@ -28,5 +29,5 @@
   <% end %>
 </fieldset>
 <%= link_to 'Add New Description', new_showcase_description_path(@showcase), :class => 'button' %>
-
+<% end %>
 

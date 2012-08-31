@@ -50,16 +50,12 @@ module Atrium
       showcases_type == "Atrium::Exhibit"
     end
 
-    def get_parent_path
-      facet={}
-      unless facet_selections.blank?
-        facet[facet_selections.first.solr_facet_name]=facet_selections.first.value
-      end
-      path=""
-      #TODO how to get application url to view path of parent
-      #path=for_exhibit? ? Rails.application.routes.url_helpers.collection_exhibit_path(:id=>parent.id, :collection_id=>parent.collection.id, :f=>facet) : Rails.application.routes.url_helpers.collection_path(parent)
-      return path
+    def facet_details
+      logger.debug("Belongs to: #{facet_selections.inspect}")
+      "#{facet_selections.solr_facet_name - facet_selections.value}"
     end
+
+
 
     belongs_to(
         :showcases,
@@ -119,7 +115,7 @@ module Atrium
     # @return Array of showcase objects found
     scope :with_selected_facets, lambda {|*args|
       parent_id, parent_type, selected_facets = args.flatten(1)
-
+      logger.debug("Selected_facet:#{selected_facets.inspect}")
       selected_facets =
           if parent_type.eql?("Atrium::Collection")
             {}
@@ -127,11 +123,13 @@ module Atrium
             selected_facets
           end
       facet_condition_values = []
+      logger.debug("facet_condition_values:#{facet_condition_values.inspect}")
       facet_conditions =
           if selected_facets
             selected_facets.collect {|key,value|
+              logger.debug("Value class: #{value.class}, Value:#{value.to_s}, facet_condition_values:#{(value.is_a?(String) ? value : value.flatten.compact.first.to_s).inspect}")
               facet_condition_values << key
-              facet_condition_values << (value.is_a?(String) ? value : value.flatten.compact.to_s)
+              facet_condition_values << (value.is_a?(String) ? value : value.flatten.compact.first.to_s)
 
               %((
           #{Atrium::Showcase::FacetSelection.quoted_table_name}.`solr_facet_name` = ?
@@ -141,7 +139,7 @@ module Atrium
           else
             []
           end
-
+      logger.debug("facet_conditions:#{facet_conditions.inspect}, facet_condition_values:#{facet_condition_values.inspect}")
       if facet_conditions.empty?
         joins(%(
         LEFT OUTER JOIN #{Atrium::Showcase::FacetSelection.quoted_table_name}
@@ -162,7 +160,7 @@ module Atrium
           AND #{quoted_table_name}.`showcases_type` = ?
           AND (#{facet_conditions.join(" OR ")})
         )
-      ), parent_id, parent_type] + facet_condition_values
+      ), parent_id, parent_type, ] + facet_condition_values
 
         having_str = %(
         COUNT(#{Atrium::Showcase::FacetSelection.quoted_table_name}.`atrium_showcase_id`) = #{facet_conditions.size}

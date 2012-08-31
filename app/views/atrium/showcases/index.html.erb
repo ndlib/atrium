@@ -1,2 +1,20 @@
-<h1>Showcases#index</h1>
-<p>Find me in app/views/atrium/showcases/index.html.erb</p>
+<h1>Showcases for <%= @parent.pretty_title%></h1>
+<% if @showcases.any? %>
+<ol class="showcase-listing">
+  <% @showcases.each do |showcase| %>
+      <li data-id="<%= showcase.id%>" data-order="<%= showcase.sequence %>" class="ui-state-default">
+        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+        <%= showcase.pretty_title %>
+        <%=render_facet_selection(showcase) %>
+        <span class="controls">
+        <%= link_to 'Configure', get_showcase_parent_edit_path(showcase) %>
+        <%= link_to "Delete", get_showcase_parent_show_path(showcase), :method=>:delete, :class=>:destroy, :confirm=>"Do you really want to delete this showcase?"%>
+      </span>
+      </li>
+  <% end %>
+</ol>
+<% end %>
+
+<% content_for :atrium_side_bar do %>
+    <%= render :partial => 'shared/navigation' %>
+<% end %>

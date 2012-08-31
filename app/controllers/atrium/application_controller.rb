@@ -1,6 +1,9 @@
 module Atrium
   class ApplicationController < ActionController::Base
     include Atrium::ApplicationHelper
+    include Atrium::ApplicationHelper
+    include Atrium::CollectionsHelper
+    include Atrium::ShowcasesHelper
 
     def atrium_user
       current_user
