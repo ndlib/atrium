@@ -5,6 +5,12 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'rspec/given'
 
+if ENV['COVERAGE']
+  require 'simplecov'
+  SimpleCov.start 'rails'
+  SimpleCov.command_name "spec"
+end
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 # Relative to HERE, NOT to Rails.root, which is off somewhere else.

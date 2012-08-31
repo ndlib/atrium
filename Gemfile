@@ -20,3 +20,5 @@ gem 'guard'
 gem 'guard-rspec'
 gem 'libnotify' if /linux/ =~ RUBY_PLATFORM
 gem 'ruby_gntp'
+
+gem 'simplecov', :require => false
