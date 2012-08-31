@@ -28,8 +28,9 @@
       </p>
       <ol>
         <li>
-          <%= f.label :filter_query_params, 'Filter query:' %>
-          <%= f.select(:filter_query_params, get_saved_search.collect{|search| [search, search.to_s]}, { :include_blank => true }) %>
+          <%= f.label :saved_search_id, 'Update Exhibit Scope:' %>
+          <%= f.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
+          <small><strong>Current Scope:</strong> <%= @exhibit.filter_query_params.inspect %></small>
           <small>Choose from one of your saved searches.</small>
         </li>
       </ol>
@@ -52,7 +53,6 @@
               <th>Facet</th>
               <th>Label</th>
               <th>Include Filter</th>
-              <th>Exclude Filter</th>
               <th>Remove</th>
             </tr>
           </thead>
@@ -65,6 +65,10 @@
                   <td><%=atrium_facet_field_labels[level.solr_facet_name]%></td>
                   <td><%=level_form.text_field :label, :value=>level.label%></td>
                   <td>
+<<<<<<< HEAD
+                      <%= level_form.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
+                        <div>Current Scope: <%= @exhibit.filter_query_params.inspect %></div>
+=======
                     <%= level_form.select(
                       :filter_query_params,
                       get_saved_search.collect{|search| [search, search.to_s]},
@@ -77,6 +81,7 @@
                       get_saved_search.collect{|search| [search, search.to_s]},
                       { :include_blank => true }
                     )%>
+>>>>>>> 0.1.0
                   </td>
                   <td><%=level_form.check_box :_destroy %></td>
                 <% end %>

@@ -17,7 +17,6 @@ class Atrium::Collection < ActiveRecord::Base
   )
   attr_accessible(
     :collection_items,
-    :filter_query_params,
     :theme,
     :title,
     :title_markup,
@@ -108,8 +107,7 @@ class Atrium::Collection < ActiveRecord::Base
     theme.blank? ? 'atrium_themes/default' : "atrium_themes/#{theme}"
   end
 
-
-  serialize :filter_query_params
+  include Atrium::QueryParamMixin
 
   serialize :collection_items, Hash
   def collection_items
