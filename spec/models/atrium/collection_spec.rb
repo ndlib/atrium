@@ -9,6 +9,10 @@ describe Atrium::Collection do
 
   it_behaves_like "query_param_mixin"
 
+  Then('#collection should be self') do
+    subject.collection.should == subject
+  end
+
   context "#url_slug" do
     context 'calculated from title' do
       Given(:collection_attributes) { { url_slug: 'Hello World' } }

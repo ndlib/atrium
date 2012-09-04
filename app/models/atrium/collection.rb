@@ -127,6 +127,9 @@ class Atrium::Collection < ActiveRecord::Base
     read_attribute(:collection_items) || write_attribute(:collection_items, {})
   end
 
+  def collection
+    self
+  end
 
   def solr_doc_ids
     collection_items[:solr_doc_ids] unless collection_items.blank?
