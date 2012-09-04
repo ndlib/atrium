@@ -34,17 +34,28 @@
   </fieldset>
 
   <fieldset>
-    <legend>Collection Configuration</legend>
+    <legend>Collection Scope</legend>
+    <p>
+      A collection can be a subset of the total holdings.<br />
+      Save a search on the catalog page to use as the collection scope.
+    </p>
+    <p>Current Scope: <%= @collection.filter_query_params.inspect %></p>
+    <ol>
+      <li>
+      <%= f.label :saved_search_id, 'Set Collection Scope:' %>
+      <%= f.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
+      <small>Choose from one of your saved searches.</small>
+      </li>
+    </ol>
+  </fieldset>
+
+  <fieldset>
+    <legend>Collection Options</legend>
     <ol>
       <li>
         <%= f.label :theme, 'Theme:' %>
         <%= f.select :theme, @collection.class.available_themes %>
-      </li>
-      <li>
-        <%= f.label :saved_search_id, 'Update Exhibit Scope:' %>
-        <%= f.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
-        <small><strong>Current Scope:</strong> <%= @collection.filter_query_params.inspect %></small>
-        <small>Choose from one of your saved searches.</small>
+        <small>Themes are created outside of the administrative interface.</small>
       </li>
       <li>
         <%= f.label :search_facet_names, 'Collection Search Facets:' %>

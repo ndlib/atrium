@@ -94,17 +94,17 @@ class Atrium::Collection < ActiveRecord::Base
     end
   end
 
-  @@included_themes = ['default']
+  @@included_themes = ['Default']
   def self.available_themes
     return @@available_themes if defined? @@available_themes
     # NOTE: theme filenames should conform to rails expectations and only use periods to delimit file extensions
     local_themes = Dir.entries(File.join(Rails.root, 'app/views/layouts/atrium_themes')).reject {|f| f =~ /^\./}
-    local_themes.collect!{|f| f.split('.').first}
+    local_themes.collect!{|f| f.split('.').first.titleize}
     @@available_themes = @@included_themes + local_themes
   end
 
   def theme_path
-    theme.blank? ? 'atrium_themes/default' : "atrium_themes/#{theme}"
+    theme.blank? ? 'atrium_themes/default' : "atrium_themes/#{theme.downcase}"
   end
 
   include Atrium::QueryParamMixin
