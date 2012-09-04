@@ -4,8 +4,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title><%= h(@page_title || application_name) %></title>
   <%# favicon_link_tag asset_path('favicon.ico') %>
-  <%= stylesheet_link_tag    "atrium", :media => "all" %>
-  <%= javascript_include_tag "atrium/application" %>
+  <%= stylesheet_link_tag    'atrium', :media => 'all' %>
+  <%= javascript_include_tag 'atrium' %>
   <%= csrf_meta_tags %>
   <%= yield :theme_styles %>
 </head>

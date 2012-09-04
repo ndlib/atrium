@@ -8,7 +8,6 @@
 //= require ckeditor/jquery.jeditable.ckeditor
 
 
-
 (function($){
 
   $.fn.outerHTML = function() {
