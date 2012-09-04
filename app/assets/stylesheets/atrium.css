@@ -172,15 +172,23 @@ ol.sortable {
 
 ol.sortable li {
   font-size: 1.2em;
-  height:1.2em;
-  margin:0 3px 3px;
+  font-weight:normal;
+  margin:0 .3em .3em;
   padding-left:1.5em;
   padding:.4em .4em .4em 1.5em;
+}
+
+ol.sortable .ui-icon {
+  margin-top:.2em;
 }
 
 ol.sortable li span {
   position:absolute;
   margin-left:-1.3em;
+}
+
+ol.sortable .controls a {
+  text-decoration:underline;
 }
 
 .sortable td.label {
