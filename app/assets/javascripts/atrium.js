@@ -37,13 +37,14 @@
 
     $('.sortable').sortable({
       update: function(e, ui){
-        var $target        = $(e.target).closest('ol'),
+        var $target        = $(e.target),
             orderedItems   = {},
             resourceURL    = $target.attr('data-resource'),
-            childTag       = $target.children().first()[0].nodeName.toLowerCase(),
+            childTag       = $target.children()[0].nodeName.toLowerCase(),
             primaryLabel   = $target.attr('data-primary-label'),
             secondaryLabel = $target.attr('data-secondary-label');
-        $(childTag, $(e.target).closest('ol')).each(function(index, element){
+
+        $(childTag, $target).each(function(index, element){
           var objectId = $(element).attr('data-id');
           orderedItems[objectId] = (index + 1);
         });
