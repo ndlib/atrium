@@ -5,11 +5,6 @@ module Atrium
     include Atrium::CollectionsHelper
     include Atrium::ShowcasesHelper
 
-    def atrium_user
-      current_user
-    end
-    helper_method :atrium_user
-
     def sign_in_path
       new_user_session_path
     end

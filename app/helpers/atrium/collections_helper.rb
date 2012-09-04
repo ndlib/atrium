@@ -19,11 +19,11 @@ module Atrium
     end
 
     def get_saved_search
-      Atrium.saved_searches_for(atrium_user)
+      Atrium.saved_searches_for(current_user)
     end
 
     def get_saved_items
-      saved_items=Atrium.saved_items_for(atrium_user)
+      saved_items=Atrium.saved_items_for(current_user)
       items=[]
       saved_items.each { |item|
         temp={}

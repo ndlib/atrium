@@ -4,11 +4,11 @@
     <% for collection in @collections %>
       <li>
         <%= link_to collection.title, main_app.collection_path(collection) %>
-        <%= link_to("Edit Collection", edit_collection_path(collection), :class => 'button').html_safe if atrium_user %>
+        <%= link_to("Edit Collection", edit_collection_path(collection), :class => 'button').html_safe if current_user %>
       </li>
     <% end %>
   </ul>
 <% else %>
   <em>No collections defined</em>
 <% end %>
-<%= link_to("Add New Collection", new_collection_path, :class => 'button').html_safe if atrium_user%>
+<%= link_to("Add New Collection", new_collection_path, :class => 'button').html_safe if current_user%>

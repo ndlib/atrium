@@ -2,7 +2,7 @@ require 'spec_helper'
 describe Atrium::CollectionsHelper do
 
   describe "saved_searches_for_select" do
-    let(:atrium_user) { 'test' }
+    let(:current_user) { 'test' }
     let(:saved_search){
       {
         id: 1,
@@ -18,9 +18,9 @@ describe Atrium::CollectionsHelper do
       }
     }
     it "should retrieve facet saved search from blacklight" do
-      helper.stub :atrium_user => atrium_user
+      helper.stub :current_user => current_user
       Atrium.should_receive(:saved_searches_for).
-        with(atrium_user).
+        with(current_user).
         and_return([saved_search])
       actual_search = helper.saved_searches_for_select.first
 
@@ -33,12 +33,12 @@ describe Atrium::CollectionsHelper do
   end
 
   describe "get_saved_items" do
-    let(:atrium_user) { 'test' }
+    let(:current_user) { 'test' }
     it "should retrieve facet saved search from blacklight" do
       saved_item1=mock(:document_id => 123, :title=> "my title")
       saved_item2=mock(:document_id => 456, :title=> "new title")
-      helper.stub :atrium_user => atrium_user
-      Atrium.stub(:saved_items_for).with(atrium_user).and_return([saved_item1, saved_item2])
+      helper.stub :current_user => current_user
+      Atrium.stub(:saved_items_for).with(current_user).and_return([saved_item1, saved_item2])
       saved_items_result=helper.get_saved_items
 
       puts saved_items_result.inspect
