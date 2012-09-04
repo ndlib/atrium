@@ -97,30 +97,51 @@
   <hr />
 
   <h3>Exhibits</h3>
-    <% if @collection.exhibits.any? %>
-      <ol data-resource="<%# edit_collection_exhibit_path %>" class="exhibit-listing sortable">
-        <% @collection.exhibits.each do |exhibit| %>
-          <li data-id="<%= exhibit[:id] %>" data-order="<%= exhibit.set_number %>" class="ui-state-default">
-            <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-            <%= exhibit.pretty_title %>
-            <span class="controls">
-              <%= link_to 'Configure', edit_collection_exhibit_path(exhibit.collection, exhibit) %>
-              <%= link_to(
-                'Delete',
-                collection_exhibit_path(exhibit.collection, exhibit),
-                :method => :delete,
-                :class => :destroy,
-                :confirm => 'Do you really want to delete this exhibit?'
-              )%>
-          </span>
-          </li>
-        <% end %>
-      </ol>
-    <% else %>
-        <p><em>There are no exhibits in this collection.</em></p>
-    <% end %>
+  <p>
+    An exhibit is a customizable view of a single topic (as defined by a facet),
+    further scoped by an optional Solr query. An exhibit defines it's own
+    hierarchical list of facets. An exhibit may also have a description and a
+    list of featured items.
+  </p>
+  <% if @collection.exhibits.any? %>
+    <ol data-resource="<%# edit_collection_exhibit_path %>" class="exhibit-listing sortable">
+      <% @collection.exhibits.each do |exhibit| %>
+        <li data-id="<%= exhibit[:id] %>" data-order="<%= exhibit.set_number %>" class="ui-state-default">
+          <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+          <%= exhibit.pretty_title %>
+          <span class="controls">
+            <%= link_to 'Configure', edit_collection_exhibit_path(exhibit.collection, exhibit) %>
+            <%= link_to(
+              'Delete',
+              collection_exhibit_path(exhibit.collection, exhibit),
+              :method => :delete,
+              :class => :destroy,
+              :confirm => 'Do you really want to delete this exhibit?'
+            )%>
+        </span>
+        </li>
+      <% end %>
+    </ol>
+  <% else %>
+    <p><em>There are no exhibits in this collection.</em></p>
+  <% end %>
   <%= link_to 'Add a Exhibit to this Collection', new_collection_exhibit_path(@collection), :class => 'button' %>
-  <%= link_to 'Add showcase to this Collection', new_collection_showcase_path(@collection), :class => 'button' %>
+  <hr />
+
+  <h3>Showcases</h3>
+  <p>
+    A showcase is a container for storing feature items and descriptions. A
+    showcase can be attached to a collection, exhibit, or to specific
+    combinations of selected facets and facet values within an exhibit. There
+    can be multiple showcases in an exhibit.
+  </p>
+  <% if @collection.showcases.any? %>
+    <p><%= link_to 'View showcases in this collection', collection_showcases_path %></p>
+  <% else %>
+    <p><em>There are no showcases in this collection.</em></p>
+  <% end %>
+  <%= link_to 'Add a Showcase to this Collection', new_collection_showcase_path(@collection), :class => 'button' %>
+
   <hr />
   <%= button_to(
                 'Delete this Collection',
