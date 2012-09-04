@@ -30,7 +30,7 @@
         <li>
           <%= f.label :saved_search_id, 'Update Exhibit Scope:' %>
           <%= f.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
-          <small><strong>Current Scope:</strong> <%= @exhibit.filter_query_params.inspect %></small>
+          <small><strong>Current Scope:</strong> <%= @exhibit.filter_query_params.inspect unless @exhibit.filter_query_params.blank?%></small>
           <small>Choose from one of your saved searches.</small>
         </li>
       </ol>
@@ -56,7 +56,7 @@
               <th>Remove</th>
             </tr>
           </thead>
-          <tbody data-resource="<%# update_atrium_exhibit_facet_order_path %>" data-primary-label="Group By:" data-secondary-label="Then By:" class="sortable">
+          <tbody data-resource="<%= update_exhibit_facet_order_path %>" data-primary-label="Group By:" data-secondary-label="Then By:" class="sortable">
             <% @exhibit.browse_levels.each_with_index do |level,index| %>
               <tr data-id="<%= level[:id] %>" data-order="<%= level.level_number %>" class="ui-state-default">
                 <%= f.fields_for :browse_levels, level do |level_form| %>
@@ -66,7 +66,7 @@
                   <td><%=level_form.text_field :label, :value=>level.label%></td>
                   <td>
                     <%= level_form.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
-                    <div>Current Scope: <%= @exhibit.filter_query_params.inspect %></div>
+                    <div> <%= "Current Scope: #{level.filter_query_params}" unless level.filter_query_params.blank?%></div>
                   </td>
                   <td><%=level_form.check_box :_destroy %></td>
                 <% end %>
@@ -97,8 +97,8 @@
           )%>
         </li>
       </ol>
+      <p><%= f.submit 'Add Navigation Level', :class => 'button' %></p>
     </fieldset>
-    <p><%= f.submit 'Add Navigation Level', :class => 'button' %></p>
   <% end %>
 <% end %>
   <%= link_to 'Add a Showcase to this Exhibit', new_exhibit_showcase_path(@exhibit), :class => 'button' %>

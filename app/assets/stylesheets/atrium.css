@@ -209,6 +209,7 @@ form.atrium ol li {
   list-style-type:none;
 }
 
+form.atrium p:first-child,
 form.atrium li:first-child label {
   margin-top:0;
 }
