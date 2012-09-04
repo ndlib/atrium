@@ -56,7 +56,7 @@
               <th>Remove</th>
             </tr>
           </thead>
-          <tbody data-resource="<%# update_atrium_exhibit_facet_order_path %>" data-primary-label="Group By:" data-secondary-label="Then By:" class="sortable">
+          <tbody data-resource="<%= update_exhibit_facet_order_path %>" data-primary-label="Group By:" data-secondary-label="Then By:" class="sortable">
             <% @exhibit.browse_levels.each_with_index do |level,index| %>
               <tr data-id="<%= level[:id] %>" data-order="<%= level.level_number %>" class="ui-state-default">
                 <%= f.fields_for :browse_levels, level do |level_form| %>
@@ -97,8 +97,8 @@
           )%>
         </li>
       </ol>
+      <p><%= f.submit 'Add Navigation Level', :class => 'button' %></p>
     </fieldset>
-    <p><%= f.submit 'Add Navigation Level', :class => 'button' %></p>
   <% end %>
 <% end %>
   <%= link_to 'Add a Showcase to this Exhibit', new_exhibit_showcase_path(@exhibit), :class => 'button' %>

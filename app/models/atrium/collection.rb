@@ -35,6 +35,19 @@ class Atrium::Collection < ActiveRecord::Base
     :dependent => :destroy
   )
 
+  def showcase_order
+    showcase_order = {}
+    showcases.map{|showcase| showcase_order[showcase[:id]] = showcase.sequence }
+    showcase_order
+  end
+
+  def showcase_order=(showcase_order = {})
+    valid_ids = showcases.select(:id).map{|showcase| showcase[:id]}
+    showcase_order.each_pair do |id, order|
+      Atrium::Showcase.find(id).update_attributes!(:sequence => order) if valid_ids.include?(id.to_i)
+    end
+  end
+
   has_many(
     :search_facets,
     :class_name => 'Atrium::Search::Facet',

@@ -66,55 +66,6 @@
       }
     });
 
-    $('.add_description').click(function(){
-        var $this = $(this);
-        $this.parent()
-          .children('.description')
-          .slideToggle(300, function(){
-            if ($this.text() == 'Add Description'){
-              $this.text('Hide Description');
-            }else{
-              $this.text('Add Description');
-            }
-          });
-    });
-
-    $("a.destroy_description", this).live("click", function(e) {
-       var $descNode = $(this).closest('dl')
-       var url = $(this).attr('action');
-       $.ajax({
-         type: "DELETE",
-         url: url,
-         dataType: "html",
-         beforeSend: function() {
-   			$descNode.animate({'backgroundColor':'#fb6c6c'},300);
-         },
-         success: function() {
-           $descNode.slideUp(300,function() {
-             $descNode.remove();
-           });
-         }
-       });
-    });
-
-    $("a.remove_featured", this).live("click", function(e) {
-       var $docNode = $(this).closest('div.document')
-       var url = $(this).attr('action');
-       $.ajax({
-         type: "POST",
-         url: url,
-         dataType: "html",
-         beforeSend: function() {
-   			$docNode.animate({'backgroundColor':'#fb6c6c'},300);
-         },
-         success: function(data) {
-           $docNode.slideUp(300,function() {
-             $docNode.remove();
-           });
-           //$("#show-selected").before('<div id="flash_notice"> data </div>'); // This could be implemented better
-         }
-       });
-    });
 
     $('.edit-text').editable(submitEditableText,{
          indicator : 'Saving...',
@@ -197,36 +148,6 @@
         $(this).siblings(".intro").toggle()
         $(this).next("div.content").slideToggle(300);
         $(this).text($(this).text() == '[Read the complete essay]' ? '[Hide essay]' : '[Read the complete essay]');
-    });
-
-    $("div.ckeditor h3.index_title a").click( function(){
-      var href = $(this).attr('href');
-      var dialog = window.opener.CKEDITOR.dialog.getCurrent();
-      var parent = window.opener.document;
-      dialog.setValueOf('info','url',href);  // Populates the URL field in the Links dialogue.
-      dialog.setValueOf('info','protocol','');  // This sets the Link's Protocol to Other which loads the file from the same folder the link is on
-      dialog.setValueOf('info','displayField',$(this).html());  // Populates the display field in the Links dialogue
-      window.close(); // closes the popup window
-      return false;
-    });
-
-    $(".add_description h3.index_title a").click( function(){
-      var href = $(this).attr('href');
-      alert(href)
-       $.ajax({
-         type: "GET",
-         url: url,
-         dataType: "html",
-         beforeSend: function() {
-   			$descNode.animate({'backgroundColor':'#fb6c6c'},300);
-         },
-         success: function() {
-           $descNode.slideUp(300,function() {
-             $descNode.remove();
-           });
-         }
-       });
-      return false;
     });
 
   });

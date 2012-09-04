@@ -104,7 +104,7 @@
     list of featured items.
   </p>
   <% if @collection.exhibits.any? %>
-    <ol data-resource="<%# edit_collection_exhibit_path %>" class="exhibit-listing sortable">
+    <ol data-resource="<%=update_collection_exhibit_order_path %>" class="exhibit-listing sortable">
       <% @collection.exhibits.each do |exhibit| %>
         <li data-id="<%= exhibit[:id] %>" data-order="<%= exhibit.set_number %>" class="ui-state-default">
           <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
@@ -136,7 +136,18 @@
     can be multiple showcases in an exhibit.
   </p>
   <% if @collection.showcases.any? %>
-    <p><%= link_to 'View showcases in this collection', collection_showcases_path %></p>
+    <ol data-resource="<%=update_collection_showcase_order_path   %>" class="exhibit-listing sortable">
+      <% @collection.showcases.each do |showcase| %>
+        <li data-id="<%= showcase.id%>" data-order="<%= showcase.sequence %>" class="ui-state-default">
+          <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+          <%= showcase.pretty_title %>
+          <span class="controls">
+            <%= link_to 'Configure', get_showcase_parent_edit_path(showcase) %>
+            <%= link_to "Delete", get_showcase_parent_show_path(showcase), :method=>:delete, :class=>:destroy, :confirm=>"Do you really want to delete this showcase?"%>
+          </span>
+        </li>
+      <% end %>
+    </ol>
   <% else %>
     <p><em>There are no showcases in this collection.</em></p>
   <% end %>
@@ -154,6 +165,5 @@
 
   <% content_for :atrium_side_bar do %>
     <%= render :partial => 'shared/navigation' %>
-    <%= link_to "Show related showcases",  collection_showcases_path(@collection.id) if @collection.showcases.any?  %>
   <% end %>
 <% end %>
