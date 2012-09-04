@@ -22,18 +22,17 @@ module Atrium
       return path
     end
 
-    def render_facet_selection(showcase)
+    def render_showcase_facet_selection(showcase)
       facets=showcase.facet_selections
       return "".html_safe unless facets
       content = []
       facets.each do |facet|
-        content << render_atrium_filter_element(facet.solr_facet_name, facet.value)
+        content << facet_element(facet.solr_facet_name, facet.value)
       end
-
       return content.flatten.join("\n").html_safe
     end
 
-    def render_atrium_filter_element(facet, value)
+    def facet_element(facet, value)
       {atrium_facet_field_labels[facet] => value}
     end
   end

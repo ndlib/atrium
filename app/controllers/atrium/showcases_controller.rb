@@ -42,7 +42,7 @@ module Atrium
     end
 
     def destroy
-      redirect_url=parent_url
+      redirect_url= @showcase.for_exhibit? ? exhibit_showcases_path(@parent) : collection_showcases_path(@parent)
       @showcase.destroy
       flash[:notice] = 'Showcase '+params[:id] +' was deleted successfully.'
       redirect_to redirect_url
@@ -93,7 +93,6 @@ module Atrium
     end
 
     def parent_url
-      puts "Parent: #{parent.inspect}"
       if parent.is_a?(Atrium::Collection)
         edit_collection_path(parent)
       elsif parent.is_a?(Atrium::Exhibit)

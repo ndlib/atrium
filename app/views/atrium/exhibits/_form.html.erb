@@ -30,7 +30,7 @@
         <li>
           <%= f.label :saved_search_id, 'Update Exhibit Scope:' %>
           <%= f.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
-          <small><strong>Current Scope:</strong> <%= @exhibit.filter_query_params.inspect %></small>
+          <small><strong>Current Scope:</strong> <%= @exhibit.filter_query_params.inspect unless @exhibit.filter_query_params.blank?%></small>
           <small>Choose from one of your saved searches.</small>
         </li>
       </ol>
@@ -66,7 +66,7 @@
                   <td><%=level_form.text_field :label, :value=>level.label%></td>
                   <td>
                     <%= level_form.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
-                    <div>Current Scope: <%= @exhibit.filter_query_params.inspect %></div>
+                    <div> <%= "Current Scope: #{level.filter_query_params}" unless level.filter_query_params.blank?%></div>
                   </td>
                   <td><%=level_form.check_box :_destroy %></td>
                 <% end %>
