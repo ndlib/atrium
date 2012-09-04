@@ -39,7 +39,7 @@
       A collection can be a subset of the total holdings.<br />
       Save a search on the catalog page to use as the collection scope.
     </p>
-    <p>Current Scope: <%= @collection.filter_query_params.inspect %></p>
+    <p>Current Scope: <%= @collection.humanized_scope %></p>
     <ol>
       <li>
       <%= f.label :saved_search_id, 'Set Collection Scope:' %>

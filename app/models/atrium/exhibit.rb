@@ -60,6 +60,10 @@ module Atrium
       end
     end
 
+    # TODO move method to presenter, also "inspect" doesn't really cut it.
+    def humanized_scope
+      filter_query_params.blank? ? "<em>No Scope has been set</em>".html_safe() : filter_query_params.inspect
+    end
 
     include Atrium::QueryParamMixin
 

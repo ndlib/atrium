@@ -120,6 +120,11 @@ class Atrium::Collection < ActiveRecord::Base
     theme.blank? ? 'atrium_themes/default' : "atrium_themes/#{theme.downcase}"
   end
 
+  # TODO move method to presenter, also "inspect" doesn't really cut it.
+  def humanized_scope
+    filter_query_params.blank? ? "<em>No Scope has been set</em>".html_safe() : filter_query_params.inspect
+  end
+
   include Atrium::QueryParamMixin
 
   serialize :collection_items, Hash
