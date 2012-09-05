@@ -201,16 +201,15 @@ describe Atrium::ShowcasesController do
       before(:each) do
         controller.stub(:parent).and_return(@exhibit = mock_model(Atrium::Exhibit))
         @exhibit.should_receive(:showcases).and_return(@showcases)
-        @exhibit.should_receive(:collection).and_return(@collection)
       end
       it "destroy showcase successfully" do
         delete :destroy, { :id => 1 }
         flash[:notice].should == "Showcase 1 was deleted successfully."
       end
 
-      it "redirects to exhibit edit" do
+      it "redirects to exhibit showcase index" do
         delete :destroy, { :id => @showcase.id }
-        response.should redirect_to(edit_collection_exhibit_path(:id=>@exhibit.id, :collection_id=>@collection.id))
+        response.should redirect_to(exhibit_showcases_path(:exhibit_id=>@exhibit.id))
       end
     end
   end

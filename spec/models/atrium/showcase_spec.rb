@@ -39,31 +39,6 @@ describe Atrium::Showcase do
       end
     end
 
-    context "#get parent_path " do
-      pending
-      describe 'exhibit show path' do
-        it "should return exhibit as parent" do
-          collection=Atrium::Collection.new
-          collection.save!
-          exhibit=collection.exhibits.build
-          exhibit.save!
-          showcase=exhibit.showcases.build
-          showcase.save!
-          #TODO how to get application url to view path of parent
-          #showcase.get_parent_path.should == collection_exhibit_path(:id=>exhibit.id, :collection_id=>collection.id)
-        end
-
-        it "should return collection show path" do
-          collection=Atrium::Collection.new
-          collection.save
-          showcase=collection.showcases.build
-          showcase.save!
-          #TODO how to get application url to view path of parent
-          #showcase.get_parent_path.should == collection_path(:id=>collection.id)
-        end
-      end
-    end
-
     describe "#creating showcase without facet selection" do
       it "should allow no facet selections defined" do
         collection = Atrium::Collection.new

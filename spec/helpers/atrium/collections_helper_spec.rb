@@ -41,8 +41,6 @@ describe Atrium::CollectionsHelper do
       Atrium.stub(:saved_items_for).with(current_user).and_return([saved_item1, saved_item2])
       saved_items_result=helper.get_saved_items
 
-      puts saved_items_result.inspect
-
       saved_items_result.length.should == 2
       saved_items_result.each do |hash|
         hash.should have_key(:title)
