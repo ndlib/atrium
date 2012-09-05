@@ -12,7 +12,6 @@ module Atrium
     end
 
     def create
-      normalize_search_facet_names_params
       @collection = Atrium::Collection.new(params[:collection])
       if @collection.save
         flash[:notice] = "Collection created successfully"
@@ -36,7 +35,6 @@ module Atrium
     end
 
     def update
-      normalize_search_facet_names_params
       if collection.update_attributes(params[:collection])
         flash[:notice] = 'Collection was successfully updated.'
       else
@@ -57,11 +55,5 @@ module Atrium
     protected :collection
     helper_method :collection
 
-    def normalize_search_facet_names_params
-      if (params[:collection])
-        params[:collection][:search_facet_names] ||= []
-        params[:collection][:search_facet_names].delete_if { |elem| elem.empty? }  if params[:collection][:search_facet_names].length > 0
-      end
-    end
   end
 end

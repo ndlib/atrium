@@ -9,6 +9,8 @@ require File.expand_path("../dummy/config/environment.rb", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'rspec/given'
+require 'factory_girl'
+FactoryGirl.find_definitions
 
 
 # Requires supporting ruby files with custom matchers and macros, etc,
