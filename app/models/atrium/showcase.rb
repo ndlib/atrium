@@ -31,16 +31,18 @@ module Atrium
     )
     accepts_nested_attributes_for :facet_selections
 
-    def parent
-      if showcases_type && showcases_id
-        begin
-          showcases_type.constantize.find(showcases_id)
-        rescue
-          logger.error("Invalid showcase parent type set for showcase id: #{id}")
-          nil
-        end
-      end
-    end
+    #def parent
+    #  if showcases_type && showcases_id
+    #    begin
+    #      showcases_type.constantize.find(showcases_id)
+    #    rescue
+    #      logger.error("Invalid showcase parent type set for showcase id: #{id}")
+    #      nil
+    #    end
+    #  end
+    #end
+
+
 
     def parent_title
       parent.pretty_title
@@ -61,6 +63,10 @@ module Atrium
         :showcases,
         :polymorphic => true
     )
+
+    def parent
+       showcases
+    end
 
     serialize :showcase_items, Hash
 
@@ -83,6 +89,10 @@ module Atrium
         write_attribute(:showcase_items, {})
       end
 
+    end
+
+    def collection
+      parent.collection
     end
 
     def solr_doc_ids

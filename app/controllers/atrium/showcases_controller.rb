@@ -42,7 +42,7 @@ module Atrium
     end
 
     def destroy
-      redirect_url= @showcase.for_exhibit? ? exhibit_showcases_path(@parent) : collection_showcases_path(@parent)
+      redirect_url=parent_url
       @showcase.destroy
       flash[:notice] = 'Showcase '+params[:id] +' was deleted successfully.'
       redirect_to redirect_url
@@ -79,7 +79,7 @@ module Atrium
     def find_parent
       case
         when params[:exhibit_id] then
-          @parent= Atrium::Exhibit.find_by_id(params[:exhibit_id])
+          @parent= Atrium::Exhibit.find(params[:exhibit_id])
         when params[:collection_id] then
           @parent = Atrium::Collection.find(params[:collection_id])
         else
@@ -88,16 +88,8 @@ module Atrium
       end
     end
 
-    def show_parent_url
-      parent.is_a?(Atrium::Exhibit) ? main_app.exhibit_path(:id=>parent.id, :f=>params[:facet_selection], :class=>"browse_facet_select") : raise("parent is not exhibit")
-    end
-
     def parent_url
-      if parent.is_a?(Atrium::Collection)
-        edit_collection_path(parent)
-      elsif parent.is_a?(Atrium::Exhibit)
-        edit_collection_exhibit_path(:id=>parent.id, :collection_id=>parent.collection.id)
-      end
+      parent.is_a?(Atrium::Exhibit) ? exhibit_showcases_path(parent) : edit_collection_path(parent)
     end
 
     def collection
@@ -105,11 +97,7 @@ module Atrium
     end
 
     def find_collection(parent)
-      if parent.is_a?(Atrium::Collection)
-        @collection = parent
-      elsif parent.is_a?(Atrium::Exhibit)
-        @collection = parent.collection
-      end
+      parent.collection
     end
   end
 end

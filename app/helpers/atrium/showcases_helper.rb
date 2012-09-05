@@ -1,5 +1,6 @@
 module Atrium
   module ShowcasesHelper
+    include Atrium::ApplicationHelper
     def get_parent_path(showcase)
       facet={}
       unless showcase.facet_selections.blank?
@@ -7,18 +8,17 @@ module Atrium
           facet[x.solr_facet_name]=x.value
         end
       end
-      path=""
       path=showcase.for_exhibit? ? main_app.exhibit_path(:id=>showcase.parent.id, :f=>facet) : main_app.collection_path(showcase.parent)
       return path
     end
 
     def get_showcase_parent_edit_path(showcase)
-      path=showcase.for_exhibit? ? edit_exhibit_showcase_path(:id=>showcase.id, :exhibit_id=>showcase.parent.id) : edit_collection_showcase_path(:id=>showcase.id, :collection_id=>showcase.parent.id)
+      path=showcase.for_exhibit? ? atrium.edit_exhibit_showcase_path(:id=>showcase.id, :exhibit_id=>showcase.parent.id) : atrium.edit_collection_showcase_path(:id=>showcase.id, :collection_id=>showcase.parent.id)
       return path
     end
 
     def get_showcase_parent_show_path(showcase)
-      path=showcase.for_exhibit? ? exhibit_showcase_path(:id=>showcase.id, :exhibit_id=>showcase.parent.id) : collection_showcase_path(:id=>showcase.id, :collection_id=>showcase.parent.id)
+      path=showcase.for_exhibit? ? atrium.exhibit_showcase_path(:id=>showcase.id, :exhibit_id=>showcase.parent.id) : atrium.collection_showcase_path(:id=>showcase.id, :collection_id=>showcase.parent.id)
       return path
     end
 
