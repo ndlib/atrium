@@ -3,6 +3,9 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe Atrium do
 
   context "Search Class exists or not" do
+    after(:each) do
+      Atrium.saved_search_class = nil
+    end
     Given(:config) {  lambda {Atrium.saved_search_class} }
     context 'saved_search_class not set in application' do
       Then { config.should raise_error(Atrium::ConfigurationNotSet) }
@@ -14,6 +17,12 @@ describe Atrium do
   end
 
   context 'Configuration settings' do
+    before(:each) do
+      @old_config = Atrium.config
+    end
+    after(:each) do
+      Atrium.config = @old_config if @old_config
+    end
     context 'should have a default value' do
       Then { Atrium.config.should == Atrium.default_config }
     end
