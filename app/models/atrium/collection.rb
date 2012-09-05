@@ -25,7 +25,8 @@ class Atrium::Collection < ActiveRecord::Base
     :search_facet_names,
     :url_slug,
     :exhibits_attributes,
-    :search_facets_attributes
+    :search_facets_attributes,
+    :showcase_order
   )
 
   has_many(
@@ -36,15 +37,17 @@ class Atrium::Collection < ActiveRecord::Base
   )
 
   def showcase_order
-    showcase_order = {}
-    showcases.map{|showcase| showcase_order[showcase[:id]] = showcase.sequence }
-    showcase_order
+    showcases.each_with_object({}) { |showcase, object|
+      object[showcase[:id]] = showcase.sequence
+    }
   end
 
   def showcase_order=(showcase_order = {})
-    valid_ids = showcases.select(:id).map{|showcase| showcase[:id]}
-    showcase_order.each_pair do |id, order|
-      Atrium::Showcase.find(id).update_attributes!(:sequence => order) if valid_ids.include?(id.to_i)
+    showcase_order.each_pair do |showcase_id, sequence|
+      begin
+        showcases.find(showcase_id).update_attributes!(sequence: sequence)
+      rescue ActiveRecord::RecordNotFound
+      end
     end
   end
 
