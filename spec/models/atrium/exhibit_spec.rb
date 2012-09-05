@@ -8,8 +8,13 @@ describe Atrium::Exhibit do
 
   it { should have_many :browse_levels }
 
-  subject { Atrium::Exhibit.new }
-  it_behaves_like "query_param_mixin"
+  it_behaves_like "query_param_mixin" do
+    Given(:subject) { Atrium::Exhibit.new }
+  end
+
+  it_behaves_like "is_showcased_mixin" do
+    Given(:subject) { FactoryGirl.create(:exhibit) }
+  end
 
   context '#accessible attributes' do
     it "should not allow access to exhibit fields" do

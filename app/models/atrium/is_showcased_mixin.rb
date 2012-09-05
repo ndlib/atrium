@@ -3,15 +3,14 @@ module Atrium::IsShowcasedMixin
   extend ActiveSupport::Concern
 
   included do
-    accepts_nested_attributes_for :showcases
     has_many(
       :showcases,
       :class_name => 'Atrium::Showcase',
       :as => :showcases,
       :dependent => :destroy
     )
+    accepts_nested_attributes_for :showcases
 
-    attr_accessible(:showcase_order)
     def showcase_order
       showcases.each_with_object({}) { |showcase, object|
         object[showcase[:id]] = showcase.sequence
@@ -26,6 +25,10 @@ module Atrium::IsShowcasedMixin
         end
       end
     end
+    attr_accessible(
+      :showcase_order,
+      :showcases_attributes
+    )
 
   end
 end

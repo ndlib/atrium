@@ -14,26 +14,7 @@ module Atrium
         :foreign_key => 'atrium_collection_id'
     )
 
-    has_many(
-        :showcases,
-        :class_name => 'Atrium::Showcase',
-        :as => :showcases
-    )
-    accepts_nested_attributes_for :showcases
-
-    def showcase_order
-      showcase_order = {}
-      showcases.map{|showcase| showcase_order[showcase[:id]] = showcase.sequence }
-      showcase_order
-    end
-
-    def showcase_order=(showcase_order = {})
-      valid_ids = showcases.select(:id).map{|showcase| showcase[:id]}
-      showcase_order.each_pair do |id, order|
-        Atrium::Showcase.find(id).update_attributes!(:sequence => order) if valid_ids.include?(id.to_i)
-      end
-    end
-
+    include Atrium::IsShowcasedMixin
 
     has_many(
         :browse_levels,
