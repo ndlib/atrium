@@ -27,7 +27,7 @@ module Atrium
     end
 
     def edit
-
+      collection
     end
 
     def show
