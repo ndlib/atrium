@@ -25,31 +25,10 @@ class Atrium::Collection < ActiveRecord::Base
     :search_facet_names,
     :url_slug,
     :exhibits_attributes,
-    :search_facets_attributes,
-    :showcase_order
+    :search_facets_attributes
   )
 
-  has_many(
-    :showcases,
-    :class_name => 'Atrium::Showcase',
-    :as => :showcases,
-    :dependent => :destroy
-  )
-
-  def showcase_order
-    showcases.each_with_object({}) { |showcase, object|
-      object[showcase[:id]] = showcase.sequence
-    }
-  end
-
-  def showcase_order=(showcase_order = {})
-    showcase_order.each_pair do |showcase_id, sequence|
-      begin
-        showcases.find(showcase_id).update_attributes!(sequence: sequence)
-      rescue ActiveRecord::RecordNotFound
-      end
-    end
-  end
+  include Atrium::IsShowcasedMixin
 
   has_many(
     :search_facets,
