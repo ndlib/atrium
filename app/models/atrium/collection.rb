@@ -92,13 +92,13 @@ class Atrium::Collection < ActiveRecord::Base
   def self.available_themes
     return @@available_themes if defined? @@available_themes
     # NOTE: theme filenames should conform to rails expectations and only use periods to delimit file extensions
-    local_themes = Dir.entries(File.join(Rails.root, 'app/views/layouts/atrium_themes')).reject {|f| f =~ /^\./}
+    local_themes = Dir.entries(File.join(Rails.root, 'app/views/atrium/themes')).reject {|f| f =~ /^[\._]/}
     local_themes.collect!{|f| f.split('.').first.titleize}
     @@available_themes = @@included_themes + local_themes
   end
 
   def theme_path
-    theme.blank? ? 'atrium_themes/default' : "atrium_themes/#{theme.downcase}"
+    theme.blank? ? 'atrium/themes/default' : "atrium/themes/#{theme.downcase}"
   end
 
   # TODO move method to presenter, also "inspect" doesn't really cut it.
