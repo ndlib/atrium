@@ -4,19 +4,10 @@ describe Atrium::ShowcasesHelper do
     pending
   end
   describe "test showcase parent path" do
-    let(:collection) { Atrium::Collection.new }
-    let(:collection_showcase) {Atrium::Showcase.new(:showcases_id=>collection.id, :showcases_type=>collection.class.name)}
-    let(:exhibit) {Atrium::Exhibit.new(:atrium_collection_id=>collection.id,:set_number=>1)}
-    let(:exhibit_showcase) {Atrium::Showcase.new(:showcases_id=>exhibit.id, :showcases_type=>exhibit.class.name)}
-
-    before(:each) do
-      exhibit_showcase.stub!(:id).and_return(1)
-      exhibit_showcase.stub!(:parent).and_return(exhibit)
-      exhibit.stub!(:id).and_return(1)
-      collection_showcase.stub!(:id).and_return(1)
-      collection_showcase.stub!(:parent).and_return(collection)
-      collection.stub!(:id).and_return(1)
-    end
+    Given(:collection) { FactoryGirl.create(:collection) }
+    Given(:collection_showcase) { FactoryGirl.create(:collection_showcase, showcases: collection) }
+    Given(:exhibit) {FactoryGirl.create(:exhibit, collection: collection,)}
+    Given(:exhibit_showcase) { FactoryGirl.create(:exhibit_showcase, showcases: exhibit) }
 
     context "#get parent edit path " do
       describe 'showcase parent edit path' do
