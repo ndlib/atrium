@@ -2,7 +2,7 @@ require_dependency "atrium/application_controller"
 
 module Atrium
   class CollectionsController < ApplicationController
-    before_filter :find_collection, :only => [:edit, :update, :destroy]
+
     def index
       @collections = Collection.all
     end
@@ -12,10 +12,6 @@ module Atrium
     end
 
     def create
-      if (params[:collection])
-        params[:collection][:search_facet_names] ||= []
-        params[:collection][:search_facet_names].delete_if { |elem| elem.empty? }  if params[:collection][:search_facet_names].length > 0
-      end
       @collection = Atrium::Collection.new(params[:collection])
       if @collection.save
         flash[:notice] = "Collection created successfully"
@@ -27,12 +23,11 @@ module Atrium
     end
 
     def edit
-
+      collection
     end
 
     def show
-      @collection = Atrium::Collection.find(params[:id])
-      @exhibits = @collection.exhibits
+      @exhibits = collection.exhibits
       respond_to do |format|
         format.html
         format.atom { render :layout => false }
@@ -40,11 +35,7 @@ module Atrium
     end
 
     def update
-      if (params[:collection])
-        params[:collection][:search_facet_names] ||= []
-        params[:collection][:search_facet_names].delete_if { |elem| elem.empty? }  if params[:collection][:search_facet_names].length > 0
-      end
-      if @collection.update_attributes(params[:collection])
+      if collection.update_attributes(params[:collection])
         flash[:notice] = 'Collection was successfully updated.'
       else
         flash.now.alert = "Collection Not updated"
@@ -53,15 +44,16 @@ module Atrium
     end
 
     def destroy
-      @collection.destroy
+      collection.destroy
       flash[:notice] = 'Collection '+ @collection.pretty_title+' was deleted successfully.'
       redirect_to collections_path
     end
 
-    def find_collection
-      @collection = Atrium::Collection.find(params[:id])
+    def collection
+      @collection ||= Atrium::Collection.find(params[:id])
     end
+    protected :collection
+    helper_method :collection
 
-    protected :find_collection
   end
 end

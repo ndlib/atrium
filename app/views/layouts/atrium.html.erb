@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <!-- TODO: Move this into the 'atrium' gem -->
     <!-- TODO: Review how this relates to the latest blacklight view -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><%= h(@page_title || application_name) %></title>
@@ -24,7 +23,7 @@
             </h1>
           <% end %>
         </div>
-        <div id="user_util_links">
+        <div id="user_util_links" class="collapsed">
           <% if content_for? :user_util_links %>
             <%= yield :user_util_links %>
           <% else %>

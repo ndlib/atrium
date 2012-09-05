@@ -26,11 +26,11 @@
         interface. Technically, an exhibit does not have to be a subset of the
         collection.
       </p>
+      <p>Current Scope: <%= @exhibit.humanized_scope %></p>
       <ol>
         <li>
-          <%= f.label :saved_search_id, 'Update Exhibit Scope:' %>
+          <%= f.label :saved_search_id, 'Set Exhibit Scope:' %>
           <%= f.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
-          <small><strong>Current Scope:</strong> <%= @exhibit.filter_query_params.inspect unless @exhibit.filter_query_params.blank?%></small>
           <small>Choose from one of your saved searches.</small>
         </li>
       </ol>

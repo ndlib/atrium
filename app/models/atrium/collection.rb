@@ -25,7 +25,8 @@ class Atrium::Collection < ActiveRecord::Base
     :search_facet_names,
     :url_slug,
     :exhibits_attributes,
-    :search_facets_attributes
+    :search_facets_attributes,
+    :showcase_order
   )
 
   has_many(
@@ -36,15 +37,17 @@ class Atrium::Collection < ActiveRecord::Base
   )
 
   def showcase_order
-    showcase_order = {}
-    showcases.map{|showcase| showcase_order[showcase[:id]] = showcase.sequence }
-    showcase_order
+    showcases.each_with_object({}) { |showcase, object|
+      object[showcase[:id]] = showcase.sequence
+    }
   end
 
   def showcase_order=(showcase_order = {})
-    valid_ids = showcases.select(:id).map{|showcase| showcase[:id]}
-    showcase_order.each_pair do |id, order|
-      Atrium::Showcase.find(id).update_attributes!(:sequence => order) if valid_ids.include?(id.to_i)
+    showcase_order.each_pair do |showcase_id, sequence|
+      begin
+        showcases.find(showcase_id).update_attributes!(sequence: sequence)
+      rescue ActiveRecord::RecordNotFound
+      end
     end
   end
 
@@ -53,33 +56,32 @@ class Atrium::Collection < ActiveRecord::Base
     :class_name => 'Atrium::Search::Facet',
     :foreign_key => 'atrium_collection_id',
     :dependent => :destroy,
-    :inverse_of => :collection
+    :inverse_of => :collection,
+    :autosave => true
   )
 
   accepts_nested_attributes_for :search_facets, :allow_destroy => true
 
   def search_facet_names
-    search_facets.map{|facet| facet.name }
+    search_facets.pluck(:name)
   end
 
 
   def search_facet_names=(collection_of_facet_names)
-    existing_facet_names = search_facets.map{|facet| facet.name }
+    existing_facet_names = search_facet_names
     add_collection_of_facets_by_name( collection_of_facet_names - existing_facet_names )
     remove_collection_of_facets_by_name( existing_facet_names - collection_of_facet_names )
   end
 
   def add_collection_of_facets_by_name(collection_of_facet_names)
     collection_of_facet_names.each do |name|
-      search_facets << Atrium::Search::Facet.find_or_create_by_name_and_atrium_collection_id(name, id)
+      search_facets.find_or_initialize_by_name(name) if name.present?
     end
   end
   private :add_collection_of_facets_by_name
 
   def remove_collection_of_facets_by_name(collection_of_facet_names)
-    collection_of_facet_names.each do |name|
-      search_facets.delete(Atrium::Search::Facet.find_by_name_and_atrium_collection_id(name, id))
-    end
+    search_facets.where("name IN (?)", collection_of_facet_names).destroy_all
   end
   private :remove_collection_of_facets_by_name
 
@@ -111,13 +113,18 @@ class Atrium::Collection < ActiveRecord::Base
   def self.available_themes
     return @@available_themes if defined? @@available_themes
     # NOTE: theme filenames should conform to rails expectations and only use periods to delimit file extensions
-    local_themes = Dir.entries(File.join(Rails.root, 'app/views/layouts/atrium_themes')).reject {|f| f =~ /^\./}
+    local_themes = Dir.entries(File.join(Rails.root, 'app/views/atrium/themes')).reject {|f| f =~ /^[\._]/}
     local_themes.collect!{|f| f.split('.').first.titleize}
     @@available_themes = @@included_themes + local_themes
   end
 
   def theme_path
-    theme.blank? ? 'atrium_themes/default' : "atrium_themes/#{theme.downcase}"
+    theme.blank? ? 'atrium/themes/default' : "atrium/themes/#{theme.downcase}"
+  end
+
+  # TODO move method to presenter, also "inspect" doesn't really cut it.
+  def humanized_scope
+    filter_query_params.blank? ? "<em>No Scope has been set</em>".html_safe() : filter_query_params.inspect
   end
 
   include Atrium::QueryParamMixin
