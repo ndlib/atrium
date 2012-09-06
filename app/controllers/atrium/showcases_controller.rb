@@ -97,7 +97,7 @@ module Atrium
     end
 
     def find_collection(parent)
-      parent.collection
+      @collection = parent.collection
     end
   end
 end

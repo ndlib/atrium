@@ -8,7 +8,7 @@
   <% end %>
 
   <fieldset>
-    <legend>Collection Name</legend>
+    <legend>Collection Attributes</legend>
     <ol>
       <li>
         <%= f.label :title, 'Title Text:' %>
@@ -18,8 +18,8 @@
         <%= f.label :url_slug, 'URL slug:' %>
         <%= f.text_field :url_slug %>
         <small>
-          Enter the way you'd like the URL for this collection to look.<br />
-          If you don't provide one we'll base it off of the collection name.
+          Enter the way you'd like this collection to be identified in the URL.<br />
+          It defaults to the numeric id of the collection.
         </small>
       </li>
       <li>
@@ -27,7 +27,7 @@
         <%= f.text_area :title_markup, :class => 'jquery-ckeditor'  %>
         <small>
           You can create an HTML title for use throughout this collection.<br />
-          For more dramatic customization create a theme instead.
+          For more dramatic view customization create a theme instead.
         </small>
       </li>
     </ol>
@@ -36,7 +36,7 @@
   <fieldset>
     <legend>Collection Scope</legend>
     <p>
-      A collection can be a subset of the total holdings.<br />
+      A collection is a subset of the total holdings.<br />
       Save a search on the catalog page to use as the collection scope.
     </p>
     <p>Current Scope: <%= @collection.humanized_scope %></p>
@@ -89,7 +89,11 @@
     </ol>
   </fieldset>
   <p>
+  <% if @collection.new_record? %>
+    <%= f.submit 'Create Collection', :class => 'button' %>
+  <% else %>
     <%= f.submit 'Update Collection', :class => 'button' %>
+  <% end %>
   </p>
 <% end %>
 <% unless @collection.new_record?  %>
@@ -100,8 +104,8 @@
   <p>
     An exhibit is a customizable view of a single topic (as defined by a facet),
     further scoped by an optional Solr query. An exhibit defines it's own
-    hierarchical list of facets. An exhibit may also have a description and a
-    list of featured items.
+    hierarchical list of facets. It may also have a description and a list of
+    featured items.
   </p>
   <% if @collection.exhibits.any? %>
     <ol data-resource="<%=update_collection_exhibit_order_path %>" class="exhibit-listing sortable">
@@ -130,10 +134,10 @@
 
   <h3>Showcases</h3>
   <p>
-    A showcase is a container for storing feature items and descriptions. A
+    A showcase is a container for storing featured items and descriptions. A
     showcase can be attached to a collection, exhibit, or to specific
     combinations of selected facets and facet values within an exhibit. There
-    can be multiple showcases in an exhibit.
+    can be multiple showcases in a collection.
   </p>
   <% if @collection.showcases.any? %>
     <ol data-resource="<%=update_collection_showcase_order_path   %>" class="exhibit-listing sortable">
