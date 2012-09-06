@@ -32,7 +32,7 @@ class BrowseLevelEvaluationService
     @facet_in_params_callable = facet_in_params_callable
     @collection = collection
     @exhibit = exhibit
-    @params = params
+    @params = ParamsAdaptorForFilter.new(params)
   end
 
   def extract(browse_levels)
