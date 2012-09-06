@@ -23,3 +23,4 @@ gem 'libnotify', :require => false
 
 gem 'simplecov', :require => false
 gem 'rails_best_practices', :require => false
+gem 'hash_syntax', require: false
