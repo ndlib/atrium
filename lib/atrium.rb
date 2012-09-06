@@ -3,6 +3,15 @@ require 'atrium/engine'
 module Atrium
   require 'ckeditor-rails'
 
+  class ConfigurationExpectation < RuntimeError
+  end
+
+  class ConfigurationNotSet < StandardError
+    def initialize(method_name)
+      super("Please define #{method_name} in config/initializer/atrium.rb")
+    end
+  end
+
   mattr_accessor :saved_search_class, :config
   class << self
     def saved_searches_for(user)
@@ -10,6 +19,30 @@ module Atrium
         saved_search_class.where(user_id: user[:id])
       else
         []
+      end
+    end
+
+    def query_param_beautifier=(callable)
+      if callable.nil?
+        @@query_param_beautifier = nil
+        return callable
+      end
+      if ! callable.respond_to?(:call)
+        message = "Expected Atrium.query_param_beautifier to respond to :call"
+        raise ConfigurationExpectation, message
+      end
+      if callable.arity != 2
+        message = "Expected Atrium.query_param_beautifier to require 2 args"
+        raise ConfigurationExpectation, message
+      end
+      @@query_param_beautifier = callable
+    end
+
+    def query_param_beautifier(context,query_params)
+      if defined?(@@query_param_beautifier) && @@query_param_beautifier
+        @@query_param_beautifier.call(context,query_params)
+      else
+        query_params.inspect
       end
     end
 
@@ -65,11 +98,4 @@ module Atrium
     end
 
   end
-
-  class ConfigurationNotSet < StandardError
-    def initialize(method_name)
-      super("Please define #{method_name} in config/initializer/atrium.rb")
-    end
-  end
-
 end

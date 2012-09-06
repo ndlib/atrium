@@ -2,6 +2,21 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Atrium do
 
+  context ".query_param_beautifier=" do
+    after(:each) do
+      Atrium.query_param_beautifier = nil
+    end
+    it 'should raise exception if not callable' do
+      expect {
+        Atrium.query_param_beautifier = 1
+      }.to raise_error(Atrium::ConfigurationExpectation)
+    end
+    it 'should raise exception if improper :arity' do
+      expect {
+        Atrium.query_param_beautifier = lambda {}
+      }.to raise_error(Atrium::ConfigurationExpectation)
+    end
+  end
   context "Search Class exists or not" do
     after(:each) do
       Atrium.saved_search_class = nil

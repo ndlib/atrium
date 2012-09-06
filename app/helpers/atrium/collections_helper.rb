@@ -14,7 +14,12 @@ module Atrium
         rescue NoMethodError, KeyError
         end
 
-        [query_params.inspect, search[:id]]
+        [
+          strip_tags(
+            Atrium.query_param_beautifier(self,query_params).gsub("<","< ")
+          ),
+          search[:id]
+        ]
       end
     end
 
