@@ -13,6 +13,13 @@ describe Atrium::Description do
   it { should be_accessible :atrium_showcase_id }
   it { should be_accessible :essay_attributes }
   it { should be_accessible :summary_attributes }
+  it { should delegate(:content).to(:summary).with_prefix(:summary) }
+  it { should delegate(:content).to(:essay).with_prefix(:essay) }
+  it { description.should respond_to(:get_summary) }
+  it { description.should respond_to(:get_essay) }
+
+  context "#get_summary" do
+  end
 
   context "#page_display?" do
     context 'default value' do
