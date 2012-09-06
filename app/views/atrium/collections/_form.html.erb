@@ -8,7 +8,7 @@
   <% end %>
 
   <fieldset>
-    <legend>Collection Name</legend>
+    <legend>Collection Attributes</legend>
     <ol>
       <li>
         <%= f.label :title, 'Title Text:' %>
@@ -18,8 +18,8 @@
         <%= f.label :url_slug, 'URL slug:' %>
         <%= f.text_field :url_slug %>
         <small>
-          Enter the way you'd like the URL for this collection to look.<br />
-          If you don't provide one it defaults to the numeric id of the collection.
+          Enter the way you'd like this collection to be identified in the URL.<br />
+          It defaults to the numeric id of the collection.
         </small>
       </li>
       <li>
@@ -27,7 +27,7 @@
         <%= f.text_area :title_markup, :class => 'jquery-ckeditor'  %>
         <small>
           You can create an HTML title for use throughout this collection.<br />
-          For more dramatic customization create a theme instead.
+          For more dramatic view customization create a theme instead.
         </small>
       </li>
     </ol>

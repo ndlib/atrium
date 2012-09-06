@@ -19,8 +19,9 @@
         </li>
       </ol>
     </fieldset>
+
     <fieldset>
-      <legend>Exhibit Configuration</legend>
+      <legend>Exhibit Scope</legend>
       <p>
         The scope of the exhibit can be set to any query made in the search
         interface. Technically, an exhibit does not have to be a subset of the
@@ -48,7 +49,7 @@
         rendered as a hierarchal navigation control.
       </p>
       <fieldset>
-        <legend>Current Navigation Levels</legend>
+        <legend>Navigation Levels</legend>
         <% if @exhibit.browse_levels.any? %>
           <table>
             <thead>
@@ -91,7 +92,7 @@
 <% unless @exhibit.new_record? %>
   <%= form_for([@collection, @exhibit], :html => {:class => 'atrium'}) do |f| %>
     <fieldset>
-      <legend>Add Navigation Levels</legend>
+      <legend>Add Navigation Level</legend>
       <%= f.fields_for :browse_levels, @exhibit.browse_levels.build do |level_form| %>
         <ol>
           <li>
