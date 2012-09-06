@@ -15,12 +15,12 @@ gem 'shoulda-matchers'
 # your gem to rubygems.org.
 
 # Dependencies not strictly needed to for the tests to pass.
-gem 'debugger', :require => false
+gem 'debugger', require: false
 gem 'guard'
 gem 'guard-rspec'
-gem 'ruby_gntp', :require => false
-gem 'libnotify', :require => false
+gem 'ruby_gntp', require: false
+gem 'libnotify', require: false
 
-gem 'simplecov', :require => false
-gem 'rails_best_practices', :require => false
+gem 'simplecov', require: false
+gem 'rails_best_practices', require: false
 gem 'hash_syntax', require: false
