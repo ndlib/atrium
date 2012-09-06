@@ -1,8 +1,8 @@
-class ParamsAdaptorForFilter
+class ParamsAdaptorForFilter < DelegateClass(Hash)
   def initialize(params)
-    @params = params
+    super(params)
   end
   def filter_query_params
-    @params
+    self
   end
 end
