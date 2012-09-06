@@ -17,7 +17,7 @@ module Atrium
         render action: "new"
       end
     end
-  
+
     def index
       @showcases=parent.showcases
     end
@@ -25,7 +25,9 @@ module Atrium
     def update
       if (params[:showcase])
         params[:showcase][:showcase_items] ||= []
-        params[:showcase][:showcase_items].delete_if { |elem| elem.empty? }  if params[:showcase][:showcase_items].length > 0
+        if params[:showcase][:showcase_items].length > 0
+          params[:showcase][:showcase_items].delete_if { |elem| elem.empty? }
+        end
       end
       if @showcase.update_attributes(params[:showcase])
         flash[:notice] = 'Showcase was successfully updated.'
@@ -34,10 +36,10 @@ module Atrium
       end
       render action: "edit"
     end
-  
+
     def edit
     end
-  
+
     def show
     end
 
@@ -51,13 +53,26 @@ module Atrium
     def add_or_update
       @parent=parent
       #TODO move it model
-      @showcase= Atrium::Showcase.with_selected_facets(@parent.id, @parent.class.name, params[:facet_selection]).first
+      @showcase= Atrium::Showcase.with_selected_facets(
+        @parent.id,
+        @parent.class.name,
+        params[:facet_selection]
+      ).first
       logger.debug("Showcase: #{@showcase.inspect}")
       unless  @showcase
-        @showcase = @parent.showcases.build({showcases_id:@parent.id, showcases_type:@parent.class.name})
+        @showcase = @parent.showcases.build(
+          {
+            showcases_id:@parent.id,
+            showcases_type:@parent.class.name
+          }
+        )
         @showcase.save!
         if(params[:facet_selection])
-          params[:facet_selection].collect {|key,value| facet_selection = @showcase.facet_selections.create({solr_facet_name:key,value:value.first}) }
+          params[:facet_selection].collect {|key,value|
+            @showcase.facet_selections.create(
+              {solr_facet_name:key,value:value.first}
+            )
+          }
           @showcase.save!
         end
       end
@@ -78,18 +93,20 @@ module Atrium
 
     def find_parent
       case
-        when params[:exhibit_id] then
-          @parent= Atrium::Exhibit.find(params[:exhibit_id])
-        when params[:collection_id] then
-          @parent = Atrium::Collection.find(params[:collection_id])
-        else
-          flash.alert = t("Atrium.showcase.parent.not_found")
-          redirect_to (:back)
+      when params[:exhibit_id] then
+        @parent= Atrium::Exhibit.find(params[:exhibit_id])
+      when params[:collection_id] then
+        @parent = Atrium::Collection.find(params[:collection_id])
+      else
+        flash.alert = t("Atrium.showcase.parent.not_found")
+        redirect_to(:back)
       end
     end
 
     def parent_url
-      parent.is_a?(Atrium::Exhibit) ? exhibit_showcases_path(parent) : edit_collection_path(parent)
+      parent.is_a?(Atrium::Exhibit) ?
+        exhibit_showcases_path(parent) :
+        edit_collection_path(parent)
     end
 
     def collection
