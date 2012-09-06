@@ -101,6 +101,7 @@
             @exhibit.get_available_facets.collect {|solr_fname| [atrium_facet_field_labels[solr_fname],solr_fname]},
             { :include_blank => true }
           )%>
+          <small>This list is populated by the facets of the parent collection.</small>
         </li>
       </ol>
       <p><%= f.submit 'Add Navigation Level', :class => 'button' %></p>
