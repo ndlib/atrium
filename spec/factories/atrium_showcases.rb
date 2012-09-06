@@ -12,7 +12,7 @@ FactoryGirl.define do
     :class => 'Atrium::Showcase',
     :parent => :showcase
   ) do
-    association :showcases, factory: :exhibit
+    association :showcases, factory: :collection
   end
 
   factory(
