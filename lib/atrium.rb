@@ -19,11 +19,10 @@ module Atrium
     end
 
     def saved_search_class
-      error = "Please define Atrium.saved_search_class in config/initializer/atrium.rb"
       if @@saved_search_class.respond_to?(:constantize)
         @@saved_search_class.constantize
       else
-        raise(Atrium::ConfigurationNotSet, error)
+        raise(Atrium::ConfigurationNotSet, 'Atrium.saved_search_class')
       end
     end
 
@@ -68,6 +67,9 @@ module Atrium
   end
 
   class ConfigurationNotSet < StandardError
+    def initialize(method_name)
+      super("Please define #{method_name} in config/initializer/atrium.rb")
+    end
   end
 
 end
