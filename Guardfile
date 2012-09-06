@@ -1,5 +1,12 @@
 guard 'rspec', :cli => '--color --format nested' do
-  notification :libnotify if RUBY_PLATFORM =~ /linux/
+  if RUBY_PLATFORM =~ /linux/
+    require 'libnotify'
+    notification :libnotify 
+  end
+  if RUBY_PLATFORM =~ /darwin/
+    require 'ruby_gntp'
+    notification :ruby_gntp
+  end
   watch('spec/spec_helper.rb') {
     'spec'
   }
