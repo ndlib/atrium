@@ -107,7 +107,10 @@ module Atrium
 
 
 
-    # This method will select showcase objects that have exactly the selected facets passed in (but no more or no less) and is tied to the given exhibit id
+    # This method will select showcase objects that have exactly the selected
+    # facets passed in (but no more or no less) and is tied to the given exhibit
+    # id
+    #
     # It expects two parameters:
     # @param[String] the exhibit id
     # @param[Hash] hash of key value pairs of selected facets
