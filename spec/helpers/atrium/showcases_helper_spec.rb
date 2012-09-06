@@ -37,11 +37,11 @@ describe Atrium::ShowcasesHelper do
   end
   context "#render_showcase_facet_selection " do
     let(:showcase) { mock_model(Atrium::Showcase) }
-    let(:facet_selections) { Atrium::Showcase::FacetSelection.new({ :solr_facet_name => "test_facet", :value=>"book" })}
+    let(:facet_selections) { Atrium::Showcase::FacetSelection.new({ solr_facet_name: "test_facet", value:"book" })}
     let(:facet_configuration) {
-          {:facet => {
-              :field_names => ['test_facet'],
-              :labels => {'test_facet' => 'Format'}
+          {facet: {
+              field_names: ['test_facet'],
+              labels: {'test_facet' => 'Format'}
           }  }
       }
     it "should return facet names" do

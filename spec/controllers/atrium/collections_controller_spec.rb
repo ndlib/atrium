@@ -7,20 +7,20 @@ describe Atrium::CollectionsController do
   end
 
   def do_create
-    post :create, :collection=>{:title=>"new collection", :slug=>"url_slug"}
+    post :create, collection:{title:"new collection", slug:"url_slug"}
   end
   def do_edit
     get :edit
   end
 
   def do_update
-    put :update, :collection=>{:title=>"new collection", :slug=>"url_slug"}
+    put :update, collection:{title:"new collection", slug:"url_slug"}
   end
 
 
   describe "Get New"   do
     before(:each) do
-      Atrium::Collection.stub!(:new).and_return(@collection = mock_model(Atrium::Collection, :save=>true))
+      Atrium::Collection.stub!(:new).and_return(@collection = mock_model(Atrium::Collection, save:true))
     end
 
     it "should build collection" do
@@ -41,7 +41,7 @@ describe Atrium::CollectionsController do
 
   describe "Post create"   do
     before(:each) do
-      Atrium::Collection.stub!(:new).and_return(@collection = mock_model(Atrium::Collection, :save=>true))
+      Atrium::Collection.stub!(:new).and_return(@collection = mock_model(Atrium::Collection, save:true))
     end
 
     it "should create the collection" do
@@ -110,12 +110,12 @@ describe Atrium::CollectionsController do
       @collection.should_receive(:pretty_title).and_return("collection_title")
     end
     it "destroy collection successfully" do
-      delete :destroy, { :id => "1" }
+      delete :destroy, { id: "1" }
       flash[:notice].should == "Collection collection_title was deleted successfully."
     end
 
     it "redirects to collection index" do
-      delete :destroy, { :id => "1" }
+      delete :destroy, { id: "1" }
       response.should redirect_to(collections_path)
     end
   end

@@ -7,20 +7,20 @@ describe Atrium::ShowcasesController do
   end
 
   def do_create
-    post :create, :exhibit=>{:title=>"new showcase for given asset"}
+    post :create, exhibit:{title:"new showcase for given asset"}
   end
   def do_edit
     get :edit
   end
 
   def do_update
-    put :update, :exhibit=>{:title=>"new exhibit", :slug=>"url_slug"}
+    put :update, exhibit:{title:"new exhibit", slug:"url_slug"}
   end
   describe "Get #new" do
     before(:each) do
       controller.stub(:find_collection).and_return(@collection = mock_model(Atrium::Collection))
       @showcase = mock_model(Atrium::Showcase)
-      @showcases=mock("Mocking showcases", :build => @showcase, :find=>@showcase)
+      @showcases=mock("Mocking showcases", build: @showcase, find:@showcase)
     end
     context "when building showcase for exhibit" do
       before(:each) do
@@ -60,7 +60,7 @@ describe Atrium::ShowcasesController do
     before(:each) do
       controller.stub(:find_collection).and_return(@collection = mock_model(Atrium::Collection))
       @showcase = mock_model(Atrium::Showcase)
-      @showcases=mock("Mocking showcases", :build => @showcase, :find=>@showcase)
+      @showcases=mock("Mocking showcases", build: @showcase, find:@showcase)
       @showcase.should_receive(:save!).and_return(true)
     end
     context "when creating showcase for exhibit" do
@@ -101,7 +101,7 @@ describe Atrium::ShowcasesController do
     before(:each) do
       controller.stub(:find_collection).and_return(@collection = mock_model(Atrium::Collection))
       @showcase = mock_model(Atrium::Showcase)
-      @showcases=mock("Mocking showcases", :build => @showcase, :find=>@showcase)
+      @showcases=mock("Mocking showcases", build: @showcase, find:@showcase)
     end
     context "when edit showcase of collection" do
       before(:each) do
@@ -139,7 +139,7 @@ describe Atrium::ShowcasesController do
     before(:each) do
       controller.stub(:find_collection).and_return(@collection = mock_model(Atrium::Collection))
       @showcase = mock_model(Atrium::Showcase)
-      @showcases=mock("Mocking showcases", :build => @showcase, :find=>@showcase)
+      @showcases=mock("Mocking showcases", build: @showcase, find:@showcase)
       @showcase.should_receive(:update_attributes).and_return(true)
     end
     context "when updating showcase of collection" do
@@ -180,7 +180,7 @@ describe Atrium::ShowcasesController do
     before(:each) do
       controller.stub(:find_collection).and_return(@collection = mock_model(Atrium::Collection))
       @showcase = mock_model(Atrium::Showcase)
-      @showcases=mock("Mocking showcases", :build => @showcase, :find=>@showcase)
+      @showcases=mock("Mocking showcases", build: @showcase, find:@showcase)
     end
     context "when deleting showcase of collection" do
       before(:each) do
@@ -188,12 +188,12 @@ describe Atrium::ShowcasesController do
         @collection.should_receive(:showcases).and_return(@showcases)
       end
       it "destroy exhibit successfully" do
-        delete :destroy, { :id => 1 }
+        delete :destroy, { id: 1 }
         flash[:notice].should == "Showcase 1 was deleted successfully."
       end
 
       it "redirects to collection edit" do
-        delete :destroy, { :id => @showcase.id }
+        delete :destroy, { id: @showcase.id }
         response.should redirect_to(edit_collection_path(@collection))
       end
     end
@@ -203,13 +203,13 @@ describe Atrium::ShowcasesController do
         @exhibit.should_receive(:showcases).and_return(@showcases)
       end
       it "destroy showcase successfully" do
-        delete :destroy, { :id => 1 }
+        delete :destroy, { id: 1 }
         flash[:notice].should == "Showcase 1 was deleted successfully."
       end
 
       it "redirects to exhibit showcase index" do
-        delete :destroy, { :id => @showcase.id }
-        response.should redirect_to(exhibit_showcases_path(:exhibit_id=>@exhibit.id))
+        delete :destroy, { id: @showcase.id }
+        response.should redirect_to(exhibit_showcases_path(exhibit_id:@exhibit.id))
       end
     end
   end

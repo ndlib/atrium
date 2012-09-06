@@ -7,21 +7,21 @@ describe Atrium::ExhibitsController do
   end
 
   def do_create
-    post :create, :exhibit=>{:title=>"new exhibit"}
+    post :create, exhibit:{title:"new exhibit"}
   end
   def do_edit
     get :edit
   end
 
   def do_update
-    put :update, :exhibit=>{:title=>"new exhibit", :slug=>"url_slug"}
+    put :update, exhibit:{title:"new exhibit", slug:"url_slug"}
   end
 
   before(:each) do
     @collection = mock_model(Atrium::Collection)
     controller.should_receive(:find_collection).and_return(@collection)
     @exhibit = mock_model(Atrium::Exhibit)
-    @exhibits=mock("Collection exhibits", :build => @exhibit, :find=>@exhibit)
+    @exhibits=mock("Collection exhibits", build: @exhibit, find:@exhibit)
     @collection.should_receive(:exhibits).and_return(@exhibits)
   end
 
@@ -90,12 +90,12 @@ describe Atrium::ExhibitsController do
   describe "Delete" do
     it "destroy exhibit successfully" do
       @collection= mock_model(Atrium::Collection)
-      delete :destroy, { :id => "1" }
+      delete :destroy, { id: "1" }
       flash[:notice].should == "Exhibit 1 was deleted successfully."
     end
 
     it "redirects to collection edit" do
-      delete :destroy, { :id => "1" }
+      delete :destroy, { id: "1" }
       response.should redirect_to(edit_collection_path(@collection))
     end
   end

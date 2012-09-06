@@ -2,8 +2,8 @@ module Atrium
   class Showcase::FacetSelection < ActiveRecord::Base
     belongs_to(
         :showcase,
-        :class_name => 'Atrium::Showcase',
-        :foreign_key => 'atrium_showcase_id'
+        class_name: 'Atrium::Showcase',
+        foreign_key: 'atrium_showcase_id'
     )
 
     validates_presence_of(

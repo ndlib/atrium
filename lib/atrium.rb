@@ -45,15 +45,15 @@ module Atrium
 
     def default_config
       {
-        :facet => {
-          :field_names => [
+        facet: {
+          field_names: [
             'active_fedora_model_s',
             'date_s',
             'format' ,
             'pub_date' ,
             'subject_topic_facet'
           ],
-            :labels => {
+            labels: {
             'active_fedora_model_s' => 'Description',
             'date_s'=>'Print Year',
             'format' => 'Format',
@@ -61,7 +61,7 @@ module Atrium
             'subject_topic_facet' => 'Topic'
           }
         },
-        :application_name => 'Atrium Application'
+        application_name: 'Atrium Application'
       }
     end
 

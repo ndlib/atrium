@@ -25,12 +25,12 @@ module Atrium
     def process_atrium_action(action, parameters = nil, session = nil, flash = nil, method = "GET")
       parameters ||= {}
       puts "Hacking routes #{action.inspect}"
-      process(action, parameters.merge!(:use_route => :atrium), session, flash, method)
+      process(action, parameters.merge!(use_route: :atrium), session, flash, method)
     end
   end
 end
 
 RSpec.configure do |c|
-  c.include Atrium::ControllerHacks, :type => :controller
+  c.include Atrium::ControllerHacks, type: :controller
 end
 

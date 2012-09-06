@@ -18,7 +18,7 @@ describe Atrium::CollectionsHelper do
       }
     }
     it "should retrieve facet saved search from blacklight" do
-      helper.stub :current_user => current_user
+      helper.stub current_user: current_user
       Atrium.should_receive(:saved_searches_for).
         with(current_user).
         and_return([saved_search])
@@ -35,9 +35,9 @@ describe Atrium::CollectionsHelper do
   describe "get_saved_items" do
     let(:current_user) { 'test' }
     it "should retrieve facet saved search from blacklight" do
-      saved_item1=mock(:document_id => 123, :title=> "my title")
-      saved_item2=mock(:document_id => 456, :title=> "new title")
-      helper.stub :current_user => current_user
+      saved_item1=mock(document_id: 123, title: "my title")
+      saved_item2=mock(document_id: 456, title: "new title")
+      helper.stub current_user: current_user
       Atrium.stub(:saved_items_for).with(current_user).and_return([saved_item1, saved_item2])
       saved_items_result=helper.get_saved_items
 

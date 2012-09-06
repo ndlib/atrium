@@ -18,7 +18,7 @@ module Atrium
         redirect_to edit_collection_path(@collection)
       else
         flash.now.alert = "Collection not created successfully"
-        render :action => "new"
+        render action: "new"
       end
     end
 
@@ -30,7 +30,7 @@ module Atrium
       @exhibits = collection.exhibits
       respond_to do |format|
         format.html
-        format.atom { render :layout => false }
+        format.atom { render layout: false }
       end
     end
 
@@ -40,7 +40,7 @@ module Atrium
       else
         flash.now.alert = "Collection Not updated"
       end
-      render :action => "edit"
+      render action: "edit"
     end
 
     def destroy

@@ -2,7 +2,7 @@ require_dependency "atrium/application_controller"
 
 module Atrium
   class ShowcasesController < ApplicationController
-    before_filter :find_showcase, :only => [:edit, :update, :destroy, :show]
+    before_filter :find_showcase, only: [:edit, :update, :destroy, :show]
 
     def new
       @showcase=parent.showcases.build(params[:showcase])
@@ -12,9 +12,9 @@ module Atrium
       @showcase=parent.showcases.build(params[:showcase])
       if @showcase.save!
         flash[:notice] = 'Showcase was successfully created.'
-        render :action => "edit"
+        render action: "edit"
       else
-        render :action => "new"
+        render action: "new"
       end
     end
   
@@ -32,7 +32,7 @@ module Atrium
       else
         flash.now.alert = 'Showcase Not updated'
       end
-      render :action => "edit"
+      render action: "edit"
     end
   
     def edit
@@ -54,14 +54,14 @@ module Atrium
       @showcase= Atrium::Showcase.with_selected_facets(@parent.id, @parent.class.name, params[:facet_selection]).first
       logger.debug("Showcase: #{@showcase.inspect}")
       unless  @showcase
-        @showcase = @parent.showcases.build({:showcases_id=>@parent.id, :showcases_type=>@parent.class.name})
+        @showcase = @parent.showcases.build({showcases_id:@parent.id, showcases_type:@parent.class.name})
         @showcase.save!
         if(params[:facet_selection])
-          params[:facet_selection].collect {|key,value| facet_selection = @showcase.facet_selections.create({:solr_facet_name=>key,:value=>value.first}) }
+          params[:facet_selection].collect {|key,value| facet_selection = @showcase.facet_selections.create({solr_facet_name:key,value:value.first}) }
           @showcase.save!
         end
       end
-      render :action => "edit"
+      render action: "edit"
     end
 
     private

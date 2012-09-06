@@ -4,27 +4,27 @@ module Atrium
   class OrderController < ApplicationController
     def exhibit_index
       respond_to do |format|
-        format.json  { render :json => collection.exhibit_order }
+        format.json  { render json: collection.exhibit_order }
       end
     end
 
     def exhibit_facet_index
       respond_to do |format|
-        format.json  { render :json => exhibit.facet_order }
+        format.json  { render json: exhibit.facet_order }
       end
     end
 
 
     def collection_showcase_index
       respond_to do |format|
-        format.json  { render :json => collection.showcase_order }
+        format.json  { render json: collection.showcase_order }
       end
     end
 
 
     def exhibit_showcase_index
       respond_to do |format|
-        format.json  { render :json => exhibit.showcase_order }
+        format.json  { render json: exhibit.showcase_order }
       end
     end
 
@@ -34,7 +34,7 @@ module Atrium
       collection.exhibit_order = params[:collection]
 
       respond_to do |format|
-        format.json  { render :json => collection.exhibit_order }
+        format.json  { render json: collection.exhibit_order }
       end
     end
 
@@ -42,7 +42,7 @@ module Atrium
       exhibit.facet_order = params[:collection]
 
       respond_to do |format|
-        format.json  { render :json => collection.exhibit_order }
+        format.json  { render json: collection.exhibit_order }
       end
     end
 
@@ -50,7 +50,7 @@ module Atrium
       exhibit.showcase_order = params[:collection]
 
       respond_to do |format|
-        format.json  { render :json => collection.exhibit_order }
+        format.json  { render json: collection.exhibit_order }
       end
     end
 
@@ -58,7 +58,7 @@ module Atrium
       collection.showcase_order = params[:collection]
 
       respond_to do |format|
-        format.json  { render :json => collection.exhibit_order }
+        format.json  { render json: collection.exhibit_order }
       end
     end
 

@@ -2,7 +2,7 @@ require_dependency "atrium/application_controller"
 
 module Atrium
   class ExhibitsController < ApplicationController
-    before_filter :find_exhibit, :only => [:edit, :update, :destroy, :show]
+    before_filter :find_exhibit, only: [:edit, :update, :destroy, :show]
     def new
       @exhibit = collection.exhibits.build(params[:exhibit])
     end
@@ -11,9 +11,9 @@ module Atrium
       @exhibit = collection.exhibits.build(params[:exhibit])
       if @exhibit.save!
         flash[:notice] = 'Exhibit was successfully created.'
-        redirect_to edit_collection_exhibit_path(:id=>@exhibit.id, :collection_id=>@collection)
+        redirect_to edit_collection_exhibit_path(id:@exhibit.id, collection_id:@collection)
       else
-        render :action => "new"
+        render action: "new"
       end
     end
 
@@ -25,7 +25,7 @@ module Atrium
       if @exhibit.update_attributes(params[:exhibit])
         flash[:notice] = 'Exhibit was successfully updated.'
       end
-      render :action => "edit"
+      render action: "edit"
     end
 
     def show

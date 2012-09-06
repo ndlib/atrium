@@ -5,9 +5,9 @@ module Atrium::IsShowcasedMixin
   included do
     has_many(
       :showcases,
-      :class_name => 'Atrium::Showcase',
-      :as => :showcases,
-      :dependent => :destroy
+      class_name: 'Atrium::Showcase',
+      as: :showcases,
+      dependent: :destroy
     )
     accepts_nested_attributes_for :showcases
 

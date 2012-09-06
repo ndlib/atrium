@@ -32,14 +32,14 @@ class Atrium::Collection < ActiveRecord::Base
 
   has_many(
     :search_facets,
-    :class_name => 'Atrium::Search::Facet',
-    :foreign_key => 'atrium_collection_id',
-    :dependent => :destroy,
-    :inverse_of => :collection,
-    :autosave => true
+    class_name: 'Atrium::Search::Facet',
+    foreign_key: 'atrium_collection_id',
+    dependent: :destroy,
+    inverse_of: :collection,
+    autosave: true
   )
 
-  accepts_nested_attributes_for :search_facets, :allow_destroy => true
+  accepts_nested_attributes_for :search_facets, allow_destroy: true
 
   def search_facet_names
     search_facets.pluck(:name)
@@ -67,13 +67,13 @@ class Atrium::Collection < ActiveRecord::Base
 
   has_many(
     :exhibits,
-    :class_name => 'Atrium::Exhibit',
-    :foreign_key => 'atrium_collection_id',
-    :order => 'set_number ASC',
-    :dependent => :destroy
+    class_name: 'Atrium::Exhibit',
+    foreign_key: 'atrium_collection_id',
+    order: 'set_number ASC',
+    dependent: :destroy
   )
 
-  accepts_nested_attributes_for :exhibits, :allow_destroy => true
+  accepts_nested_attributes_for :exhibits, allow_destroy: true
 
   def exhibit_order
     exhibit_order = {}
@@ -84,7 +84,7 @@ class Atrium::Collection < ActiveRecord::Base
   def exhibit_order=(exhibit_order = {})
     valid_ids = exhibits.select(:id).map{|exhibit| exhibit[:id]}
     exhibit_order.each_pair do |id, order|
-      Atrium::Exhibit.find(id).update_attributes!(:set_number => order) if valid_ids.include?(id.to_i)
+      Atrium::Exhibit.find(id).update_attributes!(set_number: order) if valid_ids.include?(id.to_i)
     end
   end
 

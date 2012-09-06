@@ -17,7 +17,7 @@ describe Atrium::Collection do
     Given(:subject) { FactoryGirl.create(:collection) }
   end
 
-  context "#search_facet_names=", :integration => true do
+  context "#search_facet_names=", integration: true do
     subject { FactoryGirl.create(:collection) }
 
     Then('create new one') do

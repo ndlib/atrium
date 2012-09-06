@@ -17,8 +17,8 @@ module Atrium
 
     belongs_to(
         :exhibit,
-        :class_name => 'Atrium::Exhibit',
-        :foreign_key => 'atrium_exhibit_id'
+        class_name: 'Atrium::Exhibit',
+        foreign_key: 'atrium_exhibit_id'
     )
 
     include Atrium::QueryParamMixin

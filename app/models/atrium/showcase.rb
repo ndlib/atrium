@@ -13,20 +13,20 @@ class Atrium::Showcase < ActiveRecord::Base
 
   has_many(
     :descriptions,
-    :class_name => 'Atrium::Description',
-    :foreign_key => 'atrium_showcase_id',
-    :dependent => :destroy
+    class_name: 'Atrium::Description',
+    foreign_key: 'atrium_showcase_id',
+    dependent: :destroy
   )
   accepts_nested_attributes_for(
     :descriptions,
-    :allow_destroy => true
+    allow_destroy: true
   )
 
   has_many(
     :facet_selections,
-    :class_name => 'Atrium::Showcase::FacetSelection',
-    :foreign_key => 'atrium_showcase_id',
-    :dependent => :destroy
+    class_name: 'Atrium::Showcase::FacetSelection',
+    foreign_key: 'atrium_showcase_id',
+    dependent: :destroy
   )
   accepts_nested_attributes_for :facet_selections
 
@@ -45,14 +45,14 @@ class Atrium::Showcase < ActiveRecord::Base
 
   belongs_to(
     :showcases,
-    :polymorphic => true
+    polymorphic: true
   )
 
   def parent
     showcases
   end
 
-  delegate :collection, :to => :showcases
+  delegate :collection, to: :showcases
 
   serialize :showcase_items, Hash
 
@@ -96,7 +96,7 @@ class Atrium::Showcase < ActiveRecord::Base
   def assign_sequence
     unless for_exhibit?
       sequence= parent.showcases.size
-      self.update_attributes(:sequence => sequence)
+      self.update_attributes(sequence: sequence)
     end
   end
 
@@ -147,7 +147,7 @@ class Atrium::Showcase < ActiveRecord::Base
           #{facet_selection_quoted_table_name}.`atrium_showcase_id`
         )
       ).
-        where(:showcases_id => parent_id,:showcases_type => parent_type).
+        where(showcases_id: parent_id,showcases_type: parent_type).
         where("#{facet_selection_quoted_table_name}.`id` is NULL")
     else
       # unfortunately have to do subselect here to get this correct

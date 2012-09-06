@@ -2,19 +2,19 @@ module Atrium
   class Description < ActiveRecord::Base
     belongs_to(
         :showcase,
-        :class_name => 'Atrium::Showcase',
-        :foreign_key => 'atrium_showcase_id'
+        class_name: 'Atrium::Showcase',
+        foreign_key: 'atrium_showcase_id'
     )
 
     has_one(
         :summary,
-        :class_name => 'Atrium::Essay',
-        :conditions => "\"atrium_essays\".content_type = \"summary\"",
-        :foreign_key => 'atrium_description_id',
-        :dependent => :destroy,
-        :inverse_of => :description
+        class_name: 'Atrium::Essay',
+        conditions: "\"atrium_essays\".content_type = \"summary\"",
+        foreign_key: 'atrium_description_id',
+        dependent: :destroy,
+        inverse_of: :description
     )
-    accepts_nested_attributes_for :summary, :allow_destroy => true
+    accepts_nested_attributes_for :summary, allow_destroy: true
 
     def get_summary
       essay.blank? ? "" : summary.content
@@ -22,13 +22,13 @@ module Atrium
 
     has_one(
         :essay,
-        :class_name => 'Atrium::Essay',
-        :conditions => "\"atrium_essays\".content_type = \"essay\"",
-        :foreign_key => 'atrium_description_id',
-        :dependent => :destroy,
-        :inverse_of => :description
+        class_name: 'Atrium::Essay',
+        conditions: "\"atrium_essays\".content_type = \"essay\"",
+        foreign_key: 'atrium_description_id',
+        dependent: :destroy,
+        inverse_of: :description
     )
-    accepts_nested_attributes_for :essay,   :allow_destroy => true
+    accepts_nested_attributes_for :essay,   allow_destroy: true
     def get_essay
       essay.blank? ? "" : essay.content
     end

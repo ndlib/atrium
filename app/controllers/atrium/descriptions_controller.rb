@@ -2,7 +2,7 @@ require_dependency "atrium/application_controller"
 
 module Atrium
   class DescriptionsController < ApplicationController
-    before_filter :find_description, :only => [:edit, :update, :destroy, :show]
+    before_filter :find_description, only: [:edit, :update, :destroy, :show]
 
     def index
       @descriptions = showcase.descriptions(params[:description])
@@ -10,23 +10,23 @@ module Atrium
 
     def new
       @description = showcase.descriptions.build(params[:description])
-      @description.build_essay(:content_type=>"essay")
-      @description.build_summary(:content_type=>"summary")
+      @description.build_essay(content_type:"essay")
+      @description.build_summary(content_type:"summary")
     end
 
     def create
       @description = showcase.descriptions.build(params[:description])
       if @description.save!
         flash[:notice] = 'Description was successfully created.'
-        render :action => "edit"
+        render action: "edit"
       else
-        render :action => "new"
+        render action: "new"
       end
     end
 
     def edit
-      @description.build_essay(:content_type=>"essay") unless @description.essay
-      @description.build_summary(:content_type=>"summary") unless @description.summary
+      @description.build_essay(content_type:"essay") unless @description.essay
+      @description.build_summary(content_type:"summary") unless @description.summary
     end
 
     def update
@@ -35,7 +35,7 @@ module Atrium
       else
         flash.now.alert = 'Description update failed'
       end
-      render :action => "edit"
+      render action: "edit"
     end
 
     def destroy
