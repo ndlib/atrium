@@ -1,16 +1,31 @@
 <% unless @showcase.new_record?  %>
-<strong>Showcase configuration</strong>
-<fieldset>
-  <legend>Add Featured Items</legend>
-  <%= form_for([@parent, @showcase]) do |f| %>
-      <%= f.label :showcase_items, 'Featured Items:' %>
-      <%= f.collection_select :showcase_items, get_saved_items.map{|item| Atrium::Showcase::FeaturedSelection.new(item)},:solr_id, :title, {},
-                              :multiple => true, :class => 'chosen', :'data-placeholder' => 'Select desired items from the list' %>
-      <%= f.submit 'Add Items to featured list', :class => 'button' %>
+  <hr />
+  <h3>Featured Items</h3>
+  <%= form_for([@parent, @showcase], :html => {:class => "atrium"}) do |f| %>
+    <fieldset>
+      <legend>Manage Featured Items</legend>
+      <ol>
+        <li>
+          <%= f.label :showcase_items, 'Featured Items:' %>
+          <%= f.collection_select(
+            :showcase_items,
+            get_saved_items.map{|item| Atrium::Showcase::FeaturedSelection.new(item)},
+            :solr_id,
+            :title,
+            {},
+            :multiple => true,
+            :class => 'chosen',
+            :'data-placeholder' => 'Select desired items from the list'
+          )%>
+          <small>Choose from your bookmarked items.</small>
+        </li>
+      </ol>
+    </fieldset>
+    <p><%= f.submit 'Update Featured Items List', :class => 'button' %></p>
   <% end %>
-</fieldset>
-<fieldset>
-  <legend>Description</legend>
+
+  <hr />
+  <h3>Descriptions</h3>
   <% if @showcase.descriptions.any? %>
     <ol data-resource="<%# update_atrium_collection_exhibit_order_path %>" class="exhibit-listing sortable">
       <% @showcase.descriptions.each do |desc| %>
@@ -18,16 +33,23 @@
           <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
           <%= desc.pretty_title %>
           <span class="controls">
-            <%= link_to 'Configure', edit_showcase_description_path(@showcase, desc) %>
-            <%= link_to 'Delete', showcase_description_path(@showcase, desc), :method=>:delete, :class=>:destroy, :confirm=>"Are you really want to delete this description?" %>
+            <%= link_to(
+              'Configure',
+              edit_showcase_description_path(@showcase, desc)
+            )%>
+            <%= link_to(
+              'Delete',
+              showcase_description_path(@showcase, desc),
+              :method => :delete,
+              :class => :destroy,
+              :confirm=>"Are you really want to delete this description?"
+            )%>
           </span>
         </li>
-        <% end %>
-      </ol>
+      <% end %>
+    </ol>
   <% else %>
-    <em>There are no description attached to this showcase.</em>
+    <p><em>There are no descriptions in this showcase.</em></p>
   <% end %>
-</fieldset>
-<%= link_to 'Add New Description', new_showcase_description_path(@showcase), :class => 'button' %>
+  <%= link_to 'Add New Description', new_showcase_description_path(@showcase), :class => 'button' %>
 <% end %>
-

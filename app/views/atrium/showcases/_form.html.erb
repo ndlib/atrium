@@ -7,18 +7,25 @@
         <% end %>
       </ul>
     <% end %>
-    <ol>
-      <li>
-        <%= f.label :label, 'Tag:' %>
-        <%= f.text_field :tag %>
-      </li>
-      <li>
-        <%= f.label :sequence, 'Sequence:' %>
-        <%= f.text_field :sequence %>
-      </li>
-    </ol>
+    <fieldset>
+      <legend>Rendering Options</legend>
+      <ol>
+        <li>
+          <%= f.label :label, 'Tag:' %>
+          <%= f.text_field :tag %>
+        </li>
+        <li>
+          <%= f.label :sequence, 'Sequence:' %>
+          <%= f.text_field :sequence %>
+        </li>
+      </ol>
+    </fieldset>
     <p class="showcase-controls">
-      <%= f.submit 'Update showcase', :class => 'button' %>
+    <% if @showcase.new_record? %>
+      <%= f.submit 'Create Showcase', :class => 'button' %>
+    <% else %>
+      <%= f.submit 'Update Showcase', :class => 'button' %>
+    <% end %>
     </p>
   <% end %>
 <% end %>
