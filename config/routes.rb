@@ -12,7 +12,7 @@ Atrium::Engine.routes.draw do
     resources :showcases
   end
 
-  resources :showcases, :only => [:show]
+  resources :showcases, only: [:show]
   resources :showcases do
     resources :descriptions do
       resources :essays
