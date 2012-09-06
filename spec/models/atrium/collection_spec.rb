@@ -54,12 +54,12 @@ describe Atrium::Collection do
   end
   context "#theme_path" do
     context 'default value' do
-      Then { subject.theme_path.should == "atrium_themes/default" }
+      Then { subject.theme_path.should == "atrium/themes/default" }
     end
     context 'set value' do
       Given(:theme_name) { 'chunky_bacon' }
       When { subject.theme = theme_name }
-      Then { subject.theme_path.should == "atrium_themes/#{theme_name}" }
+      Then { subject.theme_path.should == "atrium/themes/#{theme_name}" }
     end
   end
 
