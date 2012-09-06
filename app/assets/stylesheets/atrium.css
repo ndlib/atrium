@@ -267,6 +267,10 @@ form.hazardous-action .button {
   font-weight:bold;
 }
 
+#navigation-levels, #navigation-levels th, #navigation-levels td {
+  font-weight:normal;
+}
+
 .chzn-container-multi .chzn-choices .search-choice .search-choice-close {
   border-bottom:none;
 }
