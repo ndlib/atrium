@@ -89,7 +89,11 @@
     </ol>
   </fieldset>
   <p>
+  <% if @collection.new_record? %>
+    <%= f.submit 'Create Collection', :class => 'button' %>
+  <% else %>
     <%= f.submit 'Update Collection', :class => 'button' %>
+  <% end %>
   </p>
 <% end %>
 <% unless @collection.new_record?  %>
