@@ -2,7 +2,6 @@
   <% path=@showcase.for_exhibit? ? edit_exhibit_showcase_path(:id=>@showcase.id, :exhibit_id=>@showcase.parent.id) : edit_collection_showcase_path(:id=>id, :collection_id=>@showcase.parent.id)  %>
   <%= link_to 'Back to Showcase', path %>
 <% end %>
-<h1>Author a Description</h1>
 <p>
   Descriptions are blocks of text present at the top of the page when viewing
   a showcase. They can be added from within Atrium or they can be ingested
@@ -13,10 +12,6 @@
   this showcase find the item you are interested in and click the
   &#8220;Select&#8221; checkbox. You can limit the items listed by keyword
   search and or facet selection.
-</p>
-<p>
-  To save your work use the &#8220;Save&#8221; button below. If you wish to
-  close <strong>without</strong> saving close the modal window.
 </p>
 <%if @description %>
   <%= form_for([@showcase, @description], :html => { :class => 'atrium' }) do |f| %>
@@ -59,7 +54,7 @@
             </li>
         <% end %>
       </ol>
-      <%= f.submit 'Save', :class => 'button' %>
     </fieldset>
+    <p><%= f.submit 'Save', :class => 'button' %></p>
   <% end %>
 <% end %>
