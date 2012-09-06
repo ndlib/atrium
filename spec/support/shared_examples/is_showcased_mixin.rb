@@ -2,6 +2,7 @@ shared_examples "is_showcased_mixin" do
   it { should be_accessible :showcase_order }
   it { should be_accessible :showcases_attributes }
   it { should accept_nested_attributes_for :showcases }
+  it { subject.collection.should be_kind_of Atrium::Collection }
 
   context '#showcase_order=' do
     Given(:showcase_1) { FactoryGirl.create(:showcase, showcases: subject) }

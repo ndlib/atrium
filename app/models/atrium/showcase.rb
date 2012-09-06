@@ -68,6 +68,8 @@ module Atrium
        showcases
     end
 
+    delegate :collection, :to => :showcases
+
     serialize :showcase_items, Hash
 
     def showcase_items

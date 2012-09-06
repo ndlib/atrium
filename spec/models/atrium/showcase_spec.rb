@@ -5,6 +5,7 @@ describe Atrium::Showcase do
   it { should have_many :descriptions }
   it { should have_many :facet_selections }
   it { should belong_to :showcases }
+  it { should respond_to :collection }
 
   context "#checking parent type" do
     Given(:exhibit) { Atrium::Exhibit.new }
