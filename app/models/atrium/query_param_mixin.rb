@@ -4,7 +4,9 @@ module Atrium::QueryParamMixin
 
   included do
     attr_reader :saved_search_id
+
     attr_accessible :saved_search_id
+
     def saved_search_id=(value)
       @saved_search_id = value
       return @saved_search_id unless @saved_search_id.present?
@@ -25,6 +27,16 @@ module Atrium::QueryParamMixin
       end
       self.filter_query_params = formatted_query_params
     end
+
+    # TODO move method to presenter, also "inspect" doesn't really cut it.
+    def humanized_scope
+      if filter_query_params.blank?
+        "<em>No Scope has been set</em>".html_safe()
+      else
+        filter_query_params.inspect
+      end
+    end
+
     serialize :filter_query_params, Hash
 
     def filter_query_params

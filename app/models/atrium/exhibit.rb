@@ -37,13 +37,10 @@ module Atrium
     def facet_order=(facet_order = {})
       valid_ids = browse_levels.select(:id).map{|facet| facet[:id]}
       facet_order.each_pair do |id, order|
-        Atrium::BrowseLevel.find(id).update_attributes!(level_number: order) if valid_ids.include?(id.to_i)
+        if valid_ids.include?(id.to_i)
+          Atrium::BrowseLevel.find(id).update_attributes!(level_number: order)
+        end
       end
-    end
-
-    # TODO move method to presenter, also "inspect" doesn't really cut it.
-    def humanized_scope
-      filter_query_params.blank? ? "<em>No Scope has been set</em>".html_safe() : filter_query_params.inspect
     end
 
     include Atrium::QueryParamMixin

@@ -11,6 +11,7 @@ shared_examples "query_param_mixin" do
     Given(:saved_search_id) { 1 }
     Given(:filter_query_params) { {f: [1,2,3], q: ['a','b'] }}
     Given(:saved_search) { mock(query_params: filter_query_params) }
+    Then { subject.should respond_to(:humanized_scope) }
 
     context 'save_search_id is not present' do
       Given(:saved_search_id) { nil }
