@@ -47,7 +47,7 @@ module Atrium
     private
 
     def showcase
-      @showcase ||=find_showcase
+      @showcase ||= find_showcase
     end
 
     def find_description
@@ -57,7 +57,7 @@ module Atrium
     def find_showcase
       if(params[:showcase_id])
         @showcase=Atrium::Showcase.find(params[:showcase_id])
-        @collection=@showcase.for_exhibit? ? @showcase.parent.collection :  @showcase.parent
+        @collection=@showcase.collection
         @showcase
       else
         flash.alert = t("Atrium.showcase.not_found")
