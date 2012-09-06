@@ -1,6 +1,8 @@
 <% content_for :atrium_side_bar do %>
-  <% path=@showcase.for_exhibit? ? edit_exhibit_showcase_path(:id=>@showcase.id, :exhibit_id=>@showcase.parent.id) : edit_collection_showcase_path(:id=>id, :collection_id=>@showcase.parent.id)  %>
-  <%= link_to 'Back to Showcase', path %>
+  <%= link_to(
+    'Back to Showcase',
+    polymorphic_path([@showcase.parent,@showcase],action: :edit)
+  )%>
 <% end %>
 <p>
   Descriptions are blocks of text present at the top of the page when viewing

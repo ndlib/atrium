@@ -3,23 +3,18 @@ module Atrium
     include Atrium::ApplicationHelper
     def get_parent_path(showcase)
       facet={}
-      unless showcase.facet_selections.blank?
-        showcase.facet_selections.each do  |x|
-          facet[x.solr_facet_name]=x.value
-        end
+      showcase.facet_selections.each do |x|
+        facet[x.solr_facet_name]=x.value
       end
-      path=showcase.for_exhibit? ? main_app.exhibit_path(:id=>showcase.parent.id, :f=>facet) : main_app.collection_path(showcase.parent)
-      return path
+      main_app.polymorphic_path(showcase.parent, f: facet)
     end
 
     def get_showcase_parent_edit_path(showcase)
-      path=showcase.for_exhibit? ? atrium.edit_exhibit_showcase_path(:id=>showcase.id, :exhibit_id=>showcase.parent.id) : atrium.edit_collection_showcase_path(:id=>showcase.id, :collection_id=>showcase.parent.id)
-      return path
+      atrium.polymorphic_path([showcase.parent,showcase],action: :edit)
     end
 
     def get_showcase_parent_show_path(showcase)
-      path=showcase.for_exhibit? ? atrium.exhibit_showcase_path(:id=>showcase.id, :exhibit_id=>showcase.parent.id) : atrium.collection_showcase_path(:id=>showcase.id, :collection_id=>showcase.parent.id)
-      return path
+      atrium.polymorphic_path([showcase.parent,showcase])
     end
 
     def render_showcase_facet_selection(showcase)

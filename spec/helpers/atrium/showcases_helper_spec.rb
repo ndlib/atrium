@@ -12,10 +12,12 @@ describe Atrium::ShowcasesHelper do
     context "#get parent edit path " do
       describe 'showcase parent edit path' do
         it "should return exhibit as parent" do
-          helper.get_showcase_parent_edit_path(exhibit_showcase).should == edit_exhibit_showcase_path(:id=>exhibit_showcase.id, :exhibit_id=>exhibit.id)
+          helper.get_showcase_parent_edit_path(exhibit_showcase).should ==
+          edit_exhibit_showcase_path(exhibit, exhibit_showcase)
         end
         it "should return collection show path" do
-          helper.get_showcase_parent_edit_path(collection_showcase).should == edit_collection_showcase_path(:id=>collection_showcase.id, :collection_id=>collection.id)
+          helper.get_showcase_parent_edit_path(collection_showcase).should ==
+          edit_collection_showcase_path(collection, collection_showcase)
         end
       end
     end
@@ -23,10 +25,12 @@ describe Atrium::ShowcasesHelper do
     context "#get parent show path " do
       describe 'showcase parent edit path' do
         it "should return exhibit as parent" do
-          helper.get_showcase_parent_show_path(exhibit_showcase).should == exhibit_showcase_path(:id=>exhibit_showcase.id, :exhibit_id=>exhibit.id)
+          helper.get_showcase_parent_show_path(exhibit_showcase).should ==
+          exhibit_showcase_path(exhibit, exhibit_showcase)
         end
         it "should return collection show path" do
-          helper.get_showcase_parent_show_path(collection_showcase).should == collection_showcase_path(:id=>collection_showcase.id, :collection_id=>collection.id)
+          helper.get_showcase_parent_show_path(collection_showcase).should ==
+          collection_showcase_path(collection, collection_showcase)
         end
       end
     end
