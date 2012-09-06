@@ -36,53 +36,59 @@
       </ol>
     </fieldset>
 
-    <h3>Exhibit Navigation</h3>
-    <p>
-      Items in an exhibit can be further scoped by filters. Filters are
-      basically nested facets with optional include or exclude rules. Exhibit
-      filters are rendered as a hierarchal navigation control.
-    </p>
-    <fieldset>
-      <legend>Current Navigation Levels</legend>
-      <% if @exhibit.browse_levels.any? %>
-        <table>
-          <thead>
-            <tr>
-              <th>&nbsp;</th>
-              <th>&nbsp;</th>
-              <th>Facet</th>
-              <th>Label</th>
-              <th>Include Filter</th>
-              <th>Remove</th>
-            </tr>
-          </thead>
-          <tbody data-resource="<%= update_exhibit_facet_order_path %>" data-primary-label="Group By:" data-secondary-label="Then By:" class="sortable">
-            <% @exhibit.browse_levels.each_with_index do |level,index| %>
-              <tr data-id="<%= level[:id] %>" data-order="<%= level.level_number %>" class="ui-state-default">
-                <%= f.fields_for :browse_levels, level do |level_form| %>
-                  <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
-                  <td class="label"><%= level.level_number == 1 ? 'Group By:' : 'Then By:' %></td>
-                  <td><%=atrium_facet_field_labels[level.solr_facet_name]%></td>
-                  <td><%=level_form.text_field :label, :value=>level.label%></td>
-                  <td>
-                    <%= level_form.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
-                    <div> <%= "Current Scope: #{level.filter_query_params}" unless level.filter_query_params.blank?%></div>
-                  </td>
-                  <td><%=level_form.check_box :_destroy %></td>
-                <% end %>
+    <% if @exhibit.new_record? %>
+      <p>
+        <%= f.submit 'Create Exhibit', :class => 'button' %>
+      </p>
+    <% else %>
+      <h3>Exhibit Navigation</h3>
+      <p>
+        Items in an exhibit can be further scoped by filters. Filters are
+        basically nested facets with optional include or exclude rules. Exhibit
+        filters are rendered as a hierarchal navigation control.
+      </p>
+      <fieldset>
+        <legend>Current Navigation Levels</legend>
+        <% if @exhibit.browse_levels.any? %>
+          <table>
+            <thead>
+              <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>Facet</th>
+                <th>Label</th>
+                <th>Include Filter</th>
+                <th>Remove</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% end %>
-    </fieldset>
-    <p class="exhibit-facet-controls">
-      <%= f.submit 'Update Exhibit and Navigation', :class => 'button' %>
-    </p>
+            </thead>
+            <tbody data-resource="<%= update_exhibit_facet_order_path %>" data-primary-label="Group By:" data-secondary-label="Then By:" class="sortable">
+              <% @exhibit.browse_levels.each_with_index do |level,index| %>
+                <tr data-id="<%= level[:id] %>" data-order="<%= level.level_number %>" class="ui-state-default">
+                  <%= f.fields_for :browse_levels, level do |level_form| %>
+                    <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
+                    <td class="label"><%= level.level_number == 1 ? 'Group By:' : 'Then By:' %></td>
+                    <td><%= atrium_facet_field_labels[level.solr_facet_name] %></td>
+                    <td><%= level_form.text_field :label, :value => level.label %></td>
+                    <td>
+                      <%= level_form.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
+                      <div><%= "Current Scope: #{level.filter_query_params}" unless level.filter_query_params.blank?%></div>
+                    </td>
+                    <td><%= level_form.check_box :_destroy %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+      </fieldset>
+      <p class="exhibit-facet-controls">
+        <%= f.submit 'Update Exhibit and Navigation', :class => 'button' %>
+      </p>
+    <% end %>
   <% end %>
 <% end %>
 
-<% unless @exhibit.new_record?  %>
+<% unless @exhibit.new_record? %>
   <%= form_for([@collection, @exhibit], :html => {:class => 'atrium'}) do |f| %>
     <fieldset>
       <legend>Add Navigation Levels</legend>
@@ -101,6 +107,14 @@
     </fieldset>
   <% end %>
 <% end %>
+
+  <hr />
+
+  <h3>Showcases</h3>
+  <p>
+    A showcase is a container for storing feature items and descriptions.
+  </p>
+
   <%= link_to 'Add a Showcase to this Exhibit', new_exhibit_showcase_path(@exhibit), :class => 'button' %>
 
   <hr />
