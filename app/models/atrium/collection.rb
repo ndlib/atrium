@@ -48,8 +48,12 @@ class Atrium::Collection < ActiveRecord::Base
 
   def search_facet_names=(collection_of_facet_names)
     existing_facet_names = search_facet_names
-    add_collection_of_facets_by_name( collection_of_facet_names - existing_facet_names )
-    remove_collection_of_facets_by_name( existing_facet_names - collection_of_facet_names )
+    add_collection_of_facets_by_name(
+      collection_of_facet_names - existing_facet_names
+    )
+    remove_collection_of_facets_by_name(
+      existing_facet_names - collection_of_facet_names
+    )
   end
 
   def add_collection_of_facets_by_name(collection_of_facet_names)
@@ -84,15 +88,20 @@ class Atrium::Collection < ActiveRecord::Base
   def exhibit_order=(exhibit_order = {})
     valid_ids = exhibits.select(:id).map{|exhibit| exhibit[:id]}
     exhibit_order.each_pair do |id, order|
-      Atrium::Exhibit.find(id).update_attributes!(set_number: order) if valid_ids.include?(id.to_i)
+      if valid_ids.include?(id.to_i)
+        Atrium::Exhibit.find(id).update_attributes!(set_number: order)
+      end
     end
   end
 
   @@included_themes = ['Default']
   def self.available_themes
     return @@available_themes if defined? @@available_themes
-    # NOTE: theme filenames should conform to rails expectations and only use periods to delimit file extensions
-    local_themes = Dir.entries(File.join(Rails.root, 'app/views/layouts/atrium/themes')).reject {|f| f =~ /^[\._]/}
+    # NOTE: theme filenames should conform to rails expectations and only use
+    # periods to delimit file extensions
+    local_themes = Dir.entries(
+      Rails.root.join('app/views/layouts/atrium/themes').to_s
+    ).reject {|f| f =~ /^[\._]/}
     local_themes.collect!{|f| f.split('.').first.titleize}
     @@available_themes = @@included_themes + local_themes
   end
@@ -103,7 +112,11 @@ class Atrium::Collection < ActiveRecord::Base
 
   # TODO move method to presenter, also "inspect" doesn't really cut it.
   def humanized_scope
-    filter_query_params.blank? ? "<em>No Scope has been set</em>".html_safe() : filter_query_params.inspect
+    if filter_query_params.blank?
+      "<em>No Scope has been set</em>".html_safe()
+    else
+      filter_query_params.inspect
+    end
   end
 
   include Atrium::QueryParamMixin
@@ -126,7 +139,11 @@ class Atrium::Collection < ActiveRecord::Base
   end
 
   def display_title
-    has_custom_title? ? title_markup.html_safe : "<h2>#{pretty_title}</h2>".html_safe
+    if has_custom_title?
+      title_markup.html_safe
+    else
+      "<h2>#{pretty_title}</h2>".html_safe
+    end
   end
 
   def has_custom_title?
