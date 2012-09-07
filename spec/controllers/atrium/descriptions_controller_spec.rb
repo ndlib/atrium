@@ -44,7 +44,7 @@ describe Atrium::DescriptionsController do
       end
       context 'failure' do
         When {
-          description.should_receive(:save!).and_return(false)
+          description.should_receive(:save).and_return(false)
         }
         When {
           post(
@@ -58,7 +58,7 @@ describe Atrium::DescriptionsController do
       end
       context 'success' do
         When {
-          description.should_receive(:save!).and_return(true)
+          description.should_receive(:save).and_return(true)
         }
         When {
           post(
@@ -99,6 +99,17 @@ describe Atrium::DescriptionsController do
       end
       context 'success' do
         When{ description.should_receive(:update_attributes).and_return(true) }
+        When {
+          put :update, showcase_id: showcase_id, id: description_id,
+          description: {
+            title:"new description", slug:"url_slug"
+          }
+        }
+        Then { assigns(:description).should == description }
+        Then { response.should render_template("edit") }
+      end
+      context 'falise' do
+        When{ description.should_receive(:update_attributes).and_return(false) }
         When {
           put :update, showcase_id: showcase_id, id: description_id,
           description: {
