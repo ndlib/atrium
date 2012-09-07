@@ -106,9 +106,13 @@ describe Atrium::DescriptionsController do
           }
         }
         Then { assigns(:description).should == description }
-        Then { response.should render_template("edit") }
+        Then {
+          response.should(
+            redirect_to(edit_showcase_description_path(showcase,description))
+          )
+        }
       end
-      context 'falise' do
+      context 'failure' do
         When{ description.should_receive(:update_attributes).and_return(false) }
         When {
           put :update, showcase_id: showcase_id, id: description_id,

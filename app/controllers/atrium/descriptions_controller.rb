@@ -29,10 +29,11 @@ class Atrium::DescriptionsController < ApplicationController
   def update
     if description.update_attributes(params[:description])
       flash[:notice] = 'Description was successfully updated.'
+      redirect_to edit_showcase_description_path(showcase, @description)
     else
       flash.now.alert = 'Description update failed'
+      render action: "edit"
     end
-    render action: "edit"
   end
 
   def destroy
