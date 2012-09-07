@@ -1,6 +1,7 @@
 require_dependency "atrium/application_controller"
 
-class Atrium::DescriptionsController < ApplicationController
+module Atrium
+  class DescriptionsController < ApplicationController
   def index
     @descriptions = showcase.descriptions
   end
@@ -53,4 +54,5 @@ class Atrium::DescriptionsController < ApplicationController
     @description ||= showcase.descriptions.find(params[:id])
   end
   helper_method :description
+  end
 end
