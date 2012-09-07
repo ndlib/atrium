@@ -79,10 +79,6 @@ class Atrium::Showcase < ActiveRecord::Base
 
   end
 
-  def collection
-    parent.collection
-  end
-
   def solr_doc_ids
     showcase_items[:solr_doc_ids] unless showcase_items.blank?
   end
