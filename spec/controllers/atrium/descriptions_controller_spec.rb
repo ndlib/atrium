@@ -56,8 +56,10 @@ describe Atrium::DescriptionsController do
 
     describe "Get Edit"   do
       before(:each) do
-        description.should_receive(:essay).and_return(@essay = mock_model(Atrium::Essay))
-        description.should_receive(:summary).and_return(@summary = mock_model(Atrium::Essay))
+        description.should_receive(:essay).
+          and_return(@essay = mock_model(Atrium::Essay))
+        description.should_receive(:summary).
+          and_return(@summary = mock_model(Atrium::Essay))
       end
       it "should assign description" do
         do_edit
@@ -107,7 +109,11 @@ describe Atrium::DescriptionsController do
   end
 
   def do_create
-    post :create, showcase_id: showcase_id, description:{title:"new description"}
+    post(
+      :create,
+      showcase_id: showcase_id,
+      description:{title:"new description"}
+    )
   end
   def do_edit
     get :edit,showcase_id: showcase_id
