@@ -33,7 +33,6 @@ module Atrium
     end
 
     def destroy
-      puts @collection.inspect
       @exhibit.destroy
       flash[:notice] = 'Exhibit '+params[:id] +' was deleted successfully.'
       redirect_to edit_collection_path(@collection)
