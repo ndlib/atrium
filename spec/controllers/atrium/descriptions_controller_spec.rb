@@ -96,16 +96,18 @@ describe Atrium::DescriptionsController do
       before(:each) do
         descriptions.should_receive(:find).with(description_id).
           and_return(description)
-        description.should_receive(:update_attributes).and_return(true)
       end
-      When {
-        put :update, showcase_id: showcase_id, id: description_id,
-        description: {
-          title:"new description", slug:"url_slug"
+      context 'success' do
+        When{ description.should_receive(:update_attributes).and_return(true) }
+        When {
+          put :update, showcase_id: showcase_id, id: description_id,
+          description: {
+            title:"new description", slug:"url_slug"
+          }
         }
-      }
-      Then { assigns(:description).should == description }
-      Then { response.should render_template("edit") }
+        Then { assigns(:description).should == description }
+        Then { response.should render_template("edit") }
+      end
     end
 
     describe "Delete" do
