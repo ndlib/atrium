@@ -19,27 +19,11 @@ describe Atrium::Showcase do
       Then { showcase.for_exhibit?.should_not == true }
     end
   end
-  context 'with database' do
-    context "#get parent " do
-      describe 'Return exhibit' do
-        it "should return exhibit as parent" do
-            exhibit=Atrium::Exhibit.new(atrium_collection_id: 1, set_number:1)
-            exhibit.save
-            showcase=exhibit.showcases.build
-            showcase.save!
-            showcase.parent.should == exhibit
-        end
 
-        it "should return collection as parent" do
-          collection=Atrium::Collection.new
-          collection.save
-          showcase=collection.showcases.build
-          showcase.save!
-          showcase.parent.should == collection
-        end
-      end
-    end
-
+  context '#parent' do
+    Then { showcase.should alias_from(:showcases).to(:parent) }
+  end
+  context 'with database', database: true do
     describe "#creating showcase without facet selection" do
       it "should allow no facet selections defined" do
         collection = Atrium::Collection.new
