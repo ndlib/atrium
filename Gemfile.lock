@@ -7,6 +7,12 @@ PATH
       jquery-rails
       rails (~> 3.2.8)
 
+PATH
+  remote: ../ndlib-on-rspec
+  specs:
+    ndlib-on-rspec (0.0.1)
+      rspec (>= 2.6.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -177,6 +183,7 @@ DEPENDENCIES
   hash_syntax
   jquery-rails
   libnotify
+  ndlib-on-rspec!
   rails_best_practices
   rspec
   rspec-given

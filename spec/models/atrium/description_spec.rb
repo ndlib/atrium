@@ -1,4 +1,3 @@
-
 require File.expand_path(File.dirname(__FILE__) + '../../../spec_helper')
 
 describe Atrium::Description do
@@ -13,8 +12,8 @@ describe Atrium::Description do
   it { should be_accessible :atrium_showcase_id }
   it { should be_accessible :essay_attributes }
   it { should be_accessible :summary_attributes }
-  it { should delegate(:content).to(:summary).with_prefix(:summary) }
-  it { should delegate(:content).to(:essay).with_prefix(:essay) }
+  it { should delegate(:summary_content).to(:summary).via(:content) }
+  it { should delegate(:essay_content).to(:essay).via(:content) }
   it { description.should respond_to(:get_summary) }
   it { description.should respond_to(:get_essay) }
 

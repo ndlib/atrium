@@ -9,6 +9,7 @@ require File.expand_path("../dummy/config/environment.rb", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'rspec/given'
+require 'ndlib-on-rspec'
 require 'factory_girl'
 FactoryGirl.find_definitions
 
