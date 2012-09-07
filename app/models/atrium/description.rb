@@ -2,7 +2,13 @@ class Atrium::Description < ActiveRecord::Base
   belongs_to(
     :showcase,
     class_name: 'Atrium::Showcase',
-    foreign_key: 'atrium_showcase_id'
+    foreign_key: 'atrium_showcase_id',
+    inverse_of: :description
+  )
+
+  validate(
+    :showcase,
+    presence: true
   )
 
   has_one(

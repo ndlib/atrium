@@ -15,7 +15,8 @@ class Atrium::Showcase < ActiveRecord::Base
     :descriptions,
     class_name: 'Atrium::Description',
     foreign_key: 'atrium_showcase_id',
-    dependent: :destroy
+    dependent: :destroy,
+    inverse_of: :showcase
   )
   accepts_nested_attributes_for(
     :descriptions,
