@@ -18,7 +18,6 @@ gem 'shoulda-matchers'
 gem 'debugger', require: false
 gem 'guard'
 gem 'guard-rspec'
-gem 'ndlib-on-rspec', path: '../ndlib-on-rspec', require: false
 gem 'ruby_gntp', require: false
 gem 'libnotify', require: false
 
