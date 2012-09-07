@@ -15,7 +15,7 @@ class Atrium::DescriptionsController < ApplicationController
     @description = showcase.descriptions.build(params[:description])
     if @description.save!
       flash[:notice] = 'Description was successfully created.'
-      render action: "edit"
+      redirect_to edit_showcase_description_path(showcase, @description)
     else
       render action: "new"
     end

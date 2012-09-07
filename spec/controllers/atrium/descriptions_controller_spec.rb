@@ -41,17 +41,39 @@ describe Atrium::DescriptionsController do
       before(:each) do
         descriptions.should_receive(:build).with(description_attributes).
           and_return(description)
-        description.should_receive(:save!).and_return(true)
       end
-      When {
-        post(
-          :create,
-          showcase_id: showcase_id,
-          description: description_attributes
-        )
-      }
-      Then { assigns(:description).should == description }
-      Then { response.should render_template("edit") }
+      context 'failure' do
+        When {
+          description.should_receive(:save!).and_return(false)
+        }
+        When {
+          post(
+            :create,
+            showcase_id: showcase_id,
+            description: description_attributes
+          )
+        }
+        Then { assigns(:description).should == description }
+        Then { response.should render_template("new") }
+      end
+      context 'success' do
+        When {
+          description.should_receive(:save!).and_return(true)
+        }
+        When {
+          post(
+            :create,
+            showcase_id: showcase_id,
+            description: description_attributes
+          )
+        }
+        Then { assigns(:description).should == description }
+        Then {
+          response.should(
+            redirect_to(edit_showcase_description_path(showcase,description))
+          )
+        }
+      end
     end
 
     describe "GET :edit"   do
