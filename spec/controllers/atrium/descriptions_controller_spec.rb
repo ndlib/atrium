@@ -17,111 +17,87 @@ describe Atrium::DescriptionsController do
   end
 
   context 'member actions' do
-    Given(:description) { mock_model(Atrium::Description) }
-    Given(:descriptions) {
-      mock("Showcase descriptions", build: description, find: description)
-    }
+    Given(:description_id) { '2' }
+    Given(:description_attributes) { { 'Title' => 'New Title'} }
+    Given(:description) { mock_model(Atrium::Description, id: description_id) }
+    Given(:descriptions) { mock("Showcase descriptions") }
 
-    describe "Get New"   do
+    describe "GET :new"   do
       before(:each) do
+        descriptions.should_receive(:build).with(description_attributes).
+          and_return(description)
         description.should_receive(:build_essay).with(content_type:'essay')
         description.should_receive(:build_summary).with(content_type:'summary')
       end
 
-      it "should assign description" do
-        do_new
-        assigns(:description).should == description
-      end
-
-      it "should render new template" do
-        do_new
-        response.should render_template("new")
-      end
+      When {
+        get :new, showcase_id: showcase_id,description: description_attributes
+      }
+      Then { assigns(:description).should == description }
+      Then { response.should render_template("new") }
     end
 
-    describe "Post create"   do
+    describe "POST :create"   do
       before(:each) do
+        descriptions.should_receive(:build).with(description_attributes).
+          and_return(description)
         description.should_receive(:save!).and_return(true)
       end
-      it "should assign description" do
-        do_create
-        assigns(:description).should == description
-      end
-
-      it "should render edit template" do
-        do_create
-        response.should render_template("edit")
-      end
+      When {
+        post(
+          :create,
+          showcase_id: showcase_id,
+          description: description_attributes
+        )
+      }
+      Then { assigns(:description).should == description }
+      Then { response.should render_template("edit") }
     end
 
-    describe "Get Edit"   do
+    describe "GET :edit"   do
       before(:each) do
+        descriptions.should_receive(:find).with(description_id).
+          and_return(description)
         description.should_receive(:essay).
           and_return(@essay = mock_model(Atrium::Essay))
         description.should_receive(:summary).
           and_return(@summary = mock_model(Atrium::Essay))
       end
-      it "should assign description" do
-        do_edit
-        assigns(:description).should == description
-      end
-
-      it "should render edit template" do
-        do_edit
-        response.should render_template("edit")
-      end
+      When{
+        get :edit,showcase_id: showcase_id, id: description_id
+      }
+      Then { assigns(:description).should == description }
+      Then { response.should render_template("edit") }
     end
 
-    describe "Put Update"   do
+    describe "PUT :update"   do
       before(:each) do
+        descriptions.should_receive(:find).with(description_id).
+          and_return(description)
         description.should_receive(:update_attributes).and_return(true)
       end
-      it "should assign description" do
-        do_update
-        assigns(:description).should == description
-      end
-
-      it "should render edit" do
-        do_update
-        response.should render_template("edit")
-      end
+      When {
+        put :update, showcase_id: showcase_id, id: description_id,
+        description: {
+          title:"new description", slug:"url_slug"
+        }
+      }
+      Then { assigns(:description).should == description }
+      Then { response.should render_template("edit") }
     end
 
     describe "Delete" do
       before(:each) do
+        descriptions.should_receive(:find).with(description_id).
+          and_return(description)
         description.should_receive(:pretty_title).and_return("title")
       end
-      it "destroy description successfully" do
-        delete :destroy,  showcase_id: showcase_id, id: "1"
+      When { delete :destroy,  showcase_id: showcase_id, id: description_id }
+      Then {
         flash[:notice].should == "Description title was deleted successfully."
-      end
-
-      it "redirects to showcase edit" do
-        delete :destroy,  showcase_id: showcase_id, id: "1"
-        response.should redirect_to(edit_showcase_path(showcase))
-      end
+      }
+      Then { response.should redirect_to(edit_showcase_path(showcase)) }
     end
 
-  end
-
-  def do_new
-    get :new, showcase_id: showcase_id
-  end
-
-  def do_create
-    post(
-      :create,
-      showcase_id: showcase_id,
-      description:{title:"new description"}
-    )
-  end
-  def do_edit
-    get :edit,showcase_id: showcase_id
-  end
-
-  def do_update
-    put :update, showcase_id: showcase_id, description: {
-      title:"new description", slug:"url_slug"
-    }
   end
 end
