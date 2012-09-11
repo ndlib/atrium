@@ -31,7 +31,7 @@ module Atrium
 
     # NOTE this action is not currently protected from unauthorized use.
     def update_collection_exhibits_order
-      collection.exhibit_order = params[:collection]
+      collection.exhibit_order= params[:collection]
 
       respond_to do |format|
         format.json  { render json: collection.exhibit_order }
@@ -42,7 +42,7 @@ module Atrium
       exhibit.facet_order = params[:collection]
 
       respond_to do |format|
-        format.json  { render json: collection.exhibit_order }
+        format.json  { render json: exhibit.facet_order }
       end
     end
 
@@ -50,7 +50,7 @@ module Atrium
       exhibit.showcase_order = params[:collection]
 
       respond_to do |format|
-        format.json  { render json: collection.exhibit_order }
+        format.json  { render json: exhibit.showcase_order }
       end
     end
 
@@ -58,7 +58,7 @@ module Atrium
       collection.showcase_order = params[:collection]
 
       respond_to do |format|
-        format.json  { render json: collection.exhibit_order }
+        format.json  { render json: collection.showcase_order }
       end
     end
 
