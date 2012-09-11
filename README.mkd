@@ -1,15 +1,7 @@
 # Atrium
 
-## A note from the developers
-
-_0.0.1 is an alpha release. Treat it accordingly_
-
-_"master" is going through a major refactor. THINGS MAY BREAK. THE WORLD MAY
-END_
-
-Atrium is a project that has been gestating for a while. Consider the present
-state of the code a proof-of-concept implementation. There are lots of things we
-would do differently if we started over again. For more information see
+Atrium is a project that has been gestating for a while. It's coming along well
+but is still a ways off of a "1.0" release. For more information see
 `ROADMAP.mkd`. The development process is coordinated in a [public-facing
 JIRA][1]
 
