@@ -17,8 +17,11 @@ Gem::Specification.new do |s|
     "jeremy.n.friesen"
   ]
   s.homepage    = "http://github.com/ndlib/atrium"
-  s.summary     = "TODO: Summary of Atrium."
-  s.description = "TODO: Description of Atrium."
+  s.summary     = "Atrium extends Blacklight-enabled applications"
+  s.description = %q{
+    Atrium extends Blacklight-enabled applications by providing a means of
+    generating custom presentations of a subset of your Blacklight catalog.
+  }
 
   s.files         = `git ls-files`.split($\)
   s.executables   = s.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
