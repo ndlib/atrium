@@ -1,0 +1,16 @@
+<%= collection_title %>
+
+<%= render partial: 'shared/showcases', locals: { showcases: @showcases } %>
+<%= render partial: 'shared/document_list', locals: { collection_response: @collection_response } %>
+
+<% content_for :atrium_side_bar do %>
+  <%= render partial: 'exhibits' %>
+  <h3><%= link_to 'Collection Home', collection_path(@collection) %></h3>
+
+  <% if current_user %>
+    <hr />
+    <p>
+      <%= link_to 'Edit this Collection', atrium.edit_collection_path(@collection) %>
+    </p>
+  <% end %>
+<% end %>

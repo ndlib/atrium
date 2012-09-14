@@ -1,0 +1,34 @@
+<%# This partial recursively calls itself as necessary to render the navigation browse level data. %>
+<% unless browse_levels.nil? || browse_facets.nil? || exhibit_number.nil?%>
+    <% browse_level = browse_levels.first %>
+    <% unless browse_level.values.empty? %>
+        <% solr_facet_name = browse_level.solr_facet_name %>
+        <% browse_level.label = facet_field_labels[solr_facet_name] if browse_level.label.blank? %>
+        <h3 class="facet-heading"><%= browse_level.label %></h3>
+        <ul class="browse-facets">
+          <% browse_level.values.each do |value| %>
+              <li class="<%= value.downcase.gsub(/\W/, '-') %>">
+                <% @exhibit ? exhibit_set_from_params = @exhibit.set_number : exhibit_set_from_params = get_exhibit_set_number(exhibit_id) %>
+                <% if !browse_level.selected.nil? && browse_level.selected == value && exhibit_number.to_i == exhibit_set_from_params.to_i%>
+                    <% selected_path = get_selected_browse_facet_path(solr_facet_name, value, browse_facets, exhibit_number, exhibit_id) %>
+                    <span class="selected browse-facet">
+              <%= value %>
+            </span>
+                    <%= link_to("[remove]", selected_path, :class=>"remove") %>
+                    <% if browse_levels.size > 1 && !browse_levels.second.values.empty? %>
+                        <%= render :partial => 'shared/navigation_browse_level',
+                                   :locals => {
+                                           :browse_levels => browse_levels.slice(1, browse_levels.length - 1),
+                                           :browse_facets => browse_facets.slice(1, browse_facets.length - 1),
+                                           :exhibit_number => exhibit_number,
+                                           :exhibit_id => exhibit_id
+                                   } %>
+                    <% end %>
+                <% else %>
+                    <%= link_to(value, get_browse_facet_path(solr_facet_name, value, browse_facets, exhibit_number, exhibit_id)) %>
+                <% end %>
+              </li>
+          <% end %>
+        </ul>
+    <% end %>
+<% end %>

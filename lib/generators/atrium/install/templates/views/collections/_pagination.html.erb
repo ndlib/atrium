@@ -1,0 +1,6 @@
+<% if paginate_params(document_response).num_pages > 1 %>
+    <div class="pagination">
+      <h2><%= t('blacklight.search.pagination.title') %></h2>
+      <%= paginate_rsolr_response document_response, :outer_window => 2, :theme => 'blacklight' %>
+    </div>
+<% end %>

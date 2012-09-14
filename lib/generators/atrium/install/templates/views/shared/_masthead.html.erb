@@ -1,0 +1,19 @@
+<hgroup id="title-banner">
+  <h2 class="site_title"><a href="http://www.library.nd.edu/rarebooks/">Rare Books &amp; Special Collections</a></h2>
+  <h3><a href="http://www.library.nd.edu/" rel="external">Hesburgh Libraries of Notre Dame</a></h3>
+</hgroup>
+
+<nav id="collection-listing">
+  <ul>
+  <% Atrium::Collection.all.each do |collection| %>
+     <li><%= link_to_unless (collection.to_param == params[:id]), collection.title, collection_path(collection) %></li>
+  <% end %>
+     <li><%= link_to_unless in_unscoped_catalog_search?, 'Search Across Collections', catalog_index_path %></li>
+  </ul>
+</nav>
+
+<nav id="breadcrumbs">
+  <a href="http://www.library.nd.edu/rarebooks/" class="root">Rare Books &amp; Special Collections</a>
+  <a href="http://www.library.nd.edu/rarebooks/digital_projects/" class="back">Digital Projects</a>
+  <%= breadcrumb_links %>
+</nav>

@@ -1,0 +1,20 @@
+<div id="browse-navigation" class="facet-list">
+  <% if @exhibit_navigation_data.nil? || @exhibit_navigation_data.empty? %>
+    <b>No browse level defined</b>
+  <% else %>
+    <%# Recursively render the browse sets. %>
+    <% @exhibit_navigation_data.each do |exhibit| %>
+      <h3 class="facet-heading <%= exhibit.pretty_title%>"></h3>
+      <% unless exhibit.browse_levels.nil? || exhibit.browse_levels.empty? %>
+        <%= render(:partial => 'shared/navigation_browse_level',
+                   :locals=>{
+                           :exhibit_number => exhibit.set_number,
+                           :browse_levels => exhibit.browse_levels,
+                           :browse_facets => exhibit.browse_facet_names,
+                           :exhibit_id => exhibit[:id]
+                   }) %>
+
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
