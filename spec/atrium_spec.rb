@@ -31,6 +31,20 @@ describe Atrium do
     end
   end
 
+  context "Save Item Class exists or not" do
+    after(:each) do
+      Atrium.saved_items_class = nil
+    end
+    Given(:config) {  lambda {Atrium.saved_items_class} }
+    context 'saved_items_class not set in application' do
+      Then { config.should raise_error(Atrium::ConfigurationNotSet) }
+    end
+    context 'saved_items_class set in application' do
+      When {Atrium.saved_items_class = "SavedItem"}
+      Then { config.should_not raise_error(Atrium::ConfigurationNotSet)}
+    end
+  end
+
   context 'Configuration settings' do
     before(:each) do
       @old_config = Atrium.config

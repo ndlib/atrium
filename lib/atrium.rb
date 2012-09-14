@@ -12,7 +12,7 @@ module Atrium
     end
   end
 
-  mattr_accessor :saved_search_class, :config
+  mattr_accessor :saved_search_class, :config, :saved_items_class
   class << self
     def saved_searches_for(user)
       if user
@@ -47,8 +47,11 @@ module Atrium
     end
 
     def saved_items_class
-      #TODO as saved_search_class
-      "SelectedItem".constantize
+      if @@saved_items_class.respond_to?(:constantize)
+        @@saved_items_class.constantize
+      else
+        raise(Atrium::ConfigurationNotSet, 'Atrium.saved_items_class')
+      end
     end
 
     def saved_search_class
