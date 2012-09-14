@@ -1,4 +1,4 @@
-class Atrium::InstallGenerator < Rails::Generators::NamedBase
+class Atrium::InstallGenerator < Rails::Generators::Base
   source_root File.expand_path('../templates', __FILE__)
 
   def create_initializer
@@ -39,12 +39,13 @@ class Atrium::InstallGenerator < Rails::Generators::NamedBase
 
   private
   def raw_install(context)
-    directory_pattern = File.join(source_root, context, '/**/*.*')
+    container_directory = File.join(source_paths.first, '/')
+    directory_pattern = File.join(container_directory, context, '/**/*.*')
     Dir.glob(directory_pattern).each do |file_name|
-      relative_filename = file_name.sub(File.join(source_root,context,'/'), "")
-      template(
+      relative_filename = file_name.sub(container_directory, "")
+      copy_file(
         relative_filename,
-        File.join('app', context, relative_filename)
+        File.join('app', relative_filename)
       )
     end
 
