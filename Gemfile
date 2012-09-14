@@ -18,6 +18,8 @@ gem 'shoulda-matchers'
 gem 'debugger', require: false
 gem 'guard'
 gem 'guard-rspec'
+gem 'yard'
+gem 'yard-rspec'
 gem 'ruby_gntp', require: false
 gem 'libnotify', require: false
 

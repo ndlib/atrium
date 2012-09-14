@@ -166,6 +166,9 @@ GEM
       polyglot (>= 0.3.1)
     trollop (1.16.2)
     tzinfo (0.3.33)
+    yard (0.8.2.1)
+    yard-rspec (0.1)
+      yard
 
 PLATFORMS
   ruby
@@ -189,3 +192,5 @@ DEPENDENCIES
   shoulda-matchers
   simplecov
   sqlite3
+  yard
+  yard-rspec
