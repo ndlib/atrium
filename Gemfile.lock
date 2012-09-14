@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    atrium (0.0.1)
+    atrium (0.1.0)
       ckeditor_rails
       friendly_id
       jquery-rails
