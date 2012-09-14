@@ -99,12 +99,17 @@ class Atrium::Collection < ActiveRecord::Base
     return @@available_themes if defined? @@available_themes
     # NOTE: theme filenames should conform to rails expectations and only use
     # periods to delimit file extensions
-    local_themes = Dir.entries(
-      Rails.root.join('app/views/layouts/atrium/themes').to_s
-    ).reject {|f| f =~ /^[\._]/}
-    local_themes.collect!{|f| f.split('.').first.titleize}
-    @@available_themes = @@included_themes + local_themes
+    begin
+      local_themes = Dir.entries(
+        Rails.root.join('app/views/layouts/atrium/themes').to_s
+      ).reject {|f| f =~ /^[\._]/}
+      local_themes.collect!{|f| f.split('.').first.titleize}
+      @@available_themes = @@included_themes + local_themes
+    rescue Errno::ENOENT
+      @@included_themes
+    end
   end
+
 
   def theme_path
     theme.blank? ? 'atrium/themes/default' : "atrium/themes/#{theme.downcase}"
