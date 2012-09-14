@@ -8,6 +8,10 @@ class Atrium::InstallGenerator < Rails::Generators::Base
     )
   end
 
+  def update_routes
+    route(%q{mount Atrium::Engine => '/atrium', as: 'atrium'})
+  end
+
   def update_controllers
     inject_into_class(
       'app/controllers/application_controller.rb',
