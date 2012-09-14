@@ -1,5 +1,7 @@
 Atrium.saved_search_class = "Search"
 
+Atrium.saved_items_class = "SelectedItem"
+
 Atrium.query_param_beautifier = lambda {|context,ugly_params|
   context.extend(Blacklight::SearchFields)
   context.extend(Blacklight::SearchHistoryConstraintsHelperBehavior)
