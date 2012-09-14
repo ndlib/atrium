@@ -20,6 +20,7 @@ gem 'guard'
 gem 'guard-rspec'
 gem 'yard'
 gem 'yard-rspec'
+gem 'redcarpet'
 gem 'ruby_gntp', require: false
 gem 'libnotify', require: false
 

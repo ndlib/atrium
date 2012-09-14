@@ -130,6 +130,7 @@ GEM
       ffi (>= 0.5.0)
     rdoc (3.12)
       json (~> 1.4)
+    redcarpet (2.1.1)
     rspec (2.11.0)
       rspec-core (~> 2.11.0)
       rspec-expectations (~> 2.11.0)
@@ -184,6 +185,7 @@ DEPENDENCIES
   libnotify
   ndlib-on-rspec
   rails_best_practices
+  redcarpet
   rspec
   rspec-given
   rspec-on-rails-matchers
