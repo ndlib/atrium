@@ -5,6 +5,17 @@ but is still a ways off of a "1.0" release. For more information see
 `ROADMAP.mkd`. The development process is coordinated in a [public-facing
 JIRA][1]
 
+## Getting Started
+
+Make sure [blacklight](https://github.com/projectblacklight/blacklight) is
+installed. You will need an ApplicationController#current_user method, which is
+easily provided by Devise and the Blacklight devise installation option.
+
+    $ rake atrium:install:migrations
+    $ rails generate atrium:install
+    $ git commit
+    $ rake db:migrate
+
 ## What it's for
 
 Atrium is a tool for extending a [Blacklight][2]-enabled application by:
