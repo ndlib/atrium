@@ -1,0 +1,25 @@
+<% if descriptions.any? %>
+  <div class="showcase-descriptions">
+    <% descriptions.each do |description| %>
+      <% title = description.pretty_title %>
+      <% if description.show_on_this_page? %>
+        <h3><%= link_to title, description_path(description), :label=>("Essay: \"#{title}\"") %></h3>
+        <blockquote>
+          <%= description.get_summary.html_safe %>
+        </blockquote>
+        <%= link_to "Read the complete essay", description_path(description)%>
+      <% else %>
+        <h3><%= title %></h3>
+        <%if description.get_essay %>
+          <blockquote class="intro"><%= truncate( description.get_essay, :length =>550, :ommision => "…").html_safe%></blockquote>
+          <% if description.get_essay.length>50 %>
+            <a class="heading" href="#">[Read the complete essay]</a>
+            <div style="display: none"class="content" id="<%= description[:id] %>">
+              <%= description.get_essay.html_safe %>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

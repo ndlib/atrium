@@ -1,0 +1,19 @@
+<%= collection_title %>
+
+<%= render partial: 'shared/showcases', locals: { showcases: @showcases } %>
+
+<div id="collection-description">
+  <%= @collection.collection_description.html_safe %>
+</div>
+
+<% content_for :atrium_side_bar do %>
+  <%= render partial: 'exhibits' %>
+  <h3><%= link_to 'Browse Collection Holdings', browse_collection_path(@collection) %></h3>
+
+  <% if current_user %>
+    <hr />
+    <p>
+      <%= link_to 'Edit this Collection', atrium.edit_collection_path(@collection) %>
+    </p>
+  <% end %>
+<% end %>

@@ -1,0 +1,28 @@
+<%= collection_title %>
+
+<%= render partial: 'shared/showcases', locals: { showcases: @showcases } %>
+<%= render partial: 'shared/document_list', locals: { collection_response: @collection_response } %>
+
+<% content_for :atrium_side_bar do %>
+  <%= render partial: 'shared/side_bar_navigation' %>
+  <h3><%= link_to 'Collection Home', collection_path(@collection) %></h3>
+
+  <% if current_user %>
+    <hr>
+    <% if if_browsing_facet? %>
+      <p>
+        <%= link_to(
+          'Customize this Page',
+          atrium.get_browse_level_showcase_path(
+            exhibit_id: @exhibit[:id],
+            facet_selection: params[:f]
+          )
+        )%>
+      </p>
+    <% end %>
+    <p>
+      <%= link_to 'Edit this Exhibit', atrium.edit_collection_exhibit_path(@collection, @exhibit) %>
+    </p>
+  <% end %>
+
+<% end %>

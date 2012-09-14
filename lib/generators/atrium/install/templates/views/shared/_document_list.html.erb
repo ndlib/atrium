@@ -1,0 +1,14 @@
+<% if collection_response.nil? %>
+  <div id="documents" class="none-found">
+    <em>0 items found</em>
+  </div>
+<% else %>
+  <div class="pageEntriesInfo">
+    <%= render_pagination_info collection_response, entry_name: 'item' %>
+  </div>
+
+  <%= render 'pagination' , document_response: collection_response %>
+  <div id="documents">
+    <%= render partial: 'document', collection: @collection_document_list, as: :document %>
+  </div>
+<% end %>

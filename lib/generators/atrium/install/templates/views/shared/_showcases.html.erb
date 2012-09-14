@@ -1,0 +1,12 @@
+<% if showcases.any? %>
+  <div id="showcase-display">
+  <% showcases.each do |showcase| %>
+    <div class="showcase">
+      <%= render partial: 'shared/list_descriptions', locals: { descriptions: showcase.descriptions } %>
+      <div class="showcase-items">
+        <%= render partial: 'shared/featured_sources', locals: { showcase: showcase } %>
+      </div>
+    </div>
+  <% end %>
+  </div>
+<% end %>
