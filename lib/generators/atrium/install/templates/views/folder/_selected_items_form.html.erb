@@ -1,0 +1,8 @@
+<%= form_tag save_selected_items_url, :name => "items" do %>
+    <% documents.each_with_index do |document, index| %>
+        <%= hidden_field_tag "items[#{index}][document_id]", document.get(:id)%>
+        <%= hidden_field_tag "items[#{index}][title]", h(document[document_show_link_field])%>
+    <% end %>
+    <%= link_to_function "Save Items", "document.items.submit()" %>
+    <%= submit_tag "Save Items", :class => 'hide' %>
+<% end %>
