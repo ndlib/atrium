@@ -5,6 +5,11 @@ Atrium.saved_items_class = "SelectedItem"
 Atrium.query_param_beautifier = lambda {|context,ugly_params|
   context.extend(Blacklight::SearchFields)
   context.extend(Blacklight::SearchHistoryConstraintsHelperBehavior)
+
+  def context.blacklight_config
+    CatalogController.blacklight_config
+  end
+
   if context.respond_to?(:render_search_to_s)
     context.render_search_to_s(ugly_params)
   else
@@ -37,7 +42,3 @@ atrium_config = {
 }
 
 Atrium.config = atrium_config
-
-def blacklight_config
-  CatalogController.blacklight_config
-end
