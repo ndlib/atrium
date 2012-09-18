@@ -12,10 +12,6 @@ module Atrium
       @config || configure(OpenStruct.new)
     end
 
-    def configuration
-      @config || configure(OpenStruct.new)
-    end
-
     delegate(
       :application_name,
       :query_param_beautifier,

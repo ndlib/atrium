@@ -5,6 +5,6 @@ describe Atrium do
   context '.configure' do
     Given(:main_app_config) { OpenStruct.new }
     When { Atrium.configure(main_app_config) }
-    Then { Atrium.configuration.should be_instance_of(Atrium::Configuration) }
+    Then { Atrium.config.should be_instance_of(Atrium::Configuration) }
   end
 end
