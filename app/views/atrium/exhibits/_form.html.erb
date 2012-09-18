@@ -68,7 +68,7 @@
                   <%= f.fields_for :browse_levels, level do |level_form| %>
                     <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
                     <td class="label"><%= level.level_number == 1 ? 'Group By:' : 'Then By:' %></td>
-                    <td><%= atrium_facet_field_labels[level.solr_facet_name] %></td>
+                    <td><%= Atrium.config.facet_fields[level.solr_facet_name].label  %></td>
                     <td><%= level_form.text_field :label, :value => level.label %></td>
                     <td>
                       <%= level_form.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
@@ -104,7 +104,7 @@
           <%= level_form.label :solr_facet_name, 'Solr Facet:' %>
           <%= level_form.select(
             :solr_facet_name,
-            @exhibit.get_available_facets.collect {|solr_fname| [atrium_facet_field_labels[solr_fname],solr_fname]},
+            @exhibit.get_available_facets.collect {|solr_fname| [Atrium.config.label_for_facet(solr_fname),solr_fname]},
             { :include_blank => true }
           )%>
           <small>This list is populated by the facets of the parent collection.</small>

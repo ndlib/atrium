@@ -9,7 +9,7 @@ module Atrium
     end
 
     def label
-      @label ||= atrium_facet_field_labels[field_name]
+      @label ||= Atrium.config.label_for_facet(field_name)
     end
   end
 end

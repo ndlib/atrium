@@ -28,7 +28,7 @@ module Atrium
     end
 
     def facet_element(facet, value)
-      {atrium_facet_field_labels[facet] => value}
+      {Atrium.config.label_for_facet(facet) => value}
     end
   end
 end
