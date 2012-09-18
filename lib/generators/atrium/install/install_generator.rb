@@ -10,6 +10,15 @@ class Atrium::InstallGenerator < Rails::Generators::Base
 
   def update_routes
     route(%q{mount Atrium::Engine => '/atrium', as: 'atrium'})
+    route(%q{resources :collections, only: [:show] do
+      get 'browse', on: :member
+    end})
+    route(%q{resources :exhibits, only: [:show]})
+    route(%q{resources :descriptions})
+    route(%q{match 'selected_items/save',
+      to: 'selected_items#save',
+      as: 'save_selected_items',
+      via: :post})
   end
 
   def update_controllers
@@ -29,8 +38,28 @@ class Atrium::InstallGenerator < Rails::Generators::Base
     end
   end
 
+  def update_user_model
+    inject_into_file 'app/models/user.rb',
+      :before => "def to_s" do
+      [
+          "",
+          " has_many     :selected_items, :class_name => 'SelectedItem',   :dependent => :destroy",
+          "",
+          " def selected_document_ids",
+          "   self.selected_items.map{|item|item.document_id}",
+          " end",
+          "",
+          ""
+      ].join("\n")
+    end
+  end
+
   def create_controllers
     raw_install('controllers')
+  end
+
+  def create_models
+    raw_install('models')
   end
 
   def create_helpers
