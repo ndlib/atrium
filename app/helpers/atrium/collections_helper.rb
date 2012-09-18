@@ -16,7 +16,7 @@ module Atrium
 
         [
           strip_tags(
-            Atrium.query_param_beautifier(self,query_params).gsub("<","< ")
+            Atrium.query_param_beautifier(self,query_params).gsub("<"," <")
           ),
           search[:id]
         ]
