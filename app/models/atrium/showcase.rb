@@ -1,3 +1,7 @@
+# A Atrium::Showcase is a container for storing feature items and descriptions.
+# A Atrium::Showcase can be attached to a collection, exhibit, or to specific
+# combinations of selected facets and facet values within an exhibit. There can
+# be multiple Atrium::Showcase in an Atrium::Exhibit.
 class Atrium::Showcase < ActiveRecord::Base
   attr_accessible(
     :showcases_id,
