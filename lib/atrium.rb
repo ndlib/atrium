@@ -5,22 +5,15 @@ module Atrium
 
   class << self
     def configure(main_app_config, &block)
-      @configuration = Atrium::Configuration.new(main_app_config, &block)
+      @config = Atrium::Configuration.new(main_app_config, &block)
+    end
+
+    def config
+      @config || configure(OpenStruct.new)
     end
 
     def configuration
-      @configuration || configure(OpenStruct.new)
-    end
-    def config
-      @configuration || configure(OpenStruct.new)
-    end
-
-    def saved_searches_for(user)
-      if user
-        saved_search_class.where(user_id: user[:id])
-      else
-        []
-      end
+      @config || configure(OpenStruct.new)
     end
 
     delegate(
@@ -31,10 +24,16 @@ module Atrium
       :saved_search_class=,
       :saved_items_class,
       :saved_items_class=,
-      to: :configuration
+      to: :config
     )
 
-    delegate :saved_search_class, :to => :configuration
+    def saved_searches_for(user)
+      if user
+        saved_search_class.where(user_id: user[:id])
+      else
+        []
+      end
+    end
 
     def saved_items_for(user)
       if user
