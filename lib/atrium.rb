@@ -1,16 +1,7 @@
 require 'atrium/engine'
-
+require 'atrium/exceptions'
 module Atrium
   require 'ckeditor-rails'
-
-  class ConfigurationExpectation < RuntimeError
-  end
-
-  class ConfigurationNotSet < StandardError
-    def initialize(method_name)
-      super("Please define #{method_name} in config/initializer/atrium.rb")
-    end
-  end
 
   class << self
     def configure(main_app_config, &block)

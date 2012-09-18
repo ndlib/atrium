@@ -1,5 +1,5 @@
 module Atrium
-  class Configuration < SimpleDelegator
+ class Configuration < SimpleDelegator
     def initialize(default_configuration)
       super(default_configuration)
       yield(self) if block_given?
