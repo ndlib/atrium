@@ -1,4 +1,10 @@
 require 'friendly_id'
+# An Atrium::Collection contains a subset of the items in the complete index as
+# defined by a Solr query. An explicitly declared subset of the total facets can
+# be applied to these items. An Atrium::Collection description and or featured
+# items form the Atrium::Collection can be displayed at the top level
+# Atrium::Collection page. Collections can be themed independently of the base
+# application and other collections.
 class Atrium::Collection < ActiveRecord::Base
   extend FriendlyId
   friendly_id :url_slug, use: :slugged, slug_column: :url_slug

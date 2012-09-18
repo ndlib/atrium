@@ -1,56 +1,37 @@
 # Atrium
 
-Atrium is a project that has been gestating for a while. It's coming along well
-but is still a ways off of a "1.0" release. For more information see
-`ROADMAP.mkd`. The development process is coordinated in a [public-facing
-JIRA][1]
+Atrium is a [mountable Rails engine](http://guides.rubyonrails.org/engines.html)
+that adds additional functionality to the
+[blacklight](https://github.com/projectblacklight/blacklight) Rails engine.
+
+Think of Atrium as a lightweight Content Management System for your Blacklight
+application. An Atrium::Collection is analogous to one of your managed sites. An
+Atrium::Exhibit is analogous to one of the top-level pages of your site. These
+"pages" can be decorated with additional information via the Atrium::Showcase.
+
+The Atrium::BrowseLevel is similar to a group of pages (i.e. directory) at some
+location in your site's navigation. However, instead of explicitly creating
+pages in each directory, the Atrium::BrowseLevel interacts with your Blacklight
+configuration and Solr index to auto-generate these pages.
 
 ## Getting Started
 
-Make sure [blacklight](https://github.com/projectblacklight/blacklight) is
-installed. You will need an ApplicationController#current_user method, which is
-easily provided by Devise and the Blacklight devise installation option.
+Make sure your Rails application first has
+[blacklight](https://github.com/projectblacklight/blacklight) installed. Then,
+from the command line:
 
+    $ cd /path/to/rails-project
     $ rake atrium:install:migrations
     $ rails generate atrium:install
-    $ git commit
     $ rake db:migrate
 
-## What it's for
+In the all too likely scenario that you want a custom theme for an
+Atrium::Collection use the following command:
 
-Atrium is a tool for extending a [Blacklight][2]-enabled application by:
-
-  - Grouping items
-  - Adding context
-  - Customizing presentation
-
-Atrium provides four mechanisms to achieve this end:
-
-  - Collections
-  - Exhibits
-  - Showcases
-  - Themes
-
-### Collections
-A collection contains a subset of the items in the complete index as defined by
-a Solr query. An explicitly declared subset of the total facets can be applied
-to these items. A collection description and or featured items form the
-collection can be displayed at the top level collection page. Collections can be
-themed independently of the base application and other collections.
-
-### Exhibits
-An exhibit is a customizable view of a single topic (as defined by a facet),
-further scoped by an optional Solr query. An exhibit defines it's own
-hierarchical list of facets. An exhibit may also have a description and a list
-of featured items.
-
-### Showcases
-A showcase is a container for storing feature items and descriptions. A showcase
-can be attached to a collection, exhibit, or to specific combinations of
-selected facets and facet values within an exhibit. There can be multiple
-showcases in an exhibit.
+    $ rails generate atrium:theme NAME_OF_THEME
 
 ### Themes
+
 At present, themes are a wrapper around the existing rails templating system. A
 theme is simply a [nested layout][3] that works in conjunction with some `yeild`
 blocks in the base atrium layout. This is a pretty flexible solution but

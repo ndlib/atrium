@@ -1,3 +1,7 @@
+# An Atrium::Exhibit is a customizable view of a single topic (as defined by a
+# facet), further scoped by an optional Solr query. An Atrium::Exhibit defines
+# it's own hierarchical list of facets. An Atrium::Exhibit may also have a
+# description and a list of featured items.
 class Atrium::Exhibit < ActiveRecord::Base
   attr_accessible(
     :atrium_collection_id,
