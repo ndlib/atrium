@@ -9,7 +9,13 @@ require 'yard/rake/yardoc_task'
 
 namespace :doc do
   YARD::Rake::YardocTask.new(:app) do |t|
-    t.files += ['app/**/*.rb', 'spec/**/*_spec.rb']
+    t.files += [
+      'app/**/*.rb',
+      'spec/**/*_spec.rb',
+      '-',
+       "*.md",
+       "*.mkd"
+     ]
   end
 end
 
