@@ -10,15 +10,33 @@ describe Atrium::Configuration do
   Given(:expected_application_name) { 'Hello World' }
 
   context '#saved_search_class' do
-    Given(:saved_search_class_name) { 'Object' }
-    When { configuration.saved_search_class = saved_search_class_name }
-    Then { configuration.saved_search_class.should == Object }
+    context 'when set' do
+      Given(:saved_search_class_name) { 'Object' }
+      When { configuration.saved_search_class = saved_search_class_name }
+      Then { configuration.saved_search_class.should == Object }
+    end
+    context 'when not set' do
+      Then {
+        expect {
+          configuration.saved_search_class
+        }.to raise_error(Atrium::ConfigurationNotSet)
+      }
+    end
   end
 
   context '#saved_items_class' do
-    Given(:saved_items_class_name) { 'Object' }
-    When { configuration.saved_items_class = saved_items_class_name }
-    Then { configuration.saved_items_class.should == Object }
+    context 'when set' do
+      Given(:saved_items_class_name) { 'Object' }
+      When { configuration.saved_items_class = saved_items_class_name }
+      Then { configuration.saved_items_class.should == Object }
+    end
+    context 'when not set' do
+      Then {
+        expect {
+          configuration.saved_items_class
+        }.to raise_error(Atrium::ConfigurationNotSet)
+      }
+    end
   end
 
   context "#query_param_beautifier=" do
