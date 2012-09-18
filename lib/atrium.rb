@@ -14,6 +14,12 @@ module Atrium
 
   mattr_accessor :saved_search_class, :config, :saved_items_class
   class << self
+    def configure(main_app_config, &block)
+      @configuration = Atrium::Configuration.new(main_app_config, &block)
+    end
+
+    def configuration; @configuration; end
+
     def saved_searches_for(user)
       if user
         saved_search_class.where(user_id: user[:id])
@@ -61,6 +67,7 @@ module Atrium
         raise(Atrium::ConfigurationNotSet, 'Atrium.saved_search_class')
       end
     end
+
 
     def config
       @@config || default_config
