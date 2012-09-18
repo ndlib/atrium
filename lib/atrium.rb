@@ -18,7 +18,9 @@ module Atrium
       @configuration = Atrium::Configuration.new(main_app_config, &block)
     end
 
-    def configuration; @configuration; end
+    def configuration
+      @configuration
+    end
 
     def saved_searches_for(user)
       if user
@@ -59,6 +61,8 @@ module Atrium
         raise(Atrium::ConfigurationNotSet, 'Atrium.saved_items_class')
       end
     end
+
+    delegate :saved_search_class, :to => :configuration
 
     def saved_search_class
       if @@saved_search_class.respond_to?(:constantize)

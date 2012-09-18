@@ -9,6 +9,12 @@ describe Atrium::Configuration do
   Given(:default_application_name) { "Good-Bye World"}
   Given(:expected_application_name) { 'Hello World' }
 
+  context '#saved_search_class' do
+    Given(:saved_search_class_name) { 'Object' }
+    When { configuration.saved_search_class = saved_search_class_name }
+    Then { configuration.saved_search_class.should == Object }
+  end
+
   context '#application_name' do
     context 'override via config' do
       When { configuration.application_name = expected_application_name }
