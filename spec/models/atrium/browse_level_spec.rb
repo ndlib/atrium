@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe Atrium::BrowseLevel do
-  subject { Atrium::BrowseLevel.new }
+  Given(:facet_name) { 'My Facet Name' }
+  subject { Atrium::BrowseLevel.new(solr_facet_name: facet_name) }
 
   it_behaves_like "query_param_mixin"
 
@@ -29,5 +30,27 @@ describe Atrium::BrowseLevel do
     Then { subject.to_s.should == comparison_string }
   end
 
-end
+  describe '#label' do
+    Given(:expected_label) { 'Hello World'}
+    context 'override' do
+      When{ subject.label = expected_label }
+      Then{ subject.label.should == expected_label }
+    end
+    context 'lookup from configuration' do
+      Given(:configured_expected_label) { 'Good-Bye World'}
+      Given(:config) {
+        double_config = double('Config')
+        double_config.should_receive(:label_for_facet).
+        with(facet_name).and_return(configured_expected_label)
+        double_config
+      }
+      When{ subject.label = nil }
 
+      Then {
+        Atrium.should_receive(:config).and_return(config)
+        subject.label.should == configured_expected_label
+      }
+    end
+  end
+
+end

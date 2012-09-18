@@ -12,6 +12,12 @@ module Atrium
       ''
     end
 
+    def label_for_facet(facet_name)
+      self[facet_name].label
+    rescue NoMethodError
+      facet_name
+    end
+
     attr_writer :saved_search_class
     def saved_search_class
       if @saved_search_class.respond_to?(:constantize)

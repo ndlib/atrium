@@ -10,8 +10,8 @@ describe BrowseLevelEvaluationService do
     lambda {|arg1,arg2| facets }
   }
   Given(:facet_in_params_callable) { lambda{|arg1,arg2|} }
-  Given(:browse_level_1) { Atrium::BrowseLevel.new }
-  Given(:browse_level_2) { Atrium::BrowseLevel.new }
+  Given(:browse_level_1) { Atrium::BrowseLevel.new(label: 'one') }
+  Given(:browse_level_2) { Atrium::BrowseLevel.new(label: 'two') }
   Given(:collection) { Atrium::Collection.new }
   Given(:browse_levels) { [browse_level_1,browse_level_2]}
   Given(:exhibit) { Atrium::Exhibit.new }

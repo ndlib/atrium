@@ -45,9 +45,6 @@ class BrowseLevelEvaluationService
     updated_browse_levels = []
     browse_level = browse_levels.first
     browse_facet_name = browse_level.solr_facet_name
-    if (browse_level.label.nil? || browse_level.label.blank?)
-      browse_level.label = Atrium.config[:facet][:labels][browse_facet_name]
-    end
     updated_browse_levels << browse_level
     deep_cloned_params = Marshal.load(Marshal.dump(params))
 

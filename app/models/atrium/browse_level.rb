@@ -36,6 +36,14 @@ class Atrium::BrowseLevel < ActiveRecord::Base
   end
   before_create :assign_level_number
 
+  def label
+    if read_attribute(:label).present?
+      read_attribute(:label)
+    else
+      Atrium.config.label_for_facet(solr_facet_name)
+    end
+  end
+
   private
   def assign_level_number
     if self.level_number.blank?
