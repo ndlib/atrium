@@ -39,11 +39,6 @@ requires the implementer to know how layouts and rendering work in Rails. It
 also means you have to re-deploy the application every time you want to change
 how it looks.
 
-## Contributing
-
-If you are interested in contributing to Atrium, please review our
-[Contributing document](CONTRIBUTING).
-
 ## Acknowledgements
 Thanks to [Hiten Parmar][4] for the gem name. The [original atrium gem][5] was
 an instant web server.
