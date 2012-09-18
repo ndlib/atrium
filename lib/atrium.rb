@@ -4,6 +4,9 @@ module Atrium
   require 'ckeditor-rails'
 
   class << self
+
+    # Atrium interacts with Blacklight and we are hoping we will get a
+    # Blacklight::Configuration for the .configure method.
     def configure(main_app_config, &block)
       @config = Atrium::Configuration.new(main_app_config, &block)
     end

@@ -1,5 +1,7 @@
 module Atrium
- class Configuration < SimpleDelegator
+  # This class is intended to be a decorator for the Blacklight::Configuration,
+  # yet could stand alone without Blacklight.
+  class Configuration < SimpleDelegator
     def initialize(default_configuration)
       super(default_configuration)
       yield(self) if block_given?
