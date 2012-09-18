@@ -13,8 +13,8 @@ module Atrium
     end
 
     def label_for_facet(facet_name)
-      self[facet_name].label
-    rescue NoMethodError
+      facet_fields[facet_name].label
+    rescue NoMethodError, NameError
       facet_name
     end
 

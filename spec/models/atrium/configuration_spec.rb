@@ -74,6 +74,27 @@ describe Atrium::Configuration do
     end
   end
 
+  context '#label_for_facet' do
+    Given(:facet_name) { 'Name' }
+    context 'facet registered' do
+
+      Given(:expected_label) { 'My Label' }
+      Given(:facet) { double("Facet", :label => expected_label)}
+      Given(:main_app_config) {
+        OpenStruct.new(facet_fields: {facet_name => facet})
+      }
+      Then {
+        configuration.label_for_facet(facet_name).should == expected_label
+      }
+    end
+
+    context 'facet missing' do
+      Then {
+        configuration.label_for_facet(facet_name).should == facet_name
+      }
+    end
+  end
+
   context '#application_name' do
     context 'override via config' do
       When { configuration.application_name = expected_application_name }
