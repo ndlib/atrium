@@ -23,6 +23,7 @@ describe Atrium do
       }.to raise_error(Atrium::ConfigurationExpectation)
     end
   end
+
   context "Search Class exists or not" do
     after(:each) do
       Atrium.saved_search_class = nil
