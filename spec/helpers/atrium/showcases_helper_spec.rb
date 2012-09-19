@@ -1,8 +1,6 @@
 require 'spec_helper'
 describe Atrium::ShowcasesHelper do
-  context "#get parent show path " do
-    pending
-  end
+
   describe "test showcase parent path" do
     Given(:collection) { FactoryGirl.create(:collection) }
     Given(:collection_showcase) { FactoryGirl.create(:collection_showcase, showcases: collection) }
@@ -36,19 +34,22 @@ describe Atrium::ShowcasesHelper do
     end
   end
   context "#render_showcase_facet_selection " do
-    let(:showcase) { mock_model(Atrium::Showcase) }
-    let(:facet_selections) { Atrium::Showcase::FacetSelection.new({ solr_facet_name: "test_facet", value:"book" })}
-    let(:facet_configuration) {
-          {facet: {
-              field_names: ['test_facet'],
-              labels: {'test_facet' => 'Format'}
-          }  }
-      }
+    Given(:showcase) { mock_model(Atrium::Showcase) }
+    Given(:facet_name) { 'My Facet Name' }
+    Given(:facet_value) { 'My Facet Value' }
+    Given(:facet_selections) { Atrium::Showcase::FacetSelection.new({ solr_facet_name: facet_name, value:facet_value })}
+    Given(:configured_expected_label) { 'Hello World'}
+    Given(:config) {
+      double_config = double('Config')
+      double_config.should_receive(:label_for_facet).
+          with(facet_name).and_return(configured_expected_label)
+      double_config
+    }
     it "should return facet names" do
       showcase.stub!(:facet_selections).and_return([facet_selections])
-      Atrium.stub!(:config).and_return(facet_configuration)
+      Atrium.should_receive(:config).and_return(config)
       result = helper.render_showcase_facet_selection(showcase)
-      result.should == "{\"Format\"=>\"book\"}"
+      result.should == "{\"#{configured_expected_label}\"=>\"#{facet_value}\"}"
     end
   end
 
