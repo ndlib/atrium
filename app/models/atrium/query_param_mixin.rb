@@ -26,6 +26,7 @@ module Atrium::QueryParamMixin
         end
       end
       self.filter_query_params = formatted_query_params
+      @saved_search_id = nil
     end
 
     # TODO move method to presenter, also "inspect" doesn't really cut it.
@@ -60,5 +61,17 @@ module Atrium::QueryParamMixin
         super
       end
     end
+
+    attr_reader :remove_filter_query_params
+
+    attr_accessible :remove_filter_query_params
+
+    def remove_filter_query_params=(value)
+      @remove_filter_query_params = value
+      self.filter_query_params = {} if @remove_filter_query_params.to_i ==1
+      @remove_filter_query_params = nil
+    end
+
+
   end
 end

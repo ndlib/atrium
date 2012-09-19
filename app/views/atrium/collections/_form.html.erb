@@ -39,12 +39,18 @@
       A collection is a subset of the total holdings.<br />
       Save a search on the catalog page to use as the collection scope.
     </p>
-    <p>Current Scope: <%= Atrium.query_param_beautifier(self,f.object.filter_query_params) %></p>
+    <p>
+      <% if f.object.filter_query_params.present? %>
+        Current Scope: <%= Atrium.query_param_beautifier(self,f.object.filter_query_params) %>
+        <%= f.check_box :remove_filter_query_params %>
+        <small>Use the checkbox to delete scope</small>
+      <% end %>
+    </p>
     <ol>
       <li>
-      <%= f.label :saved_search_id, 'Set Collection Scope:' %>
-      <%= f.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
-      <small>Choose from one of your saved searches.</small>
+        <%= f.label :saved_search_id, 'Set Collection Scope:' %>
+        <%= f.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
+        <small>Choose from one of your saved searches.</small>
       </li>
     </ol>
   </fieldset>

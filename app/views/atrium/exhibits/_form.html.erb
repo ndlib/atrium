@@ -27,7 +27,13 @@
         interface. Technically, an exhibit does not have to be a subset of the
         collection.
       </p>
-      <p>Current Scope: <%= Atrium.query_param_beautifier(self,f.object.filter_query_params) %></p>
+      <p>
+        <% if f.object.filter_query_params.present? %>
+          Current Scope: <%= Atrium.query_param_beautifier(self,f.object.filter_query_params) %>
+          <%= f.check_box :remove_filter_query_params %>
+          <small>Use the checkbox to delete scope</small>
+        <% end %>
+      </p>
       <ol>
         <li>
           <%= f.label :saved_search_id, 'Set Exhibit Scope:' %>
@@ -76,6 +82,8 @@
                         <% if level.filter_query_params.present? %>
                           Current Scope:
                           <%= Atrium.query_param_beautifier(self,level.filter_query_params) %>
+                            <%= level_form.check_box :remove_filter_query_params unless level.filter_query_params.blank?%>
+                            <small>Use the checkbox to delete scope from browse level</small>
                         <% end %>
                       </div>
                     </td>
