@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120823143315) do
+ActiveRecord::Schema.define(:version => 20120921150543) do
 
   create_table "atrium_browse_levels", :force => true do |t|
     t.integer  "atrium_exhibit_id",    :null => false
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(:version => 20120823143315) do
     t.text     "collection_items"
     t.datetime "created_at",             :null => false
     t.datetime "updated_at",             :null => false
+    t.string   "exclude_query_params"
   end
 
   add_index "atrium_collections", ["title"], :name => "index_atrium_collections_on_title", :unique => true
@@ -74,6 +75,7 @@ ActiveRecord::Schema.define(:version => 20120823143315) do
     t.string   "filter_query_params"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
+    t.string   "exclude_query_params"
   end
 
   add_index "atrium_exhibits", ["atrium_collection_id"], :name => "index_atrium_exhibits_on_atrium_collection_id"
@@ -108,5 +110,15 @@ ActiveRecord::Schema.define(:version => 20120823143315) do
   end
 
   add_index "atrium_showcases", ["showcases_type", "showcases_id"], :name => "index_atrium_showcases_on_showcases_type_and_showcases_id"
+
+  create_table "selected_items", :force => true do |t|
+    t.integer  "user_id",     :null => false
+    t.text     "url"
+    t.string   "document_id"
+    t.string   "title"
+    t.text     "notes"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
 end

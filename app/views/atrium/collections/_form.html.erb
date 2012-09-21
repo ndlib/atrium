@@ -48,8 +48,8 @@
     </p>
     <ol>
       <li>
-        <%= f.label :saved_search_id, 'Set Collection Scope:' %>
-        <%= f.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
+        <%= f.label :include_search_id, 'Set Collection Scope:' %>
+        <%= f.select(:include_search_id, saved_searches_for_select, { :include_blank => true }) %>
         <small>Choose from one of your saved searches.</small>
       </li>
     </ol>

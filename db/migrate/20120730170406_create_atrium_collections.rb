@@ -4,6 +4,7 @@ class CreateAtriumCollections < ActiveRecord::Migration
       t.string :title
       t.string :url_slug
       t.string :filter_query_params
+      t.string :exclude_query_params
       t.string :theme
       t.text :title_markup
       t.text :collection_description

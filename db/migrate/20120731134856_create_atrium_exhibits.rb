@@ -5,6 +5,7 @@ class CreateAtriumExhibits < ActiveRecord::Migration
       t.integer :set_number, :null=>false
       t.string :label
       t.string :filter_query_params
+      t.string :exclude_query_params
       t.timestamps
     end
     add_index :atrium_exhibits, :atrium_collection_id

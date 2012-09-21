@@ -22,8 +22,6 @@ class Atrium::BrowseLevel < ActiveRecord::Base
 
   include Atrium::QueryParamMixin
 
-  serialize :exclude_query_params
-
   attr_accessor :selected
   attr_writer :values
 

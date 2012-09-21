@@ -36,8 +36,8 @@
       </p>
       <ol>
         <li>
-          <%= f.label :saved_search_id, 'Set Exhibit Scope:' %>
-          <%= f.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
+          <%= f.label :include_search_id, 'Set Exhibit Scope:' %>
+          <%= f.select(:include_search_id, saved_searches_for_select, { :include_blank => true }) %>
           <small>Choose from one of your saved searches.</small>
         </li>
       </ol>
@@ -65,6 +65,7 @@
                 <th>Facet</th>
                 <th>Label</th>
                 <th>Include Filter</th>
+                <th>Exclude Filter</th>
                 <th>Remove</th>
               </tr>
             </thead>
@@ -77,7 +78,7 @@
                     <td><%= Atrium.config.facet_fields[level.solr_facet_name].label  %></td>
                     <td><%= level_form.text_field :label, :value => level.label %></td>
                     <td>
-                      <%= level_form.select(:saved_search_id, saved_searches_for_select, { :include_blank => true }) %>
+                      <%= level_form.select(:include_search_id, saved_searches_for_select, { :include_blank => true }) %>
                       <div>
                         <% if level.filter_query_params.present? %>
                           Current Scope:
@@ -87,6 +88,17 @@
                         <% end %>
                       </div>
                     </td>
+                      <td>
+                        <%= level_form.select(:exclude_search_id, saved_searches_for_select, { :include_blank => true }) %>
+                        <div>
+                          <% if level.exclude_query_params.present? %>
+                              Current Exclude:
+                              <%= level.exclude_query_params.inspect %>
+                              <%= level_form.check_box :remove_exclude_query_params unless level.exclude_query_params.blank?%>
+                              <small>Use the checkbox to delete scope from browse level</small>
+                          <% end %>
+                        </div>
+                      </td>
                     <td><%= level_form.check_box :_destroy %></td>
                   <% end %>
                 </tr>
