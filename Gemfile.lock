@@ -168,7 +168,7 @@ GEM
     trollop (1.16.2)
     tzinfo (0.3.33)
     yard (0.8.2.1)
-    yard-rspec (0.1)
+    yard-different-rspec (0.1.1)
       yard
 
 PLATFORMS
@@ -195,4 +195,4 @@ DEPENDENCIES
   simplecov
   sqlite3
   yard
-  yard-rspec
+  yard-different-rspec
