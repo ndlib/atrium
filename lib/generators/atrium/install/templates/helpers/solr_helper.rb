@@ -115,4 +115,24 @@ module SolrHelper
     return  [response, documents]
   end
 
+  def add_exclude_fq_to_solr(solr_parameters, user_params)
+    logger.debug("Solr exclude!!!: #{solr_parameters.inspect}, #{user_params.inspect}")
+    if ( user_params[:exclude])
+      exclude_request_params = user_params[:exclude]
+      solr_parameters[:fq] ||= []
+      exclude_request_params.each_pair do |facet_field, value_list|
+        value_list ||= []
+        value_list = [value_list] unless value_list.respond_to? :each
+        value_list.each do |value|
+          exclude_facet="-(#{facet_value_to_fq_string(facet_field, value)})"
+          exclude_query="-(#{facet_value_to_fq_string(facet_field, value)})"
+          solr_parameters[:fq] << exclude_query
+          solr_parameters[:fq] << exclude_facet
+        end
+      end
+    end
+  end
+
+
+
 end

@@ -13,4 +13,6 @@ class AtriumBaseController < ApplicationController
 
   helper_method :get_solr_response_for_field_values
 
+  self.solr_search_params_logic += [:add_exclude_fq_to_solr]
+
 end
