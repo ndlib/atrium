@@ -17,10 +17,16 @@ configuration and Solr index to auto-generate these pages.
 ## Getting Started
 
 Make sure your Rails application first has
-[blacklight](https://github.com/projectblacklight/blacklight) installed. Then,
-from the command line:
+[blacklight](https://github.com/projectblacklight/blacklight) installed.
+
+Add Atrium to your project's gemfile:
+
+    gem 'atrium'
+
+Then, from the command line:
 
     $ cd /path/to/rails-project
+    $ bundle
     $ rake atrium:install:migrations
     $ rails generate atrium:install
     $ rake db:migrate
