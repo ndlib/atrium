@@ -4,6 +4,8 @@ Atrium is a [mountable Rails engine](http://guides.rubyonrails.org/engines.html)
 that adds additional functionality to the
 [blacklight](https://github.com/projectblacklight/blacklight) Rails engine.
 
+It uses Ruby 1.9.3 Hash syntax, so update your Rubies!
+
 Think of Atrium as a lightweight Content Management System for your Blacklight
 application. An Atrium::Collection is analogous to one of your managed sites. An
 Atrium::Exhibit is analogous to one of the top-level pages of your site. These
