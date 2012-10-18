@@ -1,4 +1,5 @@
 Atrium::Engine.routes.draw do
+
   resources :collections do
     resources :exhibits do
       member do
@@ -39,4 +40,5 @@ Atrium::Engine.routes.draw do
   match 'showcase/browse_level_showcase/exhibit_id',
     to: 'showcases#add_or_update',
     as: 'get_browse_level_showcase'
+  match 'markdown',    to: 'markitup#markdown',    as: 'markdown'
 end

@@ -24,7 +24,7 @@
       </li>
       <li>
         <%= f.label :title_markup, 'HTML Title (optional):' %>
-        <%= f.text_area :title_markup, :class => 'jquery-ckeditor'  %>
+        <%= f.text_area :title_markup, :class => 'markdown'  %>
         <small>
           You can create an HTML title for use throughout this collection.<br />
           For more dramatic view customization create a theme instead.
@@ -84,7 +84,7 @@
     <ol>
       <li>
         <%= f.label :collection_description, 'Collection Home Page About Text:' %>
-        <%= f.text_area :collection_description, :rows=> '20', :cols => '120', :class => 'jquery-ckeditor' %>
+        <%= f.text_area :collection_description, :rows=> '20', :cols => '120', :class => 'markdown' %>
       </li>
     </ol>
       </li>

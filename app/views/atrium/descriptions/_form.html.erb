@@ -43,7 +43,7 @@
             <% @description.essay.content_type = "essay" %>
             <li>
               <%= essay_fields.label :content, 'Full Text:' %>
-              <%= essay_fields.text_area :content, :rows=> '20', :cols => '120', :class =>'jquery-ckeditor' %>
+              <%= essay_fields.text_area :content, :rows=> '20', :cols => '120', :class =>'markdown' %>
               <%= essay_fields.hidden_field :content_type %>
             </li>
         <% end %>
@@ -51,7 +51,7 @@
             <% @description.summary.content_type = "summary" %>
             <li>
               <%= summary_fields.label :content, 'Summary:' %>
-              <%= summary_fields.text_area :content, :rows=> '20', :cols => '120', :class =>'jquery-ckeditor' %>
+              <%= summary_fields.text_area :content, :rows=> '20', :cols => '120', :class =>'markdown' %>
               <%= summary_fields.hidden_field :content_type %>
             </li>
         <% end %>

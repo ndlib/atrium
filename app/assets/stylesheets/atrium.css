@@ -16,6 +16,10 @@
  *
  *= require 'chosen'
  *= require 'ui-lightness/jquery-ui-1.8.23.custom'
+
+ * Required to for markup text editor
+ *= require 'markitup'
+ *= require 'sets/markdown/style'
  */
 
 /* Global */
