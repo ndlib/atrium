@@ -5,7 +5,6 @@ class CatalogRenderer < Redcarpet::Render::HTML
   end
 
   def link(link, title, content)
-    puts "content:#{content.inspect}, link: #{link.inspect}, title: #{title.inspect}"
     link.gsub!(/&#/, '/catalog/')
     "<a title='#{title}' href='#{link}'>#{content}</a>"
   end
