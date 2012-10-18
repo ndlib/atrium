@@ -1,8 +1,7 @@
 require 'atrium/engine'
 require 'atrium/exceptions'
 module Atrium
-  require 'ckeditor-rails'
-
+  require 'redcarpet'
   class << self
 
     # Atrium interacts with Blacklight and we are hoping we will get a
