@@ -2,6 +2,7 @@ module ApplicationHelper
   include Atrium::ApplicationHelper
   include Atrium::CollectionsHelper
   include Atrium::ShowcasesHelper
+  include Atrium::MarkdownHelper
   include NavigationHelper
   include SolrHelper
 

@@ -97,6 +97,9 @@ module Atrium
         @parent= Atrium::Exhibit.find(params[:exhibit_id])
       when params[:collection_id] then
         @parent = Atrium::Collection.find(params[:collection_id])
+      when params[:id] then
+        @showcase = Atrium::Showcase.find(params[:id])
+        @parent = @showcase.collection
       else
         flash.alert = t("Atrium.showcase.parent.not_found")
         redirect_to(:back)

@@ -3,7 +3,7 @@
 <%= render partial: 'shared/showcases', locals: { showcases: @showcases } %>
 
 <div id="collection-description">
-  <%= @collection.collection_description.html_safe %>
+  <%= markdown_parser(@collection.collection_description).html_safe%>
 </div>
 
 <% content_for :atrium_side_bar do %>

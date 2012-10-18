@@ -1,8 +1,9 @@
 <% content_for :atrium_side_bar do %>
   <%= link_to "Back to #{@showcase.parent_title}", get_parent_path(@showcase) %>
 <% end %>
-<div>
+<div class="description">
   <h3><%= @description.pretty_title%></h3>
-    <%= @description.essay_content.to_s.html_safe %>
+  <div class="content">
+    <%= markdown_parser(@description.get_essay).html_safe %>
+  </div>
 </div>
-
