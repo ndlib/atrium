@@ -75,7 +75,6 @@ class Mapper
       when :code
         parent == :pre ? "    " : "`"
       when :a
-         puts  "a tag id #{element.attribute('id').to_s}"
         if element.attribute('id').to_s =~ /^ftn(\d+)/
           "[^"
         else
@@ -112,7 +111,7 @@ class Mapper
         if element.attribute('id').to_s =~ /^ftn(\d+)/
           "]:"
         else
-          "](#{element.attribute('href').to_s})"
+          process_href(element)
         end
       when :img
         if element.has_attribute?('alt')
@@ -135,5 +134,19 @@ class Mapper
       Rails.logger.__send__(log_level, message)
     end
   end
+
+  def process_href(element)
+    if element.text =~ /^INQ (\d+)/
+      get_catalog_id(element.text.strip)
+    else
+      "](#{element.attribute('href').to_s})"
+    end
+  end
+
+  def get_catalog_id(unique_key)
+    "](need_to_get_id)"
+
+  end
+
 end
 

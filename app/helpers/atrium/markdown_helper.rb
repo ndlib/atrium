@@ -17,11 +17,13 @@ module Atrium
       return ''
     end
 
-    def from_fedora
-      #TODO Add hooks to get datastream url to convert html to markdown
-      url=''
-      markdown=convert_to_markdown(url)
-      return markdown_parser(markdown).html_safe
+    def fedora_html_parser(pid,ds_name)
+      #TODO find good way to set fedora url within atrium
+      host = 'https://fedoraprod.library.nd.edu:8443'
+      url= "#{host}/fedora/get/#{pid}/#{ds_name}"
+      markdown= convert_to_markdown(url)
+      return markdown
+      #return markdown_parser(markdown).html_safe
     end
 
   end
