@@ -27,7 +27,8 @@ Gem::Specification.new do |s|
   s.executables   = s.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
 
-  s.add_dependency "rails", "~> 3.2.8"
+  s.add_dependency "rack", "~> 1.4.5"
+  s.add_dependency "rails", "~> 3.2.11"
   s.add_dependency "jquery-rails"
   s.add_dependency "friendly_id"
   s.add_dependency 'redcarpet'
